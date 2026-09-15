@@ -36,9 +36,9 @@
                 <li><a href="../public/monitoramento.html">Monitoramento</a></li>
                 <li><a href="../public/alertas.html">Alertas</a></li>
                 <li><a href="../public/relatorios.html">Relatórios</a></li>
-                <li><a href="../public/visu_usuario.html">Visualização de Usuarios</a></li>
-                <li><a href="../public/visu_sensores.html">Visualização de Sensores</a></li>s
-                <li><a href="../index.html">Logout</a></li>
+                <li><a href="../../public/visu_usuario.php">Visualização de Usuarios</a></li>
+                <li><a href="../../public/visu_sensores.php">Visualização de Sensores</a></li>
+                <li><a href="../../index.php">Logout</a></li>
             </ul>
 
         </aside>
