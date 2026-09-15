@@ -50,6 +50,8 @@ include '../infra/conexao.php';
                     <a class="link1" href="cadastro.php">Cadastrar-se!</a>
                 </div>
 
+
+                
             </div>
         </main>
     </div>

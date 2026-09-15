@@ -17,7 +17,7 @@
             <img src="assets/img/logo_navbar2.png" alt="Logo Strain">
         </div>
 
-        <button class="btn" onclick="window.location.href='./public/login.php'">Entrar</button>
+        <button class="btn" onclick="window.location.href='public/usuarios/login.php'">Entrar</button>
 
     </nav>
 

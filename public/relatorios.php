@@ -9,11 +9,7 @@
 
 </head>
 
-<<<<<<< HEAD
 <body class ="body_dashboard">
-=======
-<body class="body_dashboard">
->>>>>>> c37895262001f863cb508f29efa6e8ff76f43b8b
 
     <header id="header_relatorios">
         <nav class="navbar">
