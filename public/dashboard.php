@@ -26,15 +26,15 @@
             <h2 id="titulo_sidebar">Dashboard</h2>
 
             <ul class="menu_sidebar">
-                <li><a href="../index.html">Início</a></li>
-                <li><a href="../public/dashboard.html" class="active_sidebar">Dashboard</a></li>
-                <li><a href="../public/trens.html">Trens</a></li>
-                <li><a href="../public/monitoramento.html">Monitoramento</a></li>
-                <li><a href="../public/alertas.html">Alertas</a></li>
-                <li><a href="../public/relatorios.html">Relatórios</a></li>
-                <li><a href="../public/visu_usuario.html">Visualização de Usuarios</a></li>
-                <li><a href="../public/visu_sensores.html">Visualização de Sensores</a></li>
-                <li><a href="../index.html">Logout</a></li>
+                <li><a href="../../index.php">Início</a></li>
+                <li><a href="../../public/dashboard.php" class="active_sidebar">Dashboard</a></li>
+                <li><a href="../public/trens/cadastrar_trens.php">Trens</a></li>
+                <li><a href="../../public/monitoramento.php">Monitoramento</a></li>
+                <li><a href="../../public/alertas.php">Alertas</a></li>
+                <li><a href="../../public/relatorios.php">Relatórios</a></li>
+                <li><a href="../../public/visu_usuario.php">Visualização de Usuarios</a></li>
+                <li><a href="../../public/visu_sensores.php">Visualização de Sensores</a></li>
+                <li><a href="../../index.php">Logout</a></li>
             </ul>
         </aside>
 

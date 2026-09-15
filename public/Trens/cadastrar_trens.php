@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trens</title>
 
-    <link rel="stylesheet" href="../assets/style/style.css">
+    <link rel="stylesheet" href="../../assets/style/style.css">
 </head>
 
 <body class="body_dashboard">
@@ -14,11 +14,11 @@
         <nav class="navbar">
 
             <div class="logo-navbar">
-                <img src="../assets/img/logo_navbar2.png" alt="Logo Strain">
+                <img src="../../assets/img/logo_navbar2.png" alt="Logo Strain">
             </div>
 
             <div class="logo-navbar">
-                <img src="../assets/img/icone_da_navbar.png" alt="logo usuario logado">
+                <img src="../../assets/img/icone_da_navbar.png" alt="logo usuario logado">
             </div>
 
         </nav>
@@ -44,7 +44,7 @@
         </aside>
 
         <div class="fotos">
-            <img src="../assets/img/trens.png" alt="Trens">
+            <img src="../../assets/img/trens.png" alt="Trens">
         </div>
 
     </main>

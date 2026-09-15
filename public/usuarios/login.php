@@ -1,11 +1,8 @@
 <?php
 
-include '../infra/conexao.php';
-
+include '../../infra/conexao.php';
 
 ?>
-
-
 
 <html class="login" lang="en">
 
@@ -16,7 +13,7 @@ include '../infra/conexao.php';
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
 
 
-    <link rel="stylesheet" href="../assets/style/style.css">
+    <link rel="stylesheet" href="../../assets/style/style.css">
 
 </head>
 
@@ -25,7 +22,7 @@ include '../infra/conexao.php';
         <nav></nav>
     </header>
     <div class="Strain">
-        <img class="Strain" src="../assets/img/Tela de login atualizada.png" alt="Strain">
+        <img class="Strain" src="../../assets/img/Tela de login atualizada.png" alt="Strain">
     </div>
     <div class="flex">
         <main class="blue">
@@ -43,11 +40,11 @@ include '../infra/conexao.php';
                         <label for="senha" class="form-label"></label>
                         <input type="password" id="senha" name="senha" placeholder="Digite sua senha" required>
                     </div>
-                    <button id="botao_login" type="submit" class="btn btn-outline-danger" onclick="window.location.href='../public/dashboard.php';">Entrar</button>
+                    <button id="botao_login" type="submit" class="btn btn-outline-danger" onclick="window.location.href='../../public/dashboard.php';">Entrar</button>
                 </form>
                 <div class="Cadastro">
                     <p id="texto_login"> Você ainda não possui cadastro?</p>
-                    <a class="link1" href="cadastro.php">Cadastrar-se!</a>
+                    <a class="link1" href="../../public/usuarios/cadastro.php">Cadastrar-se!</a>
                 </div>
 
 
