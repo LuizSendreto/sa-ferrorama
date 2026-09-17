@@ -18,7 +18,7 @@
         </nav>
     </header>
 
-    <main id="main_cadastro_sensor"></main>
+    <main id="main_cadastro_sensor">
     <aside id="sidebar_dashboard">
 
         <h2 id="titulo_sidebar">Dashboard</h2>
