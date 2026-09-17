@@ -7,6 +7,7 @@ img {
     align-items: center;
     width: 100%;
     height: 450px;
+
     display: block;
 }
 
@@ -597,53 +598,56 @@ form {
     }
 }
 
+.fotos {
+   display: flex;
+   flex-wrap: wrap;
+   justify-content: center;
+   padding: 30px;
+   width: auto;
 
-a{
-    padding-left: 0;
 }
 
 
-
-
-
-
-.fotos_dashboard {
-    width: 99%;
-    margin-left: 250px;
-    margin-top: 70px;
-
-    width: calc(100vw - 250px);
-    height: calc(100vh - 70px);
-
-    overflow: hidden;
-}
-
-.fotos_dashboard img {
-    width: 100%;
-    height: 99%;
-
-    object-fit: cover;
-    object-position: center;
-
-    display: block;
-}
 
 .trens{
-    flex-direction: column;
     align-items: center;
    display: flex;
-   width: 350px;
+   width: 420px;
     background-color: #ffffff;
     border-radius: 20px;
-    box-shadow: 0px 4px 6px rgba(165, 0, 0, 0.1);
-    border-color: #850000;
+    border: 4px solid #850000;
+    padding: 20px;
+    justify-content: center;
      
 }
 
 .trem-img{
-
   display: flex;
+}
 
+.trem-info {
+   padding: 10px; 
+    color: #000000;
+}
+
+.titulo1 {
+    display: flex;
+    color: #3e68f1;
+}
+
+.titulo2 {
+    display: flex;
+    color: #218f21;
+}
+
+.titulo3 {
+    display: flex;
+    color: #d40000;
+}
+
+.titulo4 {
+    display: flex;
+    color: #eef13e;
 }
 
 
@@ -688,3 +692,14 @@ a{
 
         cursor: pointer;
     }
+ 
+#fotos_rotas_html {
+    align-items: center;
+    width: 50%;
+    height: 80%;
+    margin-left: 350px;
+    margin-top: 9cqh;
+    border-radius: 10px;
+    border: 3px solid #850000;
+    overflow: hidden;
+}

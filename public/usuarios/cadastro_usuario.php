@@ -21,7 +21,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
    $stmt->close();
    exit;
 
-   
 
 }
 
@@ -54,7 +53,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
             <div class="container_login">
                 <h2 id="titulo_cadastro">Cadastrar</h2>
-                <form id="form_login">
+                
+                 <!--Campos de formulario de cadastro usuario verificado-->
+
+                <form id="form_login" method="POST" action="">
                     <div class="conjunto">
                         <label for="email" class="form-label"></label>
                         <input type="email" id="email" name="email" placeholder="Digite seu email" required>
@@ -75,6 +77,11 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                         <input type="password" id="senha" name="senha" placeholder="Confirme a sua senha" required>
                     </div>
 
+                    <div class="conjunto">
+                        <label for="telefone" class="form-label"></label>
+                        <input type="text" id="telefone" name="telefone" placeholder="Digite seu telefone" required>
+                    </div>
+
                     <div class="col-12">
                         <div class="form-check">
                             <input class="form-check-input " type="checkbox" id="gridCheck">
@@ -86,7 +93,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
                     <button id="botao_login" type="submit" class="btn btn-outline-danger">Cadastrar-se</button>
                 </form>
-
 
             </div>
         </main>
