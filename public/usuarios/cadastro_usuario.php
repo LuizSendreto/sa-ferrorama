@@ -3,7 +3,7 @@
 include '../../infra/conexao.php';
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
-    $nome = $_POST['nome'];
+    $nome = $_POST['nomeUsuario'];
     $email = $_POST['email'];
     $telefone = $_POST['telefone'];
 
@@ -19,6 +19,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         echo "Erro ao cadastrar" . $stmt->error;
     }
    $stmt->close();
+   header("Location: ../../index.php");
    exit;
 
 
