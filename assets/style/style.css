@@ -612,11 +612,12 @@ form {
 .trens{
     align-items: center;
    display: flex;
-   width: 500px
+   width: 600px;
    height: 300px;
     background-color: #ffffff;
     border-radius: 20px;
     border: 4px solid #850000;
+    margin: 20px;
     padding: 20px;
     justify-content: center;
     
@@ -703,4 +704,8 @@ form {
     border-radius: 10px;
     border: 3px solid #850000;
     overflow: hidden;
+}
+.doistrens{
+   margin: 20px;
+   display: flex;
 }
