@@ -40,7 +40,7 @@
         </aside>
 
         <div class="fotos_dashboard">
-            <img src="../assets/img/dashboard_certo.png" alt="Trens">
+            <img id="fotos_dashboard" src="../assets/img/dashboard_certo.png" alt="Trens">
             
         </div>
 
