@@ -612,12 +612,14 @@ form {
 .trens{
     align-items: center;
    display: flex;
-   width: 420px;
+   width: 500px
+   height: 300px;
     background-color: #ffffff;
     border-radius: 20px;
     border: 4px solid #850000;
     padding: 20px;
     justify-content: center;
+    
      
 }
 
@@ -651,8 +653,7 @@ form {
 }
 
 
-.trens1 {
-    
+.trens1 { 
     display: flex;
    
 }
