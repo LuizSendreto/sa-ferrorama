@@ -90,13 +90,13 @@ input::placeholder {
 
 
 .blue {
-    padding: 100px;
+    padding: 150px;
     background-color: rgb(253, 249, 243);
     border-radius: 20px;
     display: flex;
-    margin-right: 50px;
+    margin-right: 100px;
     margin-left: 100px;
-    height: 520PX;
+    height: 620PX;
     width: 400px;
     justify-content: center;
 
