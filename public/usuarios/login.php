@@ -44,7 +44,7 @@ include '../../infra/conexao.php';
                 </form>
                 <div class="Cadastro">
                     <p id="texto_login"> Você ainda não possui cadastro?</p>
-                    <a class="link1" href="../../public/usuarios/cadastro.php">Cadastrar-se!</a>
+                    <a class="link1" href="../../public/usuarios/cadastro_usuario.php">Cadastrar-se!</a>
                 </div>
 
 
