@@ -1,6 +1,6 @@
 <?php
 
-include '../infra/conexao.php';
+include '../../infra/conexao.php';
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
     $nome = $_POST['nome'];
@@ -35,7 +35,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
 
 
-    <link rel="stylesheet" href="../assets/style/style.css">
+    <link rel="stylesheet" href="../../assets/style/style.css">
 
 </head>
 
@@ -44,7 +44,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         <nav></nav>
     </header>
     <div class="Strain">
-        <img class="Strain" src="../assets/img/Tela de login atualizada.png" alt="Strain">
+        <img class="Strain" src="../../assets/img/Tela de login atualizada.png" alt="Strain">
     </div>
     <div class="flex">
         <main class="blue">

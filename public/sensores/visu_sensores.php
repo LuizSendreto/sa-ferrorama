@@ -1,3 +1,13 @@
+<?php
+
+include "../../infra/conexao.php";
+
+$sql = "SELECT * FROM sensores";
+
+$resultado = mysqli_query($conn, $sql);
+
+?>
+
 <html lang="en">
 
 <head>
@@ -24,6 +34,66 @@
 
     <main>
 
+
+    <style>
+        #conteudo_sensores {
+            position: fixed;
+            top: 100px;
+            left: 250px;
+            right: 0;
+            bottom: 0;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            padding: 40px;
+            box-sizing: border-box;
+
+            overflow-y: auto;
+        }
+
+        /* Botão de cadastrar */
+        #conteudo_sensores button {
+            background-color: #940404;
+            color: white;
+
+            border: none;
+            border-radius: 5px;
+
+            padding: 12px 25px;
+
+            font-size: 16px;
+            font-weight: bold;
+
+            cursor: pointer;
+
+            margin-bottom: 30px;
+        }
+
+        #conteudo_sensores button:hover {
+            background-color: #700303;
+        }
+
+        /* Tabela */
+        #tabela_registro_sensores {
+            width: 90%;
+            border-collapse: collapse;
+        }
+
+        #tabela_registro_sensores th,
+        #tabela_registro_sensores td {
+            border: 1px solid #ccc;
+            padding: 12px;
+            text-align: center;
+        }
+
+        #tabela_registro_sensores th {
+            background-color: #940404;
+            color: white;
+        }
+    </style>
+
         <!-- Parte do menu de navegação lateral -->
         <aside id="sidebar_dashboard">
 
@@ -43,42 +113,34 @@
 
         </aside>
         <!-- finalização do menu de navegação lateral -->
+     <div id="conteudo_sensores">
 
-        <section id="tabela_registro_sensores">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th scope="col">ID do Sensor</th>
-                        <th scope="col">Tipo de Sensor</th>
-                        <th scope="col">Localização</th>
-                        <th scope="col">Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1.1.1</td>
-                        <td>Temperatura</td>
-                        <td>Locomotiva 1</td>
-                        <td>Ativo</td>
-                    </tr>
-                    <tr>
-                        <td>2.2.2</td>
-                        <td>Pressão</td>
-                        <td>Vagão 3</td>
-                        <td>Inativo</td>
-                    </tr>
-                    <tr>
-                        <td>3.3.3</td>
-                        <td>Vibração</td>
-                        <td>Locomotiva 2</td>
-                        <td>Ativo</td>
-                    </tr>
-                </tbody>
+    <button onclick="location.href='cadastro_sensor.php'">
+        Cadastrar Sensor
+    </button>
 
-            </table>
-        </section>
+    <table id="tabela_registro_sensores">
+        <tr>
+            <th>ID</th>
+            <th>Tipo</th>
+            <th>Localização</th>
+            <th>Posição</th>
+        </tr>
 
-        <button id="botao_sensor" type="submit" onclick="location.href='../public/cadastro_sensor.html'">Cadastrar Sensor</button>
+        <?php while ($sensor = mysqli_fetch_assoc($resultado)) { ?>
+
+            <tr>
+                <td><?php echo $sensor["id"]; ?></td>
+                <td><?php echo $sensor["tipo"]; ?></td>
+                <td><?php echo $sensor["localizacao"]; ?></td>
+                <td><?php echo $sensor["posicao"]; ?></td>
+            </tr>
+
+        <?php } ?>
+
+    </table>
+
+</div>
 
     </main>
 

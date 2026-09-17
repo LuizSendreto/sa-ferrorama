@@ -485,7 +485,6 @@ form {
 }
 
 #main_dashboard {
-    #main_dashboard {
         margin-left: 250px;
         margin-top: 60px;
 
@@ -498,7 +497,6 @@ form {
         background-position: center;
         background-repeat: no-repeat;
     }
-}
 
 .fotos img {
     width: 100%;
@@ -659,6 +657,42 @@ form {
     display: flex;
    
 }
+
+    #conteudo_cadastro_sensor {
+        margin-left: 250px;
+        margin-top: 100px;
+        padding: 40px;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #form_cadastro_sensor {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        width: 400px;
+    }
+
+    #form_cadastro_sensor select {
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    #form_cadastro_sensor button {
+        margin-top: 20px;
+        padding: 10px;
+
+        background-color: #940404;
+        color: white;
+
+        border: none;
+        border-radius: 5px;
+
+        cursor: pointer;
+    }
  
 #fotos_rotas_html {
     align-items: center;
