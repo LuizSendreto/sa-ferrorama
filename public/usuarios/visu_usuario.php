@@ -10,7 +10,7 @@
     
 </head>
 
-            //Campos verificado(adicionado o campo de senhas)
+            <!--Campos verificado(adicionado o campo de senhas)-->
 
 <body class="body_dashboard">
 

@@ -54,7 +54,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             <div class="container_login">
                 <h2 id="titulo_cadastro">Cadastrar</h2>
                 
-                 
+                 <!--Campos de formulario de cadastro usuario verificado-->
 
                 <form id="form_login" method="POST" action="">
                     <div class="conjunto">
