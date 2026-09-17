@@ -10,6 +10,8 @@
     
 </head>
 
+            //Campos verificado(adicionado o campo de senhas)
+
 <body class="body_dashboard">
 
     <header>
@@ -53,6 +55,7 @@
                         <th scope="col">Email</th>
                         <th scope="col">Telefone</th>
                         <th scope="col">Tipo de usuario</th>
+                        <th scope="col">Senha</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -61,18 +64,21 @@
                         <td>miguel@gmail.com</td>
                         <td>(11) 99999-9999</td>
                         <td>Usuário Comum</td>
+                        <td>********</td>
                     </tr>
                     <tr>
                         <td>Juana</td>
                         <td>juana@gmail.com</td>
                         <td>(11) 88888-8888</td>
                         <td>Administrador</td>
+                        <td>********</td>
                     </tr>
                     <tr>
                         <td>Zonta</td>
                         <td>zonta@gmail.com</td>
                         <td>(11) 77777-7777</td>
                         <td>Usuário Comum</td>
+                        <td>********</td>
                     </tr>
                 </tbody>
 
