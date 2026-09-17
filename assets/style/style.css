@@ -7,6 +7,7 @@ img {
     align-items: center;
     width: 100%;
     height: 450px;
+
     display: block;
 }
 
@@ -653,4 +654,15 @@ a{
     
     display: flex;
    
+}
+ 
+#fotos_rotas_html {
+    align-items: center;
+    width: 50%;
+    height: 80%;
+    margin-left: 350px;
+    margin-top: 9cqh;
+    border-radius: 10px;
+    border: 3px solid #850000;
+    overflow: hidden;
 }
