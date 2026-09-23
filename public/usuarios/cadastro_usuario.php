@@ -58,6 +58,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                  <!--Campos de formulario de cadastro usuario verificado-->
 
                 <form id="form_login" method="POST" action="">
+                    
                     <div class="conjunto">
                         <label for="email" class="form-label"></label>
                         <input type="email" id="email" name="email" placeholder="Digite seu email" required>

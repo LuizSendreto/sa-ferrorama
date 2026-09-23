@@ -85,6 +85,18 @@
             </table>
         </section>
 
+        <div class="botoes_usuarios">
+
+            <a href="../funcionarios/cadastro_funcionarios.php" class="btn btn-primary">Cadastrar Funcionário</a>
+            <a href="../funcionarios/editar_funcionarios.php" class="btn btn-warning">Editar Funcionário</a>
+            <a href="../funcionarios/excluir_funcionario.php" class="btn btn-danger">Excluir Funcionário</a>
+
+            <a href="../usuarios/cadastro_usuario.php" class="btn btn-primary">Cadastrar Usuário</a>
+            <a href="../usuarios/editar_usuarios.php" class="btn btn-warning">Editar Usuário</a>
+            <a href="../usuarios/excluir_usuarios.php" class="btn btn-danger">Excluir Usuário</a>
+
+        </div>
+
     </main>
 
     <footer></footer>
