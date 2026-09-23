@@ -11,9 +11,6 @@ img {
     display: block;
 }
 
-
-
-
 .btn.btn-primary {
     display: flex;
 
@@ -151,10 +148,7 @@ form {
 .body_index {
     margin: 0;
     font-family: Arial, Helvetica, sans-serif;
-    background-image: url("../img/Tela\ de\ login.png");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
+   background: rgb(250, 249, 246);
 }
 
 .navbar {
@@ -186,14 +180,13 @@ form {
 
 .banner {
     height: 500px;
-    background: #940404;
+    background:  rgb(250, 249, 246);
     display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.logo-banner img {
-    width: 100%;
+    background-image: url("../img/Tela\ de\ login.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    justify-content:flex-end;
 }
 
 .conteudo {
@@ -214,12 +207,7 @@ form {
 
 .Strain {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 45px;
-    margin-right: 250px;
-    margin-left: 0px;
-    margin-top: 150px;
+    margin-right: 400px;
     width: 500px;
     height: 600px;
 }
@@ -346,6 +334,24 @@ form {
     padding: 10px;
     margin-top: 200px;
     border-radius: 30px;
+
+}
+
+#frase1 {
+    font-size: 40px;
+    font-weight: bold;
+    color:  rgb(250, 249, 246);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    font-family: Times New Roman, Times, serif;
+    display: flex; 
+    align-items: center;
+    padding: 20px;
+    background-color: #850000;
+     border-bottom-left-radius: 500px;
+    border-top-left-radius: 500px;
+    padding: 50px;
 
 }
 

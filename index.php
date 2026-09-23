@@ -22,10 +22,10 @@
     </nav>
 
     <section class="banner">
-
-        <div class="logo-banner">
-            <img src="assets/img/banner_logo2.png" alt="Logo Grande">
-        </div>
+        
+        <img class="Strain" src="assets/img/Logo_index.png" alt="Strain">
+   
+        <p id="frase1"> Olá, seja bem-vindo ao Strain, o sistema de <br> transporte público de Joinville! </p>
 
     </section>
     <main class="blue.index">
@@ -36,7 +36,7 @@
                 um sistema <br> que vai além do básico, usando sensores IoT
                 para monitorar tudo o que importa em tempo <br> real — da velocidade ao consumo de energia. Por trás
                 dessa solução, estamos nós, Luiz Felipe, <br>
-                Rafael Tironi, Nicola Jordan e Juana Franciscao, trabalhando para transformar números brutos em <br>
+                Rafael Tironi, Nicole Jordan e Juana Franciscao, trabalhando para transformar números brutos em <br>
                 dashboards práticos e relatórios de manutenção
                 preditiva. Nosso foco é unir tecnologia e mobilidade <br> urbana para garantir que a gestão ferroviária
                 seja mais segura, eficiente e conectada, sempre <br>
