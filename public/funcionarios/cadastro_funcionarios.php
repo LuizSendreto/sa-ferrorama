@@ -88,7 +88,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                         <div class="form-check">
                             <input class="form-check-input " type="checkbox" id="gridCheck">
                             <label class="form-check-label" for="gridCheck">
-                                Cadastro Funcionário
+                                É um cadastro de Funcionário por outro funcionario? Se sim, clique aqui.
                             </label>
                             <br>
                         </div>
