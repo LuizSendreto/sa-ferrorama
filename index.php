@@ -14,7 +14,7 @@
     <nav class="navbar">
 
         <div class="logo-navbar" id="logoNavbar">
-            <img src="assets/img/logo_navbar2.png" alt="Logo Strain">
+            <img src="assets/img/image.png" alt="Logo Strain">
         </div>
 
         <button class="btn" onclick="window.location.href='public/usuarios/login.php'">Entrar</button>
@@ -112,6 +112,27 @@
             </div>
     </main>
 
+
+
+        <footer class="footer">
+            <div class="footer1">
+                <p>© 2026 Strain. Todos os direitos reservados.</p> 
+                <br>
+                <p >Desenvolvido por Nicole Jordan, Juana Franciscao, Luiz Felipe e Rafael Tironi.</p>
+            </div>
+
+
+
+            <div class="footer2">
+
+                <a href="#"> <b>Trens e estações de Joinville SC </b> </a>
+                <a href="#"> <b>Cadastro de usuários </b> </a>
+                <a href="#"> <b>Sou administrador </b> </a>
+
+                </div>
+
+            
+
     <script>
 
         window.addEventListener("scroll", function () {
@@ -131,5 +152,5 @@
 </body>
 
 </html>
-
+</footer>
 <script src="Scripts/botoes.js"></script>
