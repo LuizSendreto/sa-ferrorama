@@ -18,7 +18,7 @@ mysqli_stmt_execute($stmt);
 // Fecha o statement
 mysqli_stmt_close($stmt);
 
-header("Location: visu_usuario.php");
+header("Location: visu_usuarios.php");
 exit;
-
+  
 ?>

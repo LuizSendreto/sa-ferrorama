@@ -113,20 +113,36 @@ $clientes = mysqli_query($conn, $sql);
 
             <?php while ($cliente = mysqli_fetch_assoc($clientes)) { ?>
 
-                <tr>
-                    <td><?php echo $cliente["id"]; ?></td>
-                    <td><?php echo $cliente["nome"]; ?></td>
-                    <td><?php echo $cliente["email"]; ?></td>
-                    <td><?php echo $cliente["telefone"]; ?></td>
-                    <td>
-                        <a href="../usuarios/editar_usuarios.php?id=<?php echo $cliente["id"]; ?> "class="btn btn-secondary">Editar </a>
-                        <a href="../usuarios/excluir_usuarios.php?id=<?php echo $cliente["id"]; ?> "class="btn btn-danger">Excluir </a>
-                        <a href="../usuarios/cadastro_usuarios.php "class="btn btn-success">Cadastrar</a>
-                    </td>
-                </tr>
-            <?php } ?>
-        </table>
-    </div>
+        <section id="tabela_cadastro_funcionarios">
+            <div>
+                 <h2>Funcionários Cadastrados</h2>
+
+                <table>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Email</th>
+                        <th>Telefone</th>
+                        <th>Ações</th>
+                    </tr>
+
+        <?php while ($funcionario = mysqli_fetch_assoc($funcionarios)) { ?>
+                    <tr>
+                        <td><?php echo $funcionario["id"]; ?></td>
+                        <td><?php echo $funcionario["nome"]; ?></td>
+                        <td><?php echo $funcionario["email"]; ?></td>
+                        <td><?php echo $funcionario["telefone"]; ?></td>
+                        <td>
+                            <a href="public/editar_funcionarios.php?id=<?php echo $funcionario["id"]; ?>">Editar</a>
+                            <a href="public/excluir_funcionarios.php?id=<?php echo $funcionario["id"]; ?>">Excluir</a>
+                        </td>
+                    </tr>
+        <?php } ?>
+                </table>
+            </div>
+
+        </section>
+
 
 </section>
 

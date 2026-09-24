@@ -7,7 +7,7 @@ include "../infra/conexao.php";
 $id = $_GET["id"];
 
 $sql = "SELECT * FROM funcionarios WHERE id = $id";
-$resultado = mysqli_query($conexao, $sql);
+$resultado = mysqli_query($conn, $sql);
 
 $funcionario = mysqli_fetch_assoc($resultado);
 
@@ -33,7 +33,7 @@ $funcionario = mysqli_fetch_assoc($resultado);
 
         <h2>Editando o funcionário <?php echo $funcionario["nome"]; ?>!</h2>
 
-        <form action="atualizar.php" method="POST">
+        <form action="atualizar_funcionarios.php" method="POST">
 
             <input type="hidden" name="id" value="<?php echo $funcionario["id"]; ?>">
 
