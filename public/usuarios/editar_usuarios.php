@@ -68,7 +68,7 @@ if (!$cliente) {
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
@@ -80,32 +80,39 @@ if (!$cliente) {
 </head>
 
 <body>
+
     <header>
         <h1>Editar Usuário</h1>
     </header>
+
     <main>
         <h2>Editando o usuario <?php echo $cliente["nome"]?>!</h2>
         <form action="editar_usuarios.php" method="POST">
             <input type="hidden" name="id" value="<?php echo $cliente["id"]?>">
 
             <label for="nome">Nome:</label>
-            <input type="text" name="nome" value="<?php echo $cliente["nome"]?>">
+            <input type="text" name="nome" value="<?php echo $usuario["nome"]; ?>">
             <br>
+
             <label for="email">Email:</label>
-            <input type="email" name="email" value="<?php echo $cliente["email"]?>">
+            <input type="email" name="email" value="<?php echo $usuario["email"]; ?>">
             <br>
+
             <label for="telefone">Telefone:</label>
-            <input type="number" name="telefone" value="<?php echo $cliente["telefone"]?>">
+            <input type="text" name="telefone" value="<?php echo $usuario["telefone"]; ?>">
             <br>
+
             <button type="submit">Atualizar</button>
+
         </form>
 
     </main>
+
     <footer>
 
     </footer>
 
-
 </body>
 
 </html>
+

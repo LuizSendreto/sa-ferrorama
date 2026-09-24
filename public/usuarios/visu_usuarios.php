@@ -50,7 +50,7 @@ $clientes = mysqli_query($conn, $sql);
                 <li><a href="../monitoramento.php" >Monitoramento</a></li>
                 <li><a href="../alertas.php">Alertas</a></li>
                 <li><a href="../relatorios.php" >Relatórios</a></li>
-                <li><a href="../usuarios/visu_usuario.php" class="active_sidebar">Visualização de Usuarios</a></li>
+                <li><a href="../usuarios/visu_usuarios.php" class="active_sidebar">Visualização de Usuarios</a></li>
                 <li><a href="../sensores/visu_sensores.php">Visualização de Sensores</a></li>
                 <li><a href="../usuarios/login.php">Logout</a></li>
             </ul>
@@ -104,11 +104,22 @@ $clientes = mysqli_query($conn, $sql);
         <table class="table table-bordered mx-auto" style="width: 80%;">
 
             <tr>
+<<<<<<< HEAD:public/usuarios/visu_usuario.php
                 <th>ID</th>
                 <th>Nome</th>
                 <th>Email</th>
                 <th>Telefone</th>
                 <th>Ações</th>
+=======
+                <td><?php echo $cliente["id"]; ?></td>
+                <td><?php echo $cliente["nome"]; ?></td>
+                <td><?php echo $cliente["email"]; ?></td>
+                <td><?php echo $cliente["telefone"]; ?></td>
+                <td>
+                    <a href="public/editar_usuarios.php?id=<?php echo $cliente["id"]; ?>">Editar</a>
+                    <a href="public/excluir_usuarios.php?id=<?php echo $cliente["id"]; ?>">Excluir</a>
+                </td>
+>>>>>>> 487cc1ca3f1a8348719124bd19d3124f2f36edbb:public/usuarios/visu_usuarios.php
             </tr>
 
             <?php while ($cliente = mysqli_fetch_assoc($clientes)) { ?>
