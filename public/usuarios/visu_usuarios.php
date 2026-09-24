@@ -106,8 +106,8 @@
                 <td><?php echo $cliente["email"]; ?></td>
                 <td><?php echo $cliente["telefone"]; ?></td>
                 <td>
-                    <a href="public/editar.php?id=<?php echo $cliente["id"]; ?>">Editar</a>
-                    <a href="public/excluir.php?id=<?php echo $cliente["id"]; ?>">Excluir</a>
+                    <a href="public/editar_usuarios.php?id=<?php echo $cliente["id"]; ?>">Editar</a>
+                    <a href="public/excluir_usuarios.php?id=<?php echo $cliente["id"]; ?>">Excluir</a>
                 </td>
             </tr>
         <?php } ?>
