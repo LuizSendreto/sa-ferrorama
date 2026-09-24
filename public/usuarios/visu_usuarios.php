@@ -114,8 +114,8 @@ $funcionarios = mysqli_query($conn, $sql_func);
                             <td><?php echo $funcionario["email"]; ?></td>
                             <td><?php echo $funcionario["telefone"]; ?></td>
                             <td>
-                                <a href="../public/editar_funcionarios.php?id=<?php echo $funcionario["id"]; ?>">Editar</a>
-                                <a href="../public/excluir_funcionarios.php?id=<?php echo $funcionario["id"]; ?>">Excluir</a>
+                                <a href="../../public/funcionarios/editar_funcionarios.php?id=<?php echo $funcionario["id"]; ?>">Editar</a>
+                                <a href="../../public/funcionarios/excluir_funcionarios.php?id=<?php echo $funcionario["id"]; ?>">Excluir</a>
                             </td>
                         </tr>
                 <?php } ?>
