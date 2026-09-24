@@ -99,8 +99,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="conjunto">
                         <input
                             type="password"
-                            id="senha"
-                            name="senha"
+                            id="confirmarSenha"
+                            name="confirmarSenha"
                             placeholder="Confirme sua senha"
                             required>
                     </div>
