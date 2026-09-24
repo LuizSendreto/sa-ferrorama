@@ -114,8 +114,8 @@ $funcionarios = mysqli_query($conn, $sql_func);
                             <td><?php echo $funcionario["email"]; ?></td>
                             <td><?php echo $funcionario["telefone"]; ?></td>
                             <td>
-                                <a href="editar_funcionarios.php?id=<?php echo $funcionario["id"]; ?>">Editar</a>
-                                <a href="excluir_funcionarios.php?id=<?php echo $funcionario["id"]; ?>">Excluir</a>
+                                <a href="../public/editar_funcionarios.php?id=<?php echo $funcionario["id"]; ?>">Editar</a>
+                                <a href="../public/excluir_funcionarios.php?id=<?php echo $funcionario["id"]; ?>">Excluir</a>
                             </td>
                         </tr>
                 <?php } ?>
@@ -123,7 +123,7 @@ $funcionarios = mysqli_query($conn, $sql_func);
         </div>
 
         <div class="text-center">
-            <button onclick="location.href='cadastro_funcionarios.php'">Cadastrar Funcionário</button>
+            <button onclick="location.href='../../public/funcionarios/cadastro_funcionarios.php'">Cadastrar Funcionário</button>
         </div>
         
     </section>
