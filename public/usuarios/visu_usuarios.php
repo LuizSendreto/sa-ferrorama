@@ -5,6 +5,8 @@ include '../../infra/conexao.php';
 $sql = "SELECT id, nome, email, telefone FROM clientes";
 $clientes = mysqli_query($conn, $sql);
 
+$sql_func = "SELECT id, nome, email, telefone FROM funcionarios";
+$funcionarios = mysqli_query($conn, $sql_func);
 ?>
 
 
@@ -57,94 +59,74 @@ $clientes = mysqli_query($conn, $sql);
 
         </aside>
 
-        <section id="tabela_teste">
-            <!--<table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th scope="col">Nome</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Telefone</th>
-                        <th scope="col">Tipo de usuario</th>
-                        <th scope="col">Senha</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Miguel</td>
-                        <td>miguel@gmail.com</td>
-                        <td>(11) 99999-9999</td>
-                        <td>Usuário Comum</td>
-                        <td>********</td>
-                    </tr>
-                    <tr>
-                        <td>Juana</td>
-                        <td>juana@gmail.com</td>
-                        <td>(11) 88888-8888</td>
-                        <td>Administrador</td>
-                        <td>********</td>
-                    </tr>
-                    <tr>
-                        <td>Zonta</td>
-                        <td>zonta@gmail.com</td>
-                        <td>(11) 77777-7777</td>
-                        <td>Usuário Comum</td>
-                        <td>********</td>
-                    </tr>
-                </tbody>
+        
 
-            </table>-->
-        </section>
+    <section id="tabela_cadastro_clientes">
 
-        <section id="tabela_cadastro_clientes">
+        <div class="text-center">
 
-    <div class="text-center">
+            <h2>Clientes Cadastrados</h2>
 
-        <h2>Clientes Cadastrados</h2>
+            <table class="table table-bordered mx-auto" style="width: 80%;">
 
-        <table class="table table-bordered mx-auto" style="width: 80%;">
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th>Telefone</th>
+                    <th>Ações</th>
+                </tr>
 
-            <tr>
-                <th>ID</th>
-                <th>Nome</th>
-                <th>Email</th>
-                <th>Telefone</th>
-                <th>Ações</th>
-            </tr>
+                <?php while ($cliente = mysqli_fetch_assoc($clientes)) { ?>
+                        <tr>
+                            <td><?php echo $cliente["id"]; ?></td>
+                            <td><?php echo $cliente["nome"]; ?></td>
+                            <td><?php echo $cliente["email"]; ?></td>
+                            <td><?php echo $cliente["telefone"]; ?></td>
+                            <td>
+                                <a href="public/editar_clientes.php?id=<?php echo $cliente["id"]; ?>">Editar</a>
+                                <a href="public/excluir_clientes.php?id=<?php echo $cliente["id"]; ?>">Excluir</a>
+                            </td>
+                        </tr>
+                <?php } ?>
+            </table>
+        </div>
+    </section>
 
-            <?php while ($cliente = mysqli_fetch_assoc($clientes)) { ?>
+    <section id="tabela_cadastro_funcionarios">
 
-        <section id="tabela_cadastro_funcionarios">
-            <div>
-                 <h2>Funcionários Cadastrados</h2>
+        <div class="text-center">
+            <h2>Funcionários Cadastrados</h2>
 
-                <table>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nome</th>
-                        <th>Email</th>
-                        <th>Telefone</th>
-                        <th>Ações</th>
-                    </tr>
+            <table class="table table-bordered mx-auto" style="width: 80%;">
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th>Telefone</th>
+                    <th>Ações</th>
+                </tr>
 
-        <?php while ($funcionario = mysqli_fetch_assoc($funcionarios)) { ?>
-                    <tr>
-                        <td><?php echo $funcionario["id"]; ?></td>
-                        <td><?php echo $funcionario["nome"]; ?></td>
-                        <td><?php echo $funcionario["email"]; ?></td>
-                        <td><?php echo $funcionario["telefone"]; ?></td>
-                        <td>
-                            <a href="public/editar_funcionarios.php?id=<?php echo $funcionario["id"]; ?>">Editar</a>
-                            <a href="public/excluir_funcionarios.php?id=<?php echo $funcionario["id"]; ?>">Excluir</a>
-                        </td>
-                    </tr>
-        <?php } ?>
-                </table>
-            </div>
+                <?php while ($funcionario = mysqli_fetch_assoc($funcionarios)) { ?>
+                        <tr>
+                            <td><?php echo $funcionario["id"]; ?></td>
+                            <td><?php echo $funcionario["nome"]; ?></td>
+                            <td><?php echo $funcionario["email"]; ?></td>
+                            <td><?php echo $funcionario["telefone"]; ?></td>
+                            <td>
+                                <a href="public/editar_funcionarios.php?id=<?php echo $funcionario["id"]; ?>">Editar</a>
+                                <a href="public/excluir_funcionarios.php?id=<?php echo $funcionario["id"]; ?>">Excluir</a>
+                            </td>
+                        </tr>
+                <?php } ?>
+            </table>
+        </div>
 
-        </section>
-
-
-</section>
+        <div class="text-center">
+            <button onclick="location.href='cadastro_funcionarios.php'">Cadastrar Funcionário</button>
+        </div>
+        
+    </section>
 
     </main>
 
