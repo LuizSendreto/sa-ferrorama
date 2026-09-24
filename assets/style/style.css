@@ -725,6 +725,7 @@ form {
     height: 100%;
 }
 
+
 .footer{
     background-color: #850000;
     color: white;
@@ -767,4 +768,15 @@ a{
     font-size: 16px;
     margin-bottom: 10px;
     width: 100%;
+}
+
+#tabela_cadastro_clientes {
+    margin-left: 250px;
+    padding: 20px;
+}
+
+#tabela_cadastro_clientes table {
+    margin: 0 auto;
+    width: 80%;
+
 }

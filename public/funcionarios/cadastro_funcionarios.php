@@ -19,7 +19,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         echo "Erro ao cadastrar" . $stmt->error;
     }
    $stmt->close();
-   header("Location: ../usuarios/visu_usuario.php");
+   header("Location: ../usuarios/visu_usuarios.php");
    exit;
 
 
@@ -57,7 +57,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 
                  <!--Campos de formulario de cadastro usuario verificado-->
 
-                <form id="form_login" method="POST" action="">
+                <form id="form_cadastro" method="POST" action="">
                     
                     <div class="conjunto">
                         <label for="email" class="form-label"></label>
@@ -94,7 +94,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                         </div>
                     </div>
 
-                    <button id="botao_login" type="submit" class="btn btn-outline-danger">Cadastrar-se</button>
+                    <button id="botao_cadastro" type="submit" class="btn btn-outline-danger">Cadastrar-se</button>
                 </form>
 
             </div>

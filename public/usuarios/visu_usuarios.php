@@ -1,3 +1,13 @@
+<?php
+
+include '../../infra/conexao.php';
+
+$sql = "SELECT id, nome, email, telefone FROM clientes";
+$clientes = mysqli_query($conn, $sql);
+
+?>
+
+
 <html lang="en">
 
 <head>
@@ -40,15 +50,15 @@
                 <li><a href="../monitoramento.php" >Monitoramento</a></li>
                 <li><a href="../alertas.php">Alertas</a></li>
                 <li><a href="../relatorios.php" >Relatórios</a></li>
-                <li><a href="../usuarios/visu_usuario.php" class="active_sidebar">Visualização de Usuarios</a></li>
+                <li><a href="../usuarios/visu_usuarios.php" class="active_sidebar">Visualização de Usuarios</a></li>
                 <li><a href="../sensores/visu_sensores.php">Visualização de Sensores</a></li>
                 <li><a href="../usuarios/login.php">Logout</a></li>
             </ul>
 
         </aside>
 
-        <section id="tabela_registro_sensores">
-            <table class="table table-bordered">
+        <section id="tabela_teste">
+            <!--<table class="table table-bordered">
                 <thead>
                     <tr>
                         <th scope="col">Nome</th>
@@ -82,20 +92,43 @@
                     </tr>
                 </tbody>
 
-            </table>
+            </table>-->
         </section>
 
-        <div class="botoes_usuarios">
+        <section id="tabela_cadastro_clientes">
 
-            <a href="../funcionarios/cadastro_funcionarios.php" class="btn btn-primary">Cadastrar Funcionário</a>
-            <a href="../funcionarios/editar_funcionarios.php" class="btn btn-warning">Editar Funcionário</a>
-            <a href="../funcionarios/excluir_funcionario.php" class="btn btn-danger">Excluir Funcionário</a>
+    <div class="text-center">
 
-            <a href="../usuarios/cadastro_usuario.php" class="btn btn-primary">Cadastrar Usuário</a>
-            <a href="../usuarios/editar_usuarios.php" class="btn btn-warning">Editar Usuário</a>
-            <a href="../usuarios/excluir_usuarios.php" class="btn btn-danger">Excluir Usuário</a>
+        <h2>Clientes Cadastrados</h2>
 
-        </div>
+        <table class="table table-bordered mx-auto" style="width: 80%;">
+
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>Telefone</th>
+                <th>Ações</th>
+            </tr>
+
+            <?php while ($cliente = mysqli_fetch_assoc($clientes)) { ?>
+
+                <tr>
+                    <td><?php echo $cliente["id"]; ?></td>
+                    <td><?php echo $cliente["nome"]; ?></td>
+                    <td><?php echo $cliente["email"]; ?></td>
+                    <td><?php echo $cliente["telefone"]; ?></td>
+                    <td>
+                        <a href="../usuarios/editar_usuarios.php?id=<?php echo $cliente["id"]; ?> "class="btn btn-secondary">Editar </a>
+                        <a href="../usuarios/excluir_usuarios.php?id=<?php echo $cliente["id"]; ?> "class="btn btn-danger">Excluir </a>
+                        <a href="../usuarios/cadastro_usuarios.php "class="btn btn-success">Cadastrar</a>
+                    </td>
+                </tr>
+            <?php } ?>
+        </table>
+    </div>
+
+</section>
 
     </main>
 
