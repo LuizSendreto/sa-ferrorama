@@ -23,7 +23,7 @@ img {
     border-radius: 5px;
     font-weight: bold;
     font-size: 40px;
-    border-color: #810000;
+    border-color: #850000;
 }
 
 .container_login {
@@ -38,7 +38,7 @@ img {
 
 .btn.btn-outline-danger {
     display: flex;
-    border-color: #810000;
+    border-color: #850000;
     background: #850000;
     color: rgb(253, 249, 243);
     border-radius: 30px;
@@ -156,7 +156,7 @@ form {
     top: 0;
     width: 100%;
     height: 70px;
-    background: #940404;
+    background: #850000;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -179,7 +179,7 @@ form {
 }
 
 .banner {
-    height: 500px;
+    height: 600px;
     background:  rgb(250, 249, 246);
     display: flex;
     background-image: url("../img/Tela\ de\ login.png");
@@ -187,6 +187,8 @@ form {
     background-size: cover;
     background-position: center;
     justify-content:flex-end;
+    
+   
 }
 
 .conteudo {
@@ -199,7 +201,7 @@ form {
     padding: 10px 20px;
     border: none;
     background: white;
-    color: #9b0000;
+    color: #850000;
     font-weight: bold;
     cursor: pointer;
     border-radius: 5px;
@@ -210,6 +212,7 @@ form {
     margin-right: 400px;
     width: 500px;
     height: 600px;
+    margin-top: 20px;
 }
 
 #titulo_cadastro {
@@ -224,7 +227,7 @@ form {
 
 .form-check-input {
     background-color: #bd5e5e;
-    border-color: #810000;
+    border-color:#850000;
     box-shadow: #850000;
 }
 
@@ -237,7 +240,7 @@ form {
 
 .flex2 {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #950000;
+    background-color: #850000;
     height: 510px;
     width: 460px;
     border-radius: 50px;
@@ -253,7 +256,7 @@ form {
 
 
 .btn.btn-outline2 {
-    background-color: #950000;
+    background-color: #850000;
     color: aliceblue;
     width: 300px;
     height: 50px;
@@ -367,7 +370,7 @@ form {
 
 #sidebar_dashboard {
     width: 250px;
-    background-color: #940404;
+    background-color:#850000;
     height: calc(100vh - 70px);
     position: fixed;
     top: 70px;
@@ -403,11 +406,11 @@ form {
 }
 
 .menu_sidebar a:hover {
-    background-color: #7a0000;
+    background-color: #850000;
 }
 
 .active_sidebar {
-    background-color: #7a0000;
+    background-color: #850000;
     font-weight: bold;
 }
 
@@ -444,7 +447,7 @@ form {
 
 .popup-conteudo {
 
-    background: #8B0000;
+    background: #850000;
 
     color: white;
 
@@ -693,7 +696,7 @@ form {
         margin-top: 20px;
         padding: 10px;
 
-        background-color: #940404;
+        background-color: #850000;
         color: white;
 
         border: none;
@@ -722,6 +725,51 @@ form {
     height: 100%;
 }
 
+
+.footer{
+    background-color: #850000;
+    color: white;
+    padding: 100px;
+    bottom: 0;
+    width: 2000px;
+    display: flex;
+    flex-direction: row;
+}
+
+.footer1{
+    background-color: #850000;
+    color: white;
+    padding: 100px;
+    bottom: 0;
+    width: 2000px;
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+a{
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+
+}
+
+.footer2 {
+    background-color: #850000;
+    color: white;
+    padding: 50px;
+    bottom: 0;
+    width: 2000px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.text {
+    font-size: 16px;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
 #tabela_cadastro_clientes {
     margin-left: 250px;
     padding: 20px;
@@ -730,4 +778,5 @@ form {
 #tabela_cadastro_clientes table {
     margin: 0 auto;
     width: 80%;
+
 }
