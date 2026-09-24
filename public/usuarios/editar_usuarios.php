@@ -91,15 +91,15 @@ if (!$cliente) {
             <input type="hidden" name="id" value="<?php echo $cliente["id"]?>">
 
             <label for="nome">Nome:</label>
-            <input type="text" name="nome" value="<?php echo $usuario["nome"]; ?>">
+            <input type="text" name="nome" value="<?php echo $cliente["nome"]; ?>">
             <br>
 
             <label for="email">Email:</label>
-            <input type="email" name="email" value="<?php echo $usuario["email"]; ?>">
+            <input type="email" name="email" value="<?php echo $cliente["email"]; ?>">
             <br>
 
             <label for="telefone">Telefone:</label>
-            <input type="text" name="telefone" value="<?php echo $usuario["telefone"]; ?>">
+            <input type="number" name="telefone" value="<?php echo $cliente["telefone"]; ?>">
             <br>
 
             <button type="submit">Atualizar</button>
