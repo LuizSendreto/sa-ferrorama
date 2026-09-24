@@ -24,10 +24,12 @@
     <section class="banner">
         
         <img class="Strain" src="assets/img/Logo_index.png" alt="Strain">
-   
-        <p id="frase1"> Olá, seja bem-vindo ao Strain, o sistema de <br> transporte público de Joinville! </p>
+      
+  
+        <p id="frase1"> Olá, seja bem-vindo ao Strain, o sistema de  transporte público de Joinville! </p>
 
     </section>
+    <hr class="linha">
     <main class="blue.index">
         <div class="Introducao1">
 
@@ -43,10 +45,10 @@
                 com o pé no chão e o código em dia.</h4>
         </div>
 
-
+         <hr class="linha1">
 
         <div class="container_index">
-
+       
             <div class="flex2">
 
                 <div>
