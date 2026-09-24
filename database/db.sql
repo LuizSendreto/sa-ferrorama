@@ -26,3 +26,4 @@ CREATE TABLE funcionarios(
     telefone VARCHAR(20)
 
 );
+

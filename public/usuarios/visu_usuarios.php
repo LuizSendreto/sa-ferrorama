@@ -67,7 +67,7 @@ $funcionarios = mysqli_query($conn, $sql_func);
 
             <h2>Clientes Cadastrados</h2>
 
-            <table class="table table-bordered mx-auto" style="width: 80%;">
+            <table class="table table-bordered mx-auto" style="width: 70%;">
 
                 <tr>
                     <th>ID</th>
@@ -98,7 +98,7 @@ $funcionarios = mysqli_query($conn, $sql_func);
         <div class="text-center">
             <h2>Funcionários Cadastrados</h2>
 
-            <table class="table table-bordered mx-auto" style="width: 80%;">
+            <table class="table table-bordered mx-auto" style="width: 70%;">
                 <tr>
                     <th>ID</th>
                     <th>Nome</th>
@@ -125,7 +125,7 @@ $funcionarios = mysqli_query($conn, $sql_func);
         <div class="text-center">
             <button onclick="location.href='cadastro_funcionarios.php'">Cadastrar Funcionário</button>
         </div>
-        
+
     </section>
 
     </main>
