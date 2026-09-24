@@ -84,8 +84,8 @@ $funcionarios = mysqli_query($conn, $sql_func);
                             <td><?php echo $cliente["email"]; ?></td>
                             <td><?php echo $cliente["telefone"]; ?></td>
                             <td>
-                                <a href="public/editar_clientes.php?id=<?php echo $cliente["id"]; ?>">Editar</a>
-                                <a href="public/excluir_clientes.php?id=<?php echo $cliente["id"]; ?>">Excluir</a>
+                                <a href="editar_usuarios.php?id=<?php echo $cliente["id"]; ?>">Editar</a>
+                                <a href="excluir_usuarios.php?id=<?php echo $cliente["id"]; ?>">Excluir</a>
                             </td>
                         </tr>
                 <?php } ?>
@@ -114,8 +114,8 @@ $funcionarios = mysqli_query($conn, $sql_func);
                             <td><?php echo $funcionario["email"]; ?></td>
                             <td><?php echo $funcionario["telefone"]; ?></td>
                             <td>
-                                <a href="public/editar_funcionarios.php?id=<?php echo $funcionario["id"]; ?>">Editar</a>
-                                <a href="public/excluir_funcionarios.php?id=<?php echo $funcionario["id"]; ?>">Excluir</a>
+                                <a href="editar_funcionarios.php?id=<?php echo $funcionario["id"]; ?>">Editar</a>
+                                <a href="excluir_funcionarios.php?id=<?php echo $funcionario["id"]; ?>">Excluir</a>
                             </td>
                         </tr>
                 <?php } ?>
