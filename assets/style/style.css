@@ -80,8 +80,6 @@ input::placeholder {
     background-size: cover;
     background-position: center;
     min-height: 1000px;
-    margin: 0;
-
 }
 
 
@@ -90,12 +88,13 @@ input::placeholder {
     padding: 150px;
     background-color: rgb(253, 249, 243);
     border-radius: 20px;
-    display: flex;
     margin-right: 100px;
-    margin-left: 100px;
+    margin-left: 150px;
     height: 620PX;
     width: 400px;
     justify-content: center;
+    display: flex;
+    align-items: center;
 
 }
 
@@ -212,7 +211,9 @@ form {
     margin-right: 300px;
     width: 500px;
     height: 600px;
-    margin-top: 20px;
+    margin-top: 110px;
+    margin-right: 500px;
+    border-radius: 40px;
 }
 
 #titulo_cadastro {
