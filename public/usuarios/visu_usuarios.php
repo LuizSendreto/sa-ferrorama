@@ -40,7 +40,7 @@
                 <li><a href="../monitoramento.php" >Monitoramento</a></li>
                 <li><a href="../alertas.php">Alertas</a></li>
                 <li><a href="../relatorios.php" >Relatórios</a></li>
-                <li><a href="../usuarios/visu_usuario.php" class="active_sidebar">Visualização de Usuarios</a></li>
+                <li><a href="../usuarios/visu_usuarios.php" class="active_sidebar">Visualização de Usuarios</a></li>
                 <li><a href="../sensores/visu_sensores.php">Visualização de Sensores</a></li>
                 <li><a href="../usuarios/login.php">Logout</a></li>
             </ul>

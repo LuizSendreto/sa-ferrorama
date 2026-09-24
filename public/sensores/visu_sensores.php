@@ -106,7 +106,7 @@ $resultado = mysqli_query($conn, $sql);
                 <li><a href="../monitoramento.php">Monitoramento</a></li>
                 <li><a href="../alertas.php">Alertas</a></li>
                 <li><a href="../relatorios.php">Relatórios</a></li>
-                <li><a href="../usuarios/visu_usuario.php">Visualização de Usuarios</a></li>
+                <li><a href="../usuarios/visu_usuarios.php">Visualização de Usuarios</a></li>
                 <li><a href="../sensores/visu_sensores.php" class="active_sidebar">Visualização de Sensores</a></li>
                 <li><a href="../usuarios/login.php">Logout</a></li>
             </ul>

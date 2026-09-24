@@ -32,7 +32,7 @@
                 <li><a href="../public/monitoramento.php" class="active_sidebar">Monitoramento</a></li>
                 <li><a href="../public/alertas.php" >Alertas</a></li>
                 <li><a href="../public/relatorios.php" >Relatórios</a></li>
-                <li><a href="../public/usuarios/visu_usuario.php">Visualização de Usuarios</a></li>
+                <li><a href="../public/usuarios/visu_usuarios.php">Visualização de Usuarios</a></li>
                 <li><a href="../public/sensores/visu_sensores.php">Visualização de Sensores</a></li>
                 <li><a href="../public/usuarios/login.php">Logout</a></li>
             </ul>
