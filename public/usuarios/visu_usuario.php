@@ -47,8 +47,8 @@
 
         </aside>
 
-        <section id="tabela_registro_sensores">
-            <table class="table table-bordered">
+        <section id="tabela_teste">
+            <!--<table class="table table-bordered">
                 <thead>
                     <tr>
                         <th scope="col">Nome</th>
@@ -82,8 +82,40 @@
                     </tr>
                 </tbody>
 
-            </table>
+            </table>-->
         </section>
+
+        <section id="tabela_cadastro_clientes">
+            <div>
+                 <h2>Clientes Cadastrados</h2>
+
+                 <table>
+
+                    <tr>
+                      <th>ID</th>
+                      <th>Nome</th>
+                      <th>Email</th>
+                      <th>Telefone</th>
+                      <th>Ações</th>
+                    </tr>
+
+        <?php while ($cliente = mysqli_fetch_assoc($clientes)) { ?>
+            <tr>
+                <td><?php echo $cliente["id"]; ?></td>
+                <td><?php echo $cliente["nome"]; ?></td>
+                <td><?php echo $cliente["email"]; ?></td>
+                <td><?php echo $cliente["telefone"]; ?></td>
+                <td>
+                    <a href="public/editar.php?id=<?php echo $cliente["id"]; ?>">Editar</a>
+                    <a href="public/excluir.php?id=<?php echo $cliente["id"]; ?>">Excluir</a>
+                </td>
+            </tr>
+        <?php } ?>
+                 </table>
+        </div>
+
+        </section>
+
 
         <div class="botoes_usuarios">
 
