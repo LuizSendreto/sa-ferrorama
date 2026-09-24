@@ -1,3 +1,13 @@
+<?php
+
+include '../../infra/conexao.php';
+
+$sql = "SELECT id, nome, email, telefone FROM clientes";
+$clientes = mysqli_query($conn, $sql);
+
+?>
+
+
 <html lang="en">
 
 <head>
@@ -86,35 +96,22 @@
         </section>
 
         <section id="tabela_cadastro_clientes">
-            <div>
-                 <h2>Clientes Cadastrados</h2>
 
-                 <table>
+    <div class="text-center">
 
-                    <tr>
-                      <th>ID</th>
-                      <th>Nome</th>
-                      <th>Email</th>
-                      <th>Telefone</th>
-                      <th>Ações</th>
-                    </tr>
+        <h2>Clientes Cadastrados</h2>
 
-        <?php while ($cliente = mysqli_fetch_assoc($clientes)) { ?>
+        <table class="table table-bordered mx-auto" style="width: 80%;">
+
             <tr>
-                <td><?php echo $cliente["id"]; ?></td>
-                <td><?php echo $cliente["nome"]; ?></td>
-                <td><?php echo $cliente["email"]; ?></td>
-                <td><?php echo $cliente["telefone"]; ?></td>
-                <td>
-                    <a href="public/editar_usuarios.php?id=<?php echo $cliente["id"]; ?>">Editar</a>
-                    <a href="public/excluir_usuarios.php?id=<?php echo $cliente["id"]; ?>">Excluir</a>
-                </td>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>Telefone</th>
+                <th>Ações</th>
             </tr>
-        <?php } ?>
-                 </table>
-        </div>
 
-        </section>
+            <?php while ($cliente = mysqli_fetch_assoc($clientes)) { ?>
 
         <section id="tabela_cadastro_funcionarios">
             <div>
@@ -147,17 +144,7 @@
         </section>
 
 
-        <div class="botoes_usuarios">
-
-            <a href="../funcionarios/cadastro_funcionarios.php" class="btn btn-primary">Cadastrar Funcionário</a>
-            <a href="../funcionarios/editar_funcionarios.php" class="btn btn-warning">Editar Funcionário</a>
-            <a href="../funcionarios/excluir_funcionario.php" class="btn btn-danger">Excluir Funcionário</a>
-
-            <a href="../usuarios/cadastro_usuario.php" class="btn btn-primary">Cadastrar Usuário</a>
-            <a href="../usuarios/editar_usuarios.php" class="btn btn-warning">Editar Usuário</a>
-            <a href="../usuarios/excluir_usuarios.php" class="btn btn-danger">Excluir Usuário</a>
-
-        </div>
+</section>
 
     </main>
 
