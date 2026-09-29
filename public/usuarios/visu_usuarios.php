@@ -125,7 +125,7 @@ $funcionarios = mysqli_query($conn, $sql_func);
         </div>
 
         <div class="div_button">
-            <button class="button-container" onclick="location.href='cadastro_funcionarios.php'"> <b>Cadastrar Funcionário</b></button>
+            <button class="button-container" onclick="location.href='../funcionarios/cadastro_funcionarios.php'"> <b>Cadastrar Funcionário</b></button>
         </div>
         </div>
     </section>
