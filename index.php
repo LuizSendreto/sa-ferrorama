@@ -49,7 +49,7 @@ if ($_SESSION['tipo_usuario'] == "funcionario") {
     <main class="blue.index">
         <div class="Introducao1">
 
-            <h2><b class="Introducao">Bem-vindo ao Strain, o sistema de transporte público de Joinville!</b></h2>
+            <h2><b class="Introducao">Oie, Bem-vindo ao Strain, o sistema de transporte público de Joinville!</b></h2>
             <h4 class="Introducao">O STRAIN nasceu do desafio de levar a inteligência de dados para os trilhos. Criamos
                 um sistema <br> que vai além do básico, usando sensores IoT
                 para monitorar tudo o que importa em tempo <br> real — da velocidade ao consumo de energia. Por trás
