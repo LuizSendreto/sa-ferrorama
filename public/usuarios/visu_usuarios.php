@@ -40,7 +40,7 @@ $funcionarios = mysqli_query($conn, $sql_func);
         </nav>
     </header>
 
-    <main>
+    <main class="main_dashboard">
         <aside id="sidebar_dashboard">
 
             <h2 id="titulo_sidebar">Dashboard</h2>
@@ -60,21 +60,23 @@ $funcionarios = mysqli_query($conn, $sql_func);
         </aside>
 
         
+        <div class="container_dashboard">
 
+            <h1 id="titulo_cadastro">Visualização de Usuários</h1>
     <section id="tabela_cadastro_clientes">
 
         <div class="text-center">
 
-            <h2>Clientes Cadastrados</h2>
+            <h2 class="titulo_tabela">Clientes Cadastrados</h2>
 
             <table class="table table-bordered mx-auto" style="width: 80%;">
 
                 <tr>
-                    <th>ID</th>
-                    <th>Nome</th>
-                    <th>Email</th>
-                    <th>Telefone</th>
-                    <th>Ações</th>
+                    <th class="text-center">ID</th>
+                    <th class="text-center">Nome</th>
+                    <th class="text-center">Email</th>
+                    <th class="text-center">Telefone</th>
+                    <th class="text-center">Ações</th>
                 </tr>
 
                 <?php while ($cliente = mysqli_fetch_assoc($clientes)) { ?>
@@ -96,15 +98,15 @@ $funcionarios = mysqli_query($conn, $sql_func);
     <section id="tabela_cadastro_funcionarios">
 
         <div class="text-center">
-            <h2>Funcionários Cadastrados</h2>
+            <h2 class="titulo_tabela">Funcionários Cadastrados</h2>
 
             <table class="table table-bordered mx-auto" style="width: 80%;">
                 <tr>
-                    <th>ID</th>
-                    <th>Nome</th>
-                    <th>Email</th>
-                    <th>Telefone</th>
-                    <th>Ações</th>
+                    <th class="text-center">ID</th>
+                    <th class="text-center">Nome</th>
+                    <th class="text-center">Email</th>
+                    <th class="text-center">Telefone</th>
+                    <th class="text-center">Ações</th>
                 </tr>
 
                 <?php while ($funcionario = mysqli_fetch_assoc($funcionarios)) { ?>
@@ -122,10 +124,10 @@ $funcionarios = mysqli_query($conn, $sql_func);
             </table>
         </div>
 
-        <div class="text-center">
-            <button onclick="location.href='cadastro_funcionarios.php'">Cadastrar Funcionário</button>
+        <div class="div_button">
+            <button class="button-container" onclick="location.href='cadastro_funcionarios.php'"> <b>Cadastrar Funcionário</b></button>
         </div>
-        
+        </div>
     </section>
 
     </main>

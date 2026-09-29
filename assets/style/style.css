@@ -807,22 +807,28 @@ a{
 #tabela_cadastro_funcionarios {
     margin-left: 250px;
     padding: 20px;
+    border-radius: 20px;
+    border-color: #ffffff;
 }
 
-container_dashboard {
-    margin-left: 250px;
-    margin-top: 100px;
-    padding: 40px;
+.container_dashboard {
+  
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
+    margin-right: 220px;
 }
 
     .main_dashboard {
-        background-color: #b9b1b1;
-        margin-left: 350px;
+        background-color: #850000;
+        display: flex;
+        flex-direction: column-reverse;
+        margin-left: 600px;
+        margin-right: 250px;
+        border-radius: 20px;
+        margin-top: 50px;
         width: 1000px;
-        justify-content: center;
+    
     }
 
 #titulo_cadastro {
@@ -830,5 +836,36 @@ container_dashboard {
    justify-content: center;
    margin-left: 220px;
    margin-top: 50px;
-   s
+   color: #ffffff;
 }
+
+.titulo_tabela {
+   color: #ffffff;
+}
+
+
+.button-container{
+    
+    background-color:  #ffffff;
+    color: #850000;
+    border-color:  #ffffff;
+    display: flex;
+    padding: 10px 10px;
+    justify-content: center;
+    margin-top: 20px;
+    border-radius: 5px;
+}
+
+#tabela_cadastro_funcionarios{
+ 
+  flex-direction: column;
+  align-items: center;
+}
+
+.div_button{
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+
