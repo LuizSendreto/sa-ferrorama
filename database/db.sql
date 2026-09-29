@@ -6,7 +6,8 @@ CREATE TABLE clientes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL,
-    telefone VARCHAR(20)
+    telefone VARCHAR(20) NOT NULL,
+    senha VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE sensores(
@@ -23,6 +24,14 @@ CREATE TABLE funcionarios(
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL,
-    telefone VARCHAR(20)
+    telefone VARCHAR(20) NOT NULL,
+    senha VARCHAR(255) NOT NULL
+);
 
+INSERT INTO funcionarios (nome, email, telefone, senha)
+VALUES (
+    'Rafael',
+    'rafael@strain.com',
+    '123456789',
+    '$2y$10$tB/pDB0hZTDJt00C2ihAm.73NNb62FNhkFEpg4BIS.iyR8Y8sFwoe'
 );

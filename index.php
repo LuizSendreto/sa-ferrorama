@@ -1,3 +1,19 @@
+<?php
+
+session_start();
+
+if (!isset($_SESSION['tipo_usuario'])) {
+    header("Location: public/usuarios/login.php");
+    exit;
+}
+
+if ($_SESSION['tipo_usuario'] == "funcionario") {
+    header("Location: public/dashboard.php");
+    exit;
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 

@@ -69,7 +69,7 @@ $funcionarios = mysqli_query($conn, $sql_func);
 
             <h2 class="titulo_tabela">Clientes Cadastrados</h2>
 
-            <table class="table table-bordered mx-auto" style="width: 80%;">
+            <table class="table table-bordered mx-auto" style="width: 70%;">
 
                 <tr>
                     <th class="text-center">ID</th>
@@ -100,7 +100,7 @@ $funcionarios = mysqli_query($conn, $sql_func);
         <div class="text-center">
             <h2 class="titulo_tabela">Funcionários Cadastrados</h2>
 
-            <table class="table table-bordered mx-auto" style="width: 80%;">
+            <table class="table table-bordered mx-auto" style="width: 70%;">
                 <tr>
                     <th class="text-center">ID</th>
                     <th class="text-center">Nome</th>
@@ -116,8 +116,8 @@ $funcionarios = mysqli_query($conn, $sql_func);
                             <td><?php echo $funcionario["email"]; ?></td>
                             <td><?php echo $funcionario["telefone"]; ?></td>
                             <td>
-                                <a href="editar_funcionarios.php?id=<?php echo $funcionario["id"]; ?>">Editar</a>
-                                <a href="excluir_funcionarios.php?id=<?php echo $funcionario["id"]; ?>">Excluir</a>
+                                <a href="../../public/funcionarios/editar_funcionarios.php?id=<?php echo $funcionario["id"]; ?>">Editar</a>
+                                <a href="../../public/funcionarios/excluir_funcionarios.php?id=<?php echo $funcionario["id"]; ?>">Excluir</a>
                             </td>
                         </tr>
                 <?php } ?>
