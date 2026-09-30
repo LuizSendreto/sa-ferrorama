@@ -125,6 +125,7 @@ $resultado = mysqli_query($conn, $sql);
             <th>Tipo</th>
             <th>Localização</th>
             <th>Posição</th>
+            <th>Ações</th>
         </tr>
 
         <?php while ($sensor = mysqli_fetch_assoc($resultado)) { ?>
@@ -134,6 +135,11 @@ $resultado = mysqli_query($conn, $sql);
                 <td><?php echo $sensor["tipo"]; ?></td>
                 <td><?php echo $sensor["localizacao"]; ?></td>
                 <td><?php echo $sensor["posicao"]; ?></td>
+                <td>
+                    <a href="excluir_sensor.php?id=<?php echo $sensor["id"]; ?>" onclick="return confirm('Tem certeza que deseja excluir este sensor?');">
+                        Excluir
+                    </a>
+                </td>
             </tr>
 
         <?php } ?>
