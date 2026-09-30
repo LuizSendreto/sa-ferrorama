@@ -1,5 +1,5 @@
 <?php
-
+// codigo para excluir um usuário do banco de dados com prepared statements revisado.
 session_start();
 
 include "../../infra/conexao.php";
