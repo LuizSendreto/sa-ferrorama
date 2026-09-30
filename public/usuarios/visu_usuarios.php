@@ -87,7 +87,9 @@ $funcionarios = mysqli_query($conn, $sql_func);
                             <td><?php echo $cliente["telefone"]; ?></td>
                             <td>
                                 <a href="editar_usuarios.php?id=<?php echo $cliente["id"]; ?>">Editar</a>
-                                <a href="excluir_usuarios.php?id=<?php echo $cliente["id"]; ?>">Excluir</a>
+                                <a href="excluir_usuarios.php?id=<?php echo $cliente["id"]; ?>" onclick="return confirm('Tem certeza que deseja excluir este cliente?');">
+                                    Excluir
+                                </a>
                             </td>
                         </tr>
                 <?php } ?>
@@ -117,7 +119,9 @@ $funcionarios = mysqli_query($conn, $sql_func);
                             <td><?php echo $funcionario["telefone"]; ?></td>
                             <td>
                                 <a href="../../public/funcionarios/editar_funcionarios.php?id=<?php echo $funcionario["id"]; ?>">Editar</a>
-                                <a href="../../public/funcionarios/excluir_funcionarios.php?id=<?php echo $funcionario["id"]; ?>">Excluir</a>
+                                <a href="../../public/funcionarios/excluir_funcionarios.php?id=<?php echo $funcionario["id"]; ?>" onclick="return confirm('Tem certeza que deseja excluir este funcionário?');">
+                                    Excluir
+                                </a>
                             </td>
                         </tr>
                 <?php } ?>
