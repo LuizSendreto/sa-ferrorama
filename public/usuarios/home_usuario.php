@@ -1,53 +1,49 @@
+<?php
+
+session_start();
+
+if (!isset($_SESSION['tipo_usuario'])) {
+    header("Location: login.php");
+    exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Strain</title>
-
-    <link rel="stylesheet" href="./assets/style/style.css">
-
+    <title>Cadastrar</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../assets/style/style.css">
 </head>
 
 <body class="body_index">
     <nav class="navbar">
 
         <div class="logo-navbar" id="logoNavbar">
-            <img src="assets/img/image.png" alt="Logo Strain">
+            <img src="../../assets/img/image.png" alt="Logo Strain">
         </div>
 
         <button class="btn" onclick="window.location.href='public/usuarios/login.php'">Entrar</button>
 
     </nav>
 
-    ..<section class="banner">
+    <section class="banner">
         
-        <img class="Strain" src="assets/img/Logo_index.png" alt="Strain">
+        <img class="Strain" src="../../assets/img/Logo_index.png" alt="Strain">
       
   
         <p id="frase1"> Olá, seja bem-vindo ao Strain, o sistema de  transporte público de Joinville! </p>
 
     </section>
+    
     <hr class="linha">
     <main class="blue.index">
-        <div class="Introducao1">
+        
 
-            <h2><b class="Introducao">Oi, Bem-vindo ao Strain, o sistema de transporte público de Joinville!</b></h2>
-            <h4 class="Introducao">O STRAIN nasceu do desafio de levar a inteligência de dados para os trilhos. Criamos
-                um sistema <br> que vai além do básico, usando sensores IoT
-                para monitorar tudo o que importa em tempo <br> real — da velocidade ao consumo de energia. Por trás
-                dessa solução, estamos nós, Luiz Felipe, <br>
-                Rafael Tironi, Nicole Jordan e Juana Franciscao, trabalhando para transformar números brutos em <br>
-                dashboards práticos e relatórios de manutenção
-                preditiva. Nosso foco é unir tecnologia e mobilidade <br> urbana para garantir que a gestão ferroviária
-                seja mais segura, eficiente e conectada, sempre <br>
-                com o pé no chão e o código em dia.</h4>
-        </div>
-
-         <hr class="linha1">
-
-        <div class="container_index">
+         <div class="container_index">
        
             <div class="flex2">
 
@@ -57,11 +53,13 @@
 
                 <br>
                 <div class="container_index">
+
+
                     <div class="linhas">
 
                         <div class="linhas">
                             <button id="botaoindex" type="submit" class="btn btn-outline2"><img class="foto_linhas"
-                                    src="assets/img/Captura de tela 2026-05-12 072739.png"
+                                    src="../../assets/img/Captura de tela 2026-05-12 072739.png"
                                     alt="Foto dos trens"></button>
                         </div>
                     </div>
@@ -89,28 +87,24 @@
                     </div>
 
                     <div id="popup" class="popup">
-
                         <div class="popup-conteudo">
-
                             <span class="fechar" onclick="fecharPopup()">✕</span>
-
                             <h2 id="tituloLinha"></h2>
-
                             <div id="horarios"></div>
-
                         </div>
-
                     </div>
-
                 </div>
             </div>
 
 
-
+            <div >
+                
+            </div>
 
             <div>
-                <img class="Mapa" src="assets/img/Mockup- SA Juana, Luiz, Nicole, Rafael.png" alt="Mapa dos trens">
-
+                <img class="Mapa" src="../../assets/img/Mockup- SA Juana, Luiz, Nicole, Rafael.png" alt="Mapa dos trens">
+                <img class="Mapa" src="../../assets/img/alertas.png" alt="Alertas">
+                <img class="Mapa"  src="../../assets/img/trens.png" alt="Trens">
             </div>
     </main>
 
@@ -155,4 +149,4 @@
 
 </html>
 </footer>
-<script src="Scripts/botoes.js"></script>
+<script src="../../Scripts/botoes.js"></script>

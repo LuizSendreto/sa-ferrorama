@@ -48,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION['cliente_email'] = $cliente['email'];
                 $_SESSION['tipo_usuario'] = "cliente";
 
-                header("Location: ../../index.php");
+                header("Location: home_usuario.php");
                 exit;
             } else {
                 $erro = "Senha incorreta.";
