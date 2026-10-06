@@ -868,4 +868,63 @@ a{
     margin-top: 20px;
 }
 
+.imgLocalizacao {
+    display: flex;
+    width: 70px;
+    height: 70px;
+    margin-bottom: 20px;
+}
+
+.container_monitoramento {
+    display: flex;
+    flex-direction: column;
+    margin-top: 100px;
+    background-color: #850000;
+    padding: 20px;
+    width: 500px;
+    margin: 20px;
+    border-radius: 20px;
+}
+
+.titulo_monitoramento {
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #ffffff;
+    margin-top: 15px;
+}
+
+.titulo_monitoramento2 {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    color: #ffffff;
+    display: flex;
+    padding: 10px;
+}
+
+.titulo_monitoramento3 {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    color: #ffffff;
+    display: flex;
+    border-radius: 10px;
+    border: 2px solid #ffffff;
+    padding: 10px;
+}
+
+
+.div_monitoramento {
+    display: flex;
+    flex-wrap: wrap;
+    
+}
+
+#main_monitoramento {
+    margin-left: 250px;
+    margin-top: 80px;
+    padding: 40px;
+    display: flex;
+   
+}
+
 
