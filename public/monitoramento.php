@@ -39,10 +39,50 @@
             
         </aside>
 
-        <div class="fotos">
-            <img src="../assets/img/monitoramento.png" alt="Trens">
-        </div>
 
+        <container class="container_monitoramento">
+        <div class="div_monitoramento">
+            <img class= "imgLocalizacao"src="../assets/img/Purple and Pink Modern Illustration Happy Halloween Circle Sticker (2).png" alt="Imagem de monitoramento" class="img_monitoramento">
+            <h1 class="titulo_monitoramento">Localização dos trens</h1>
+            <p class="titulo_monitoramento2">Esta página é dedicada ao monitoramento em tempo real dos trens e <br> sensores. Aqui você pode visualizar dados atualizados, gráficos de desempenho e alertas importantes para garantir a operação segura e eficiente do sistema ferroviário.</p>
+            
+        </div>
+        </container>
+
+        <container class="container_monitoramento">
+        <div class="div_monitoramento">
+            <img class= "imgLocalizacao"src="../assets/img/Purple and Pink Modern Illustration Happy Halloween Circle Sticker (3).png" alt="Imagem de monitoramento" class="img_monitoramento">
+            <h1 class="titulo_monitoramento">Resumo do sistema</h1>
+</div>
+            <div class="trensMonitoramento">
+                <p class="titulo_monitoramento3">Trens</p>
+                </div>
+              
+                 </div>
+
+                 <div class="status">
+                <p class="titulo_monitoramento3">status</p>
+                </div>
+               
+                 </div>
+
+                 <div class="alerta">
+                <p class="titulo_monitoramento3">Alertas</p>
+                </div>
+              
+                 </div>
+
+                 <div class="falha">
+                <p class="titulo_monitoramento3">Falhas</p>
+                </div>
+               
+                 </div>
+            
+                 </div>
+        </div>
+        </container>
+
+        
     </main>
 
 </body>
