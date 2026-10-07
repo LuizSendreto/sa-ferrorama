@@ -26,7 +26,7 @@ if (!isset($_SESSION['tipo_usuario'])) {
             <img src="../../assets/img/image.png" alt="Logo Strain">
         </div>
 
-        <button class="btn" onclick="window.location.href='public/usuarios/login.php'">Entrar</button>
+        <button class="btn" onclick="window.location.href='logout.php'">Logout</button>
 
     </nav>
 

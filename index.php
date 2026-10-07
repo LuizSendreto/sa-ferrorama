@@ -117,6 +117,8 @@
 
 
         <footer class="footer">
+
+            
             <div class="footer1">
                 <p>© 2026 Strain. Todos os direitos reservados.</p> 
                 <br>
@@ -132,6 +134,28 @@
                 <a href="#"> <b>Sou administrador </b> </a>
 
                 </div>
+
+            <div  class="footer3">
+                <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse aut veniam autem accusamus perferendis, porro et? 
+                </p>
+                <br>
+                <p>
+                    Rem distinctio, molestias nam itaque sapiente dolorem error ducimus, aspernatur natus reprehenderit, deserunt quis! 
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse aut veniam autem accusamus perferendis, porro et? 
+                </p>
+                <br>
+                <p> 
+                    Rem distinctio, molestias nam itaque sapiente dolorem error ducimus, aspernatur natus reprehenderit, deserunt quis! 
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse aut veniam autem accusamus perferendis, porro et?
+                </p> 
+                <br>
+                <p>
+                    Rem distinctio, molestias nam itaque sapiente dolorem error ducimus, aspernatur natus reprehenderit, deserunt quis! 
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse aut veniam autem accusamus perferendis, porro et? 
+                    Rem distinctio, molestias nam itaque sapiente dolorem error ducimus, aspernatur natus reprehenderit, deserunt quis!
+                </p>
+            </div>
 
             
 
