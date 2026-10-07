@@ -23,7 +23,7 @@
 
     ..<section class="banner">
         
-        <img class="Strain" src="assets/img/Logo_index.png" alt="Strain">
+        <img class="Strain" src="assets/img/logo_nova.png" alt="Strain">
       
   
         <p id="frase1"> Olá, seja bem-vindo ao Strain, o sistema de  transporte público de Joinville! </p>
