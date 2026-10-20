@@ -135,7 +135,7 @@ $trens = mysqli_query($conn, $sql);
     </section>
 
      <div class="div_button">
-            <button class="button-container" onclick="location.href='../funcionarios/cadastro_funcionarios.php'"> <b>Cadastrar Funcionário</b></button>
+            <button class="button-container" onclick="location.href='../funcionarios/cadastro_funcionarios.php'"> <b>Cadastrar trem</b></button>
         </div>
 
 
