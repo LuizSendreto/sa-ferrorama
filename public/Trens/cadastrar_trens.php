@@ -1,3 +1,12 @@
+ <?php
+
+include '../../infra/conexao.php';
+
+$sql = "SELECT id, nome, numero_serie, velocidade, estado FROM trens";
+$trens = mysqli_query($conn, $sql);
+
+?>  
+
 <html lang="en">
 
 <head>
@@ -85,6 +94,49 @@
                  </div>
 
         </div>
+
+
+ <div class="container_dashboard">
+
+            <h1 id="titulo_cadastro">Visualização de Usuários</h1>
+    <section id="tabela_cadastro_clientes">
+
+        <div class="text-center">
+
+            <h2 class="titulo_tabela">Clientes Cadastrados</h2>
+
+            <table class="table table-bordered mx-auto" style="width: 70%;">
+
+                <tr>
+                    <th class="text-center">ID</th>
+                    <th class="text-center">Numero de série</th>
+                    <th class="text-center">Velocidade</th>
+                    <th class="text-center">Estado</th>
+                    <th class="text-center">Ações</th>
+                </tr>
+
+                <?php while ($trem = mysqli_fetch_assoc($trens)) { ?>
+                        <tr>
+                            <td><?php echo $trem["id"]; ?></td>
+                            <td><?php echo $trem["numero_serie"]; ?></td>
+                            <td><?php echo $trem["velocidade"]; ?></td>
+                            <td><?php echo $trem["estado"]; ?></td>
+                            <td>
+                                <a href="editar_trens.php?id=<?php echo $trem["id"]; ?>">Editar</a>
+                                <a href="excluir_trens.php?id=<?php echo $trem["id"]; ?>" onclick="return confirm('Tem certeza que deseja excluir este trem?');">
+                                    Excluir
+                                </a>
+                            </td>
+                        </tr>
+                <?php } ?>
+            </table>
+        </div>
+    </section>
+
+     <div class="div_button">
+            <button class="button-container" onclick="location.href='../funcionarios/cadastro_funcionarios.php'"> <b>Cadastrar Funcionário</b></button>
+        </div>
+
 
     </main>
 
