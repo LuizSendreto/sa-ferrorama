@@ -23,7 +23,7 @@
     <main id="main_monitoramento">
         <aside id="sidebar_dashboard">
 
-            <h2 id="titulo_sidebar"></h2>
+            <h2 id="titulo_sidebar">Dashboard</h2>
             <ul class="menu_sidebar">
                 <li><a href="../index.php">Início</a></li>
                 <li><a href="../public/dashboard.php" >Dashboard</a></li>

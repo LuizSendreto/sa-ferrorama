@@ -3,7 +3,14 @@ include "../../infra/conexao.php";
 
 $sql_funcionarios = "SELECT id, nome FROM funcionarios ORDER BY nome ASC";
 $funcionarios = mysqli_query($conn, $sql_funcionarios);
+
 ?>
+ <?php
+
+$sql = "SELECT id, nome_linha, numero_serie, velocidade, estado FROM trem";
+$trem = mysqli_query($conn, $sql);
+
+?>  
 
 <html lang="en">
 
@@ -40,6 +47,7 @@ $funcionarios = mysqli_query($conn, $sql_funcionarios);
                 <li><a href="../../index.php">Início</a></li>
                 <li><a href="../dashboard.php" >Dashboard</a></li>
                 <li><a href="../trens/cadastrar_trens.php" class="active_sidebar">Trens</a></li>
+                <li><a href="../rotas.php">Rotas</a></li>
                 <li><a href="../monitoramento.php">Monitoramento</a></li>
                 <li><a href="../alertas.php">Alertas</a></li>
                 <li><a href="../relatorios.php">Relatórios</a></li>
