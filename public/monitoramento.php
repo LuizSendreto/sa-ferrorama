@@ -29,7 +29,7 @@
                 <li><a href="../index.php">Início</a></li>
                 <li><a href="../public/dashboard.php" >Dashboard</a></li>
                 <li><a href="../public/trens/cadastrar_trens.php">Trens</a></li>
-                <li><a href="../public/rotas.php">Rotas</a></li>
+                <li><a href="../public/rotas/rotas.php">Rotas</a></li>
                 <li><a href="../public/monitoramento.php" class="active_sidebar">Monitoramento</a></li>
                 <li><a href="../public/alertas.php" >Alertas</a></li>
                 <li><a href="../public/relatorios.php" >Relatórios</a></li>
