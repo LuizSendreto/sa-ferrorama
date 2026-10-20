@@ -31,6 +31,7 @@ CREATE TABLE funcionarios(
 CREATE TABLE trens(
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome_numero VARCHAR(100) NOT NULL,
+    numero_serie VARCHAR(100) NOT NULL,
     velocidade VARCHAR(100) NOT NULL,
     estado INT NOT NULL,
     funcionario_id INT,
