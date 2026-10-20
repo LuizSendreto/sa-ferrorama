@@ -50,6 +50,7 @@ $funcionarios = mysqli_query($conn, $sql_func);
                 <li><a href="../dashboard.php" >Dashboard</a></li>
                 <li><a href="../trens/cadastrar_trens.php">Trens</a></li>
                 <li><a href="../monitoramento.php" >Monitoramento</a></li>
+                <li><a href="../public/rotas.php">Rotas</a></li>
                 <li><a href="../alertas.php">Alertas</a></li>
                 <li><a href="../relatorios.php" >Relatórios</a></li>
                 <li><a href="../usuarios/visu_usuarios.php" class="active_sidebar">Visualização de Usuarios</a></li>

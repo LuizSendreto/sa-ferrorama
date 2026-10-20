@@ -38,6 +38,7 @@
                 <li><a href="../public/dashboard.php" >Dashboard</a></li>
                 <li><a href="../public/trens/cadastrar_trens.php">Trens</a></li>
                 <li><a href="../public/monitoramento.php">Monitoramento</a></li>
+                <li><a href="../public/rotas.php">Rotas</a></li>
                 <li><a href="../public/alertas.php">Alertas</a></li>
                 <li><a href="../public/relatorios.php" class="active_sidebar">Relatórios</a></li>
                 <li><a href="../public/usuarios/visu_usuarios.php">Visualização de Usuarios</a></li>
