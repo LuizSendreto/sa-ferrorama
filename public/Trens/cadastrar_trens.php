@@ -42,6 +42,7 @@ $trens = mysqli_query($conn, $sql);
                 <li><a href="../../index.php">Início</a></li>
                 <li><a href="../dashboard.php" >Dashboard</a></li>
                 <li><a href="../trens/cadastrar_trens.php" class="active_sidebar">Trens</a></li>
+                <li><a href="../rotas.php">Rotas</a></li>
                 <li><a href="../monitoramento.php">Monitoramento</a></li>
                 <li><a href="../alertas.php">Alertas</a></li>
                 <li><a href="../relatorios.php">Relatórios</a></li>
