@@ -28,6 +28,15 @@ CREATE TABLE funcionarios(
     senha VARCHAR(255) NOT NULL
 );
 
+CREATE TABLE trens(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome_numero VARCHAR(100) NOT NULL,
+    velocidade VARCHAR(100) NOT NULL,
+    estado INT NOT NULL,
+    funcionario_id INT,
+    FOREIGN KEY (funcionario_id) REFERENCES funcionarios(id)
+);
+
 INSERT INTO funcionarios (nome, email, telefone, senha)
 VALUES (
     'Rafael','rafael@strain.com','123456789','$2y$10$tB/pDB0hZTDJt00C2ihAm.73NNb62FNhkFEpg4BIS.iyR8Y8sFwoe'
