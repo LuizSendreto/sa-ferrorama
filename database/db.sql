@@ -28,7 +28,7 @@ CREATE TABLE funcionarios(
     senha VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE trem(
+CREATE TABLE trens(
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome_linha VARCHAR(100) NOT NULL,
     numero_serie VARCHAR(100) NOT NULL,

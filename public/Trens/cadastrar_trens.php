@@ -1,17 +1,3 @@
-<?php
-include "../../infra/conexao.php";
-
-$sql_funcionarios = "SELECT id, nome FROM funcionarios ORDER BY nome ASC";
-$funcionarios = mysqli_query($conn, $sql_funcionarios);
-
-?>
- <?php
-
-$sql = "SELECT id, nome_linha, numero_serie, velocidade, estado FROM trem";
-$trem = mysqli_query($conn, $sql);
-
-?>  
-
 <html lang="en">
 
 <head>

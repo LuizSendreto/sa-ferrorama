@@ -13,7 +13,31 @@ $trem = mysqli_query($conn, $sql);
 
 ?>  
       
+<html lang="en">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trens</title>
+
+    <link rel="stylesheet" href="../../assets/style/style.css">
+</head>
+
+<body class="body_dashboard">
+    <header id="header_trens">
+        <nav class="navbar">
+
+            <div class="logo-navbar">
+                <img src="../../assets/img/logo_navbar2.png" alt="Logo Strain">
+            </div>
+
+            <div class="logo-navbar">
+                <img src="../../assets/img/icone_da_navbar.png" alt="logo usuario logado">
+            </div>
+
+        </nav>
+    </header>
+    <main id="main_trens">
             <h2>Cadastro de Trens</h2>
 
             <form action="cadastrar_trem.php" method="POST">
@@ -99,4 +123,7 @@ $trem = mysqli_query($conn, $sql);
                 >Cadastrar Trem</button>
 
             </form>
+    </main>
+</body>
+    </html>
     
