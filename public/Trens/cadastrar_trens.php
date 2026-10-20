@@ -103,6 +103,44 @@ $trens = mysqli_query($conn, $sql);
 
         </div>
        
+
+
+ <div class="table_trens">
+            <h1 id="table_trens">Visualização de trens</h1>
+    <section id="tabela_cadastro_trens">
+        <div class="text-center">
+            <h2 class="titulo_tabela">Trens Cadastrados</h2>
+            <table class="table_t" style="width: 70%;">
+                <tr>
+                    <th class="text-center">ID</th>
+                    <th class="text-center">Numero de série</th>
+                    <th class="text-center">Velocidade</th>
+                    <th class="text-center">Estado</th>
+                    <th class="text-center">Ações</th>
+                </tr>
+                <?php while ($trem = mysqli_fetch_assoc($trens)) { ?>
+                        <tr>
+                            <td><?php echo $trem["id"]; ?></td>
+                            <td><?php echo $trem["numero_serie"]; ?></td>
+                            <td><?php echo $trem["velocidade"]; ?></td>
+                            <td><?php echo $trem["estado"]; ?></td>
+                            <td>
+                                <a href="editar_trens.php?id=<?php echo $trem["id"]; ?>">Editar</a>
+                                <a href="excluir_trens.php?id=<?php echo $trem["id"]; ?>" onclick="return confirm('Tem certeza que deseja excluir este trem?');">
+                                    Excluir
+                                </a>
+                            </td>
+                        </tr>
+                <?php } ?>
+            </table>
+        </div>
+    </section>
+     <div class="div_button">
+            <button class="button-container" onclick="location.href='../funcionarios/cadastro_funcionarios.php'"> <b>Cadastrar trem</b></button>
+        </div>
+    </main>
+</body>
+</html>
     </main>
 
 </body>

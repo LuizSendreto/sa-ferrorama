@@ -927,4 +927,26 @@ a{
    
 }
 
+.table_trens {
+    background-color: #850000;
+    color: #ffffff;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
 
+.table_t {
+    display: flex;
+    color: #ffffff;
+}
+
+.text-center{
+    display: flex;
+}
+
+.titulo_tabela {
+    display: flex;
+}
