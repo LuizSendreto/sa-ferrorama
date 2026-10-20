@@ -55,10 +55,11 @@ exit();
                 <li><a href="../../index.php">Início</a></li>
                 <li><a href="../dashboard.php" >Dashboard</a></li>
                 <li><a href="../trens/cadastrar_trens.php">Trens</a></li>
+                <li><a href="../public/rotas.php">Rotas</a></li>
                 <li><a href="../monitoramento.php">Monitoramento</a></li>
                 <li><a href="../alertas.php">Alertas</a></li>
                 <li><a href="../relatorios.php">Relatórios</a></li>
-                <li><a href="../usuarios/visu_usuario.php">Visualização de Usuarios</a></li>
+                <li><a href="../usuarios/visu_usuarios.php">Visualização de Usuarios</a></li>
                 <li><a href="../sensores/visu_sensores.php" class="active_sidebar">Cadastro de Sensores</a></li>
                 <li><a href="../usuarios/login.php">Logout</a></li>
         </ul>

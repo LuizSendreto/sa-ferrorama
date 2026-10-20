@@ -1,6 +1,6 @@
-<!--
+
 <?php
-/*
+
 include "../../infra/conexao.php";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -13,7 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Atualiza os dados do usuário
     $sql = "UPDATE trens
-            SET nome_numero = ?, numero_serie = ?, velocidade = ?, estado = ?, funcionario_id = ?
+            SET nome = ?, numero_serie = ?, velocidade = ?, estado = ?, funcionario_id = ?
             WHERE id = ?";
 
     $stmt = mysqli_prepare($conn, $sql);
@@ -37,7 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Volta para a visualização dos usuários
-    header("Location: visu_usuario.php");
+    header("Location: cadastrar_trens.php");
     exit();
 }
 
@@ -71,7 +71,7 @@ if (!$trem) {
 }
 
 ?>
-//
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -93,10 +93,10 @@ if (!$trem) {
     <main>
         <h2>Editando o trem <?php echo $trem["nome"]?>!</h2>
         <form action="editar_trens.php" method="POST">
-            <input type="hidden" name="id" value="<?php echo $cliente["id"]?>">
+            <input type="hidden" name="id" value="<?php echo $trem["id"]?>">
 
             <label for="nome">Nome:</label>
-            <input type="text" name="nome" value="<?php echo $cliente["nome"]; ?>">
+            <input type="text" name="nome" value="<?php echo $trem["nome"]; ?>">
             <br>
 
             <label for="numero_serie">Número de Série:</label>
