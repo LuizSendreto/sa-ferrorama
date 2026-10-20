@@ -1,9 +1,14 @@
+<?php
+include "../../infra/conexao.php";
+
+$sql_funcionarios = "SELECT id, nome FROM funcionarios ORDER BY nome ASC";
+$funcionarios = mysqli_query($conn, $sql_funcionarios);
+
+?>
  <?php
 
-include '../../infra/conexao.php';
-
-$sql = "SELECT id, nome, numero_serie, velocidade, estado FROM trens";
-$trens = mysqli_query($conn, $sql);
+$sql = "SELECT id, nome_linha, numero_serie, velocidade, estado FROM trem";
+$trem = mysqli_query($conn, $sql);
 
 ?>  
 
@@ -96,48 +101,102 @@ $trens = mysqli_query($conn, $sql);
 
         </div>
 
+      <!-- formulario de cadastro de trens-->  
 
- <div class="container_dashboard">
+            <section id="cadastro_trens">
 
-            <h1 id="titulo_cadastro">Visualização de Usuários</h1>
-    <section id="tabela_cadastro_clientes">
+            <h2>Cadastro de Trens</h2>
 
-        <div class="text-center">
+            <form action="cadastrar_trem.php" method="POST">
 
-            <h2 class="titulo_tabela">Clientes Cadastrados</h2>
+                <div>
+                    <label for="nome_linha">Nome da linha:</label>
+                    <input
+                        type="text"
+                        id="nome_linha"
+                        name="nome_linha"
+                        placeholder="Digite o nome da linha do trem"
+                        required
+                    >
+                </div>
 
-            <table class="table table-bordered mx-auto" style="width: 70%;">
+                <div>
+                    <label for="numero_serie">Número de série:</label>
+                    <input
+                        type="text"
+                        id="numero_serie"
+                        name="numero_serie"
+                        placeholder="Digite o número de série do trem"
+                        required
+                    >
+                </div>
 
-                <tr>
-                    <th class="text-center">ID</th>
-                    <th class="text-center">Numero de série</th>
-                    <th class="text-center">Velocidade</th>
-                    <th class="text-center">Estado</th>
-                    <th class="text-center">Ações</th>
-                </tr>
+                <div>
+                    <label for="velocidade">Velocidade mínima:</label>
+                    <input
+                        type="number"
+                        id="velocidade"
+                        name="velocidade"
+                        placeholder="Digite a velocidade mínima do trem"
+                        min="0"
+                        step="any"
+                        required
+                    >
+                </div>
 
-                <?php while ($trem = mysqli_fetch_assoc($trens)) { ?>
-                        <tr>
-                            <td><?php echo $trem["id"]; ?></td>
-                            <td><?php echo $trem["numero_serie"]; ?></td>
-                            <td><?php echo $trem["velocidade"]; ?></td>
-                            <td><?php echo $trem["estado"]; ?></td>
-                            <td>
-                                <a href="editar_trens.php?id=<?php echo $trem["id"]; ?>">Editar</a>
-                                <a href="excluir_trens.php?id=<?php echo $trem["id"]; ?>" onclick="return confirm('Tem certeza que deseja excluir este trem?');">
-                                    Excluir
-                                </a>
-                            </td>
-                        </tr>
-                <?php } ?>
-            </table>
-        </div>
+                <div>
+                    <label for="estado">Status:</label>
+
+                    <select name="estado" id="estado" required>
+                        <option value="">Selecione o status:</option>
+                        <option value="Ativo">Ativo</option>
+                        <option value="Inativo">Inativo</option>
+                        <option value="Manutencao">Manutenção</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="funcionario_id">Funcionário responsável:</label>
+
+                    <select name="funcionario_id" id="funcionario_id" required>
+                        <option value="">Selecione o funcionário:</option>
+
+                        <?php
+                        if ($funcionarios && mysqli_num_rows($funcionarios) > 0) {
+                            while ($funcionario = mysqli_fetch_assoc($funcionarios)) {
+                        ?>
+
+                            <option value="<?php echo (int) $funcionario['id']; ?>">
+                                <?php
+                                echo htmlspecialchars(
+                                    $funcionario['nome'],
+                                    ENT_QUOTES,
+                                    'UTF-8'
+                                );
+                                ?>
+                            </option>
+
+                        <?php
+                            }
+                        }
+                        ?>
+                    </select>
+                </div>
+
+                <button
+                    id="botao_cadastro_trem"
+                    type="submit"
+                    class="btn btn-outline-danger"
+                >Cadastrar Trem</button>
+
+            </form>
+    
     </section>
+
 
      <div class="div_button">
             <button class="button-container" onclick="location.href='../funcionarios/cadastro_funcionarios.php'"> <b>Cadastrar trem</b></button>
         </div>
-
 
     </main>
 
