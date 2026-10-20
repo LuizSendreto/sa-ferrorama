@@ -7,8 +7,8 @@ $funcionarios = mysqli_query($conn, $sql_funcionarios);
 ?>
  <?php
 
-$sql = "SELECT id, nome_linha, numero_serie, velocidade, estado FROM trem";
-$trem = mysqli_query($conn, $sql);
+$sql = "SELECT id, nome_linha, numero_serie, velocidade, estado FROM trens";
+$trens = mysqli_query($conn, $sql);
 
 ?>  
 
