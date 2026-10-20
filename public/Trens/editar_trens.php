@@ -6,12 +6,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $id = $_POST["id"];
     $nome = $_POST["nome"];
-    $email = $_POST["email"];
-    $telefone = $_POST["telefone"];
+    $numero_serie = $_POST["numero_serie"];
+    $velocidade = $_POST["velocidade"];
+    $estado = $_POST["estado"];
+    $funcionario_id = $_POST["funcionario_id"];
 
     // Atualiza os dados do usuário
-    $sql = "UPDATE clientes
-            SET nome = ?, email = ?, telefone = ?
+    $sql = "UPDATE trens
+            SET nome_numero = ?, numero_serie = ?, velocidade = ?, estado = ?, funcionario_id = ?
             WHERE id = ?";
 
     $stmt = mysqli_prepare($conn, $sql);
@@ -20,10 +22,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         mysqli_stmt_bind_param(
             $stmt,
-            "sssi",
+            "siisii",
             $nome,
-            $email,
-            $telefone,
+            $numero_serie,
+            $velocidade,
+            $estado,
+            $funcionario_id,
             $id
         );
 
@@ -38,13 +42,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 if (!isset($_GET["id"]) || empty($_GET["id"])) {
-    die("O ID do usuário não foi informado.");
+    die("O ID do trem não foi informado.");
 }
 
 $id = $_GET["id"];
 
-// Busca o usuário no banco
-$sql = "SELECT * FROM clientes WHERE id = ?";
+// Busca o trem no banco
+$sql = "SELECT * FROM trens WHERE id = ?";
 
 $stmt = mysqli_prepare($conn, $sql);
 
@@ -56,14 +60,14 @@ if ($stmt) {
 
     $resultado = mysqli_stmt_get_result($stmt);
 
-    $cliente = mysqli_fetch_assoc($resultado);
+    $trem = mysqli_fetch_assoc($resultado);
 
     mysqli_stmt_close($stmt);
 }
 
-// Verifica se o usuário foi encontrado
-if (!$cliente) {
-    die("Usuário não encontrado.");
+// Verifica se o trem foi encontrado
+if (!$trem) {
+    die("Trem não encontrado.");
 }
 
 ?>
@@ -74,7 +78,7 @@ if (!$cliente) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Editar Usuario</title>
+    <title> Editar Trem</title>
     <link rel="stylesheet" href="../../assets/style/style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -83,24 +87,28 @@ if (!$cliente) {
 <body>
 
     <header>
-        <h1>Editar Usuário</h1>
+        <h1>Editar Trem</h1>
     </header>
 
     <main>
-        <h2>Editando o usuario <?php echo $cliente["nome"]?>!</h2>
-        <form action="editar_usuarios.php" method="POST">
+        <h2>Editando o trem <?php echo $trem["nome"]?>!</h2>
+        <form action="editar_trens.php" method="POST">
             <input type="hidden" name="id" value="<?php echo $cliente["id"]?>">
 
             <label for="nome">Nome:</label>
             <input type="text" name="nome" value="<?php echo $cliente["nome"]; ?>">
             <br>
 
-            <label for="email">Email:</label>
-            <input type="email" name="email" value="<?php echo $cliente["email"]; ?>">
+            <label for="numero_serie">Número de Série:</label>
+            <input type="text" name="numero_serie" value="<?php echo $trem["numero_serie"]; ?>">
             <br>
 
-            <label for="telefone">Telefone:</label>
-            <input type="number" name="telefone" value="<?php echo $cliente["telefone"]; ?>">
+            <label for="velocidade">Velocidade:</label>
+            <input type="text" name="velocidade" value="<?php echo $trem["velocidade"]; ?>">
+            <br>
+
+            <label for="estado">Estado:</label>
+            <input type="number" name="estado" value="<?php echo $trem["estado"]; ?>">
             <br>
 
             <button type="submit">Atualizar</button>
