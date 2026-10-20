@@ -1,6 +1,6 @@
 <!--
 <?php
-/*
+
 include "../../infra/conexao.php";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -71,7 +71,7 @@ if (!$trem) {
 }
 
 ?>
-//
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
