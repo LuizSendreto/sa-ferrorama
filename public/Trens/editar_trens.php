@@ -91,12 +91,12 @@ if (!$trem) {
     </header>
 
     <main>
-        <h2>Editando o trem <?php echo $trem["nome"]?>!</h2>
+        <h2>Editando o trem <?php echo $trem["nome_linha"]?>!</h2>
         <form action="editar_trens.php" method="POST">
             <input type="hidden" name="id" value="<?php echo $trem["id"]?>">
 
             <label for="nome">Nome:</label>
-            <input type="text" name="nome" value="<?php echo $trem["nome"]; ?>">
+            <input type="text" name="nome" value="<?php echo $trem["nome_linha"]; ?>">
             <br>
 
             <label for="numero_serie">Número de Série:</label>
