@@ -40,6 +40,11 @@ CREATE TABLE trens(
     
 );
 
+INSERT INTO trens (nome_linha, numero_serie, velocidade, estado, funcionario_id)
+VALUES (
+    'Linha Azul(Sul)', '1010', '80', 1, 1
+);
+
 Create table rotas(
     id int auto_increment primary key,
     nome_rota varchar(100) not null,
