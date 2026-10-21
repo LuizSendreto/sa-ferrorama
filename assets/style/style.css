@@ -366,7 +366,9 @@ form {
     margin: 0;
     display: flex;
     flex-direction: column;
-    height: 100vh;
+      min-height: 100vh;
+    height: auto;
+    overflow-y: auto;
 }
 
 #sidebar_dashboard {
@@ -949,4 +951,16 @@ a{
 
 .titulo_tabela {
     display: flex;
+}
+
+.container_trens{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: 5px;
+    position: relative;
+    overflow-x: hidden;
+     height: auto;
+    min-height: 100vh;
+     overflow-y: auto;
 }
