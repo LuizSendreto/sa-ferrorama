@@ -2,13 +2,52 @@
 <?php
 include "../../infra/conexao.php";
 
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    $nome_linha = $_POST["nome_linha"];
+    $numero_serie = $_POST["numero_serie"];
+    $velocidade = $_POST["velocidade"];
+    $estado = $_POST["estado"];
+    $funcionario_id = $_POST["funcionario_id"];
+
+    $sql = "INSERT INTO trens
+            (nome_linha, numero_serie, velocidade, estado, funcionario_id)
+            VALUES (?, ?, ?, ?, ?)";
+
+    $stmt = mysqli_prepare($conn, $sql);
+
+    if (!$stmt) {
+        die("Erro ao preparar cadastro: " . mysqli_error($conn));
+    }
+
+    mysqli_stmt_bind_param(
+        $stmt,
+        "ssssi",
+        $nome_linha,
+        $numero_serie,
+        $velocidade,
+        $estado,
+        $funcionario_id
+    );
+
+    if (mysqli_stmt_execute($stmt)) {
+        mysqli_stmt_close($stmt);
+
+        header("Location: visualizar_trens.php");
+        exit();
+    } else {
+        die("Erro ao cadastrar trem: " . mysqli_stmt_error($stmt));
+    }
+}
+
+
 $sql_funcionarios = "SELECT id, nome FROM funcionarios ORDER BY nome ASC";
 $funcionarios = mysqli_query($conn, $sql_funcionarios);
 
 ?>
  <?php
 
-$sql = "SELECT id, nome_linha, numero_serie, velocidade, estado FROM trem";
+$sql = "SELECT id, nome_linha, numero_serie, velocidade, estado FROM trens";
 $trem = mysqli_query($conn, $sql);
 
 ?>  
@@ -119,8 +158,8 @@ $trem = mysqli_query($conn, $sql);
                 <button
                     id="botao_cadastro_trem"
                     type="submit"
-                    class="btn btn-outline-danger"
-                    >Cadastrar Trem
+                    class="btn btn-outline-danger">
+                    Cadastrar Trem
                 </button>
 
             </form>

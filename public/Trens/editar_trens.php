@@ -2,18 +2,23 @@
 <?php
 
 include "../../infra/conexao.php";
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+s
     $id = $_POST["id"];
-    $nome = $_POST["nome"];
+    $nome_linha = $_POST["nome_linha"];
     $numero_serie = $_POST["numero_serie"];
     $velocidade = $_POST["velocidade"];
     $estado = $_POST["estado"];
     $funcionario_id = $_POST["funcionario_id"];
 
-    // Atualiza os dados do usuário
+    // Atualiza os dados do trem
     $sql = "UPDATE trens
-            SET nome = ?, numero_serie = ?, velocidade = ?, estado = ?, funcionario_id = ?
+            SET nome_linha = ?,
+                numero_serie = ?,
+                velocidade = ?,
+                estado = ?,
+                funcionario_id = ?
             WHERE id = ?";
 
     $stmt = mysqli_prepare($conn, $sql);
@@ -22,8 +27,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         mysqli_stmt_bind_param(
             $stmt,
-            "siisii",
-            $nome,
+            "ssssii",
+            $nome_linha,
             $numero_serie,
             $velocidade,
             $estado,
@@ -32,11 +37,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         );
 
         mysqli_stmt_execute($stmt);
-
         mysqli_stmt_close($stmt);
     }
 
-    // Volta para a visualização dos usuários
     header("Location: visualizar_trens.php");
     exit();
 }
@@ -107,9 +110,22 @@ if (!$trem) {
             <input type="text" name="velocidade" value="<?php echo $trem["velocidade"]; ?>">
             <br>
 
-            <label for="estado">Estado:</label>
-            <input type="number" name="estado" value="<?php echo $trem["estado"]; ?>">
-            <br>
+            <label for="estado">Status:</label>
+                <select name="estado" id="estado" required>
+                    <option value="">Selecione o status:</option>
+
+                    <option value="Ativo" <?php if ($trem["estado"] == "Ativo") echo "selected"; ?>>
+                    Ativo
+                    </option>
+
+                    <option value="Inativo" <?php if ($trem["estado"] == "Inativo") echo "selected"; ?>>
+                    Inativo
+                    </option>
+
+                    <option value="Manutencao" <?php if ($trem["estado"] == "Manutencao") echo "selected"; ?>>
+                    Manutenção
+                    </option>
+                </select>
 
             <button type="submit">Atualizar</button>
 
@@ -117,9 +133,6 @@ if (!$trem) {
 
     </main>
 
-    <footer>
-
-    </footer>
 
 </body>
 
