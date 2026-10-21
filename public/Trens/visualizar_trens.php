@@ -116,16 +116,16 @@ $funcionarios = mysqli_query($conn, $sql_funcionarios);
                     <th class="text-center">Ações</th>
                     <th class="text-center">Funcionário responsável</th>
                 </tr>
-                <?php while ($trem = mysqli_fetch_assoc($trens)) { ?>
+                <?php while ($trens = mysqli_fetch_assoc($trens)) { ?>
                         <tr>
-                            <td><?php echo $trem["id"]; ?></td>
-                            <td><?php echo $trem["numero_serie"]; ?></td>
-                            <td><?php echo $trem["velocidade"]; ?></td>
-                            <td><?php echo $trem["estado"]; ?></td>
-                            <td><?php echo $trem["funcionario_id"]; ?></td>
+                            <td><?php echo $trens["id"]; ?></td>
+                            <td><?php echo $trens["numero_serie"]; ?></td>
+                            <td><?php echo $trens["velocidade"]; ?></td>
+                            <td><?php echo $trens["estado"]; ?></td>
+                            <td><?php echo $trens["funcionarios_id"]; ?></td>
                             <td>
-                                <a href="editar_trens.php?id=<?php echo $trem["id"]; ?>">Editar</a>
-                                <a href="excluir_trens.php?id=<?php echo $trem["id"]; ?>" onclick="return confirm('Tem certeza que deseja excluir este trem?');">
+                                <a href="editar_trens.php?id=<?php echo $trens["id"]; ?>">Editar</a>
+                                <a href="excluir_trens.php?id=<?php echo $trens["id"]; ?>" onclick="return confirm('Tem certeza que deseja excluir este trem?');">
                                     Excluir
                                 </a>
                             </td>
@@ -135,7 +135,7 @@ $funcionarios = mysqli_query($conn, $sql_funcionarios);
         </div>
     </section>
      <div class="div_button">
-            <button class="button-container" onclick="location.href='./trens_cadastro.php'"> <b>Cadastrar trem</b></button>
+            <button class="button-container" onclick="location.href='../funcionarios/cadastro_funcionarios.php'"> <b>Cadastrar trem</b></button>
         </div>
         </container>
         <br>
