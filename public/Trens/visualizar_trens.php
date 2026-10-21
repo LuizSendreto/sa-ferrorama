@@ -1,8 +1,46 @@
-
 <?php
 include "../../infra/conexao.php";
 
+// Cadastra o trem quando o formulário é enviado
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
+    $nome_linha = $_POST["nome_linha"];
+    $numero_serie = $_POST["numero_serie"];
+    $velocidade = $_POST["velocidade"];
+    $estado = $_POST["estado"];
+    $funcionario_id = $_POST["funcionario_id"];
+
+    $sql_cadastro = "INSERT INTO trens
+        (nome_linha, numero_serie, velocidade, estado, funcionario_id)
+        VALUES (?, ?, ?, ?, ?)";
+
+    $stmt = mysqli_prepare($conn, $sql_cadastro);
+
+    if (!$stmt) {
+        die("Erro ao preparar cadastro: " . mysqli_error($conn));
+    }
+
+    mysqli_stmt_bind_param(
+        $stmt,
+        "ssssi",
+        $nome_linha,
+        $numero_serie,
+        $velocidade,
+        $estado,
+        $funcionario_id
+    );
+
+    if (mysqli_stmt_execute($stmt)) {
+        mysqli_stmt_close($stmt);
+
+        header("Location: visualizar_trens.php");
+        exit();
+    } else {
+        die("Erro ao cadastrar trem: " . mysqli_stmt_error($stmt));
+    }
+}
+
+// Busca os trens cadastrados e seus funcionários responsáveis
 $sql = "SELECT
             trens.id,
             trens.nome_linha,
@@ -17,12 +55,15 @@ $sql = "SELECT
 
 $trens = mysqli_query($conn, $sql);
 
-$trens = mysqli_query($conn, $sql);
+if (!$trens) {
+    die("Erro ao consultar trens: " . mysqli_error($conn));
+}
 
+// Busca os funcionários para o formulário
 $sql_funcionarios = "SELECT id, nome FROM funcionarios ORDER BY nome ASC";
 $funcionarios = mysqli_query($conn, $sql_funcionarios);
+?>
 
-?>  
 
 
 <html lang="en">
@@ -115,46 +156,57 @@ $funcionarios = mysqli_query($conn, $sql_funcionarios);
 
         </div>
        
- <div class="table_trens">
-            <h1 id="table_trens">Visualização de trens</h1>
-    <section id="tabela_visualizar_trens">
 
-        <div class="text-center">
-            <h2 class="titulo_tabela">Trens Cadastrados</h2>
-            <table class="table_t" style="width: 70%;">
+<div class="table_trens">
+    <h1 id="table_trens">Visualização de trens</h1>
+
+    <section id="tabela_visualizar_trens">
+        <h2 class="titulo_tabela">Trens Cadastrados</h2>
+
+        <table class="table_t">
+            <thead>
                 <tr>
-                    <th class="text-center">ID</th>
-                    <th class="text-center">Numero de série</th>
-                    <th class="text-center">Velocidade</th>
-                    <th class="text-center">Estado</th>
-                    <th class="text-center">Ações</th>
-                    <th class="text-center">Funcionário responsável</th>
+                    <th>ID</th>
+                    <th>Número de série</th>
+                    <th>Velocidade</th>
+                    <th>Estado</th>
+                    <th>Funcionário responsável</th>
+                    <th>Ações</th>
                 </tr>
+            </thead>
+
+            <tbody>
                 <?php while ($trem = mysqli_fetch_assoc($trens)) { ?>
-                        <tr>
-                            <td><?php echo $trem["id"]; ?></td>
-                            <td><?php echo $trem["numero_serie"]; ?></td>
-                            <td><?php echo $trem["velocidade"]; ?></td>
-                            <td><?php echo $trem["estado"]; ?></td>
-                            <td><?php echo $trem["funcionario_id"]; ?></td>
-                            <td>
-                                <a href="editar_trens.php?id=<?php echo $trem["id"]; ?>">Editar</a>
-                                <a href="excluir_trens.php?id=<?php echo $trem["id"]; ?>" onclick="return confirm('Tem certeza que deseja excluir este trem?');">
-                                    Excluir
-                                </a>
-                            </td>
-                        </tr>
+                    <tr>
+                        <td><?php echo $trem["id"]; ?></td>
+                        <td><?php echo $trem["numero_serie"]; ?></td>
+                        <td><?php echo $trem["velocidade"]; ?> km/h</td>
+                        <td><?php echo htmlspecialchars($trem["estado"]); ?></td>
+                        <td><?php echo htmlspecialchars($trem["funcionario_responsavel"] ?? "Não atribuído"); ?></td>
+                        <td>
+                            <a href="editar_trens.php?id=<?php echo $trem["id"]; ?>">Editar</a>
+
+                            <a href="excluir_trens.php?id=<?php echo $trem["id"]; ?>"
+                               onclick="return confirm('Tem certeza que deseja excluir este trem?');">
+                                Excluir
+                            </a>
+                        </td>
+                    </tr>
                 <?php } ?>
-            </table>
-        </div>
+            </tbody>
+        </table>
     </section>
-     <div class="div_button">
-            <button class="button-container" onclick="location.href='../Trens/trens_cadastro.php'"> <b>Cadastrar trem</b></button>
-        </div>
-        </container>
-        <br>
+
+    <div class="div_button">
+        <button class="button-container"
+                onclick="location.href='trens_cadastro.php'">
+            <b>Cadastrar trem</b>
+        </button>
+    </div>
+</div>
+
         
-    </main>
+</main>
 </body>
 </html>
     </main>

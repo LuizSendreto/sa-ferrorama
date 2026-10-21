@@ -941,16 +941,40 @@ a{
 }
 
 .table_t {
-    display: flex;
+    display: table;
+    width: 100%;
+    border-collapse: collapse;
     color: #ffffff;
+    table-layout: auto;
+}
+
+.table_t th,
+.table_t td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    vertical-align: middle;
+}
+
+.table_t th {
+    font-weight: bold;
+}
+
+.table_t td a {
+    display: inline-block;
+    margin: 4px;
 }
 
 .text-center{
-    display: flex;
+    display: block;
+    width: 100%;
 }
 
 .titulo_tabela {
-    display: flex;
+    display: block;
+    text-align: center;
+    color: #ffffff;
+    margin-bottom: 20px;
 }
 
 .container_trens{
