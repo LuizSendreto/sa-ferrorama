@@ -113,6 +113,7 @@ $funcionarios = mysqli_query($conn, $sql_funcionarios);
                     <th class="text-center">Velocidade</th>
                     <th class="text-center">Estado</th>
                     <th class="text-center">Ações</th>
+                    <th class="text-center">Funcionário responsável</th>
                 </tr>
                 <?php while ($trem = mysqli_fetch_assoc($trens)) { ?>
                         <tr>
@@ -120,6 +121,7 @@ $funcionarios = mysqli_query($conn, $sql_funcionarios);
                             <td><?php echo $trem["numero_serie"]; ?></td>
                             <td><?php echo $trem["velocidade"]; ?></td>
                             <td><?php echo $trem["estado"]; ?></td>
+                            <td><?php echo $trem["funcionarios_id"]; ?></td>
                             <td>
                                 <a href="editar_trens.php?id=<?php echo $trem["id"]; ?>">Editar</a>
                                 <a href="excluir_trens.php?id=<?php echo $trem["id"]; ?>" onclick="return confirm('Tem certeza que deseja excluir este trem?');">

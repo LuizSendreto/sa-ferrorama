@@ -32,7 +32,7 @@ if (mysqli_stmt_affected_rows($stmt) == 0) {
 
 mysqli_stmt_close($stmt);
 
-header("Location: cadastrar_trens.php");
+header("Location: visualizar_trens.php");
 exit;
 
 ?>

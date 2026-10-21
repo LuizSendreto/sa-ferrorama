@@ -120,7 +120,8 @@ $trem = mysqli_query($conn, $sql);
                     id="botao_cadastro_trem"
                     type="submit"
                     class="btn btn-outline-danger"
-                >Cadastrar Trem</button>
+                    >Cadastrar Trem
+                </button>
 
             </form>
     </main>
