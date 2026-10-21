@@ -1,10 +1,23 @@
 <?php
+session_start();
+
+if (!isset($_SESSION['funcionario_id'])) {
+    header("Location: ../usuarios/login.php");
+    exit;
+}
 
 include "../../infra/conexao.php";
 
-$sql = "SELECT * FROM rotas";
+$sql = "SELECT rotas.*, trens.nome_linha, trens.numero_serie
+        FROM rotas
+        LEFT JOIN trens ON rotas.trem_id = trens.id
+        ORDER BY rotas.id";
 
 $resultado = mysqli_query($conn, $sql);
+
+if (!$resultado) {
+    die("Erro ao consultar rotas: " . mysqli_error($conn));
+}
 
 ?>
 
@@ -110,7 +123,7 @@ $resultado = mysqli_query($conn, $sql);
                 <li><a href="../relatorios.php">Relatórios</a></li>
                 <li><a href="../usuarios/visu_usuarios.php">Visualização de Usuarios</a></li>
                 <li><a href="../sensores/visu_sensores.php">Visualização de Sensores</a></li>
-                <li><a href="../usuarios/login.php">Logout</a></li>
+                <li><a href="../usuarios/logout.php">Logout</a></li>
             </ul>
 
         </aside>
@@ -128,22 +141,33 @@ $resultado = mysqli_query($conn, $sql);
             <th>Descrição</th>
             <th>Distância</th>
             <th>Trem vinculado</th>
-            <th>Tempo precisto</th>
+            <th>Tempo previsto</th>
             <th>Data de Criação</th>
+            <th>Ações</th>
         </tr>
 
         <?php while ($rota = mysqli_fetch_assoc($resultado)) { ?>
 
             <tr>
-                <td><?php echo $rota["id"]; ?></td>
-                <td><?php echo $rota["nome_rota"]; ?></td>
-                <td><?php echo $rota["descricao"]; ?></td>
-                <td><?php echo $rota["distancia"]; ?></td>
-                <td><?php echo $rota["trem_id"]; ?></td>
-                <td><?php echo $rota["tempo_estimado"]; ?></td>
-                <td><?php echo $rota["data_criacao"]; ?></td>
+                <td><?php echo (int) $rota["id"]; ?></td>
+                <td><?php echo htmlspecialchars($rota["nome_rota"]); ?></td>
+                <td><?php echo htmlspecialchars($rota["descricao"]); ?></td>
+                <td><?php echo htmlspecialchars($rota["distancia"]); ?> km</td>
                 <td>
-                    <a href="excluir_rotas.php?id=<?php echo $rota["id"]; ?>" onclick="return confirm('Tem certeza que deseja excluir esta rota?');">
+                    <?php
+                    if ($rota["nome_linha"]) {
+                        echo htmlspecialchars($rota["numero_serie"] . " - " . $rota["nome_linha"]);
+                    } else {
+                        echo "Sem trem";
+                    }
+                    ?>
+                </td>
+                <td><?php echo (int) $rota["tempo_estimado"]; ?> min</td>
+                <td><?php echo date("d/m/Y", strtotime($rota["data_criacao"])); ?></td>
+                <td>
+                    <a href="editar_rotas.php?id=<?php echo (int) $rota["id"]; ?>">Editar</a>
+                    <a href="excluir_rotas.php?id=<?php echo (int) $rota["id"]; ?>"
+                       onclick="return confirm('Tem certeza que deseja excluir esta rota?');">
                         Excluir
                     </a>
                 </td>

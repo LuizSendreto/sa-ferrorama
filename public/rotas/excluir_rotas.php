@@ -1,10 +1,19 @@
 <?php
-// codigo para excluir uma rota do banco de dados com prepared statements revisado.
+// Exclui uma rota do banco de dados (com prepared statements).
 session_start();
+
+if (!isset($_SESSION['funcionario_id'])) {
+    header("Location: ../usuarios/login.php");
+    exit;
+}
 
 include "../../infra/conexao.php";
 
-$id = $_GET["id"];
+if (!isset($_GET["id"]) || !ctype_digit($_GET["id"])) {
+    die("ID inválido.");
+}
+
+$id = (int) $_GET["id"];
 
 $sql = "DELETE FROM rotas WHERE id = ?";
 
@@ -27,7 +36,7 @@ if (!mysqli_stmt_execute($stmt)) {
 
 if (mysqli_stmt_affected_rows($stmt) == 0) {
     mysqli_stmt_close($stmt);
-    die("Nenhuma rota foi encontrado para exclusão.");
+    die("Nenhuma rota foi encontrada para exclusão.");
 }
 
 mysqli_stmt_close($stmt);

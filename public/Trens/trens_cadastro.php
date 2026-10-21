@@ -1,58 +1,65 @@
-
 <?php
+session_start();
+
+if (!isset($_SESSION['funcionario_id'])) {
+    header("Location: ../usuarios/login.php");
+    exit;
+}
+
 include "../../infra/conexao.php";
+
+$erro = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $nome_linha = $_POST["nome_linha"];
-    $numero_serie = $_POST["numero_serie"];
-    $velocidade = $_POST["velocidade"];
-    $estado = $_POST["estado"];
-    $funcionario_id = $_POST["funcionario_id"];
+    $nome_linha     = trim($_POST["nome_linha"]);
+    $numero_serie   = trim($_POST["numero_serie"]);
+    $velocidade     = (int) $_POST["velocidade"];
+    $estado         = $_POST["estado"];
+    $funcionario_id = (int) $_POST["funcionario_id"];
 
-    $sql = "INSERT INTO trens
-            (nome_linha, numero_serie, velocidade, estado, funcionario_id)
-            VALUES (?, ?, ?, ?, ?)";
+    $estados_validos = ["Ativo", "Inativo", "Manutencao"];
 
-    $stmt = mysqli_prepare($conn, $sql);
-
-    if (!$stmt) {
-        die("Erro ao preparar cadastro: " . mysqli_error($conn));
-    }
-
-    mysqli_stmt_bind_param(
-        $stmt,
-        "ssssi",
-        $nome_linha,
-        $numero_serie,
-        $velocidade,
-        $estado,
-        $funcionario_id
-    );
-
-    if (mysqli_stmt_execute($stmt)) {
-        mysqli_stmt_close($stmt);
-
-        header("Location: visualizar_trens.php");
-        exit();
+    if ($nome_linha === "" || $numero_serie === "") {
+        $erro = "Preencha todos os campos.";
+    } elseif ($velocidade < 0) {
+        $erro = "A velocidade não pode ser negativa.";
+    } elseif (!in_array($estado, $estados_validos)) {
+        $erro = "Status inválido.";
+    } elseif ($funcionario_id <= 0) {
+        $erro = "Selecione um funcionário.";
     } else {
-        die("Erro ao cadastrar trem: " . mysqli_stmt_error($stmt));
+        $sql = "INSERT INTO trens
+                (nome_linha, numero_serie, velocidade, estado, funcionario_id)
+                VALUES (?, ?, ?, ?, ?)";
+
+        $stmt = mysqli_prepare($conn, $sql);
+
+        mysqli_stmt_bind_param(
+            $stmt,
+            "ssisi",
+            $nome_linha,
+            $numero_serie,
+            $velocidade,
+            $estado,
+            $funcionario_id
+        );
+
+        if (mysqli_stmt_execute($stmt)) {
+            mysqli_stmt_close($stmt);
+            header("Location: visualizar_trens.php");
+            exit();
+        } else {
+            $erro = "Erro ao cadastrar trem: " . mysqli_stmt_error($stmt);
+        }
     }
 }
 
-
-$sql_funcionarios = "SELECT id, nome FROM funcionarios ORDER BY nome ASC";
-$funcionarios = mysqli_query($conn, $sql_funcionarios);
+$funcionarios = mysqli_query($conn, "SELECT id, nome FROM funcionarios ORDER BY nome ASC");
 
 ?>
- <?php
-
-$sql = "SELECT id, nome_linha, numero_serie, velocidade, estado FROM trens";
-$trem = mysqli_query($conn, $sql);
-
-?>  
-      
-<html lang="en">
+<!DOCTYPE html>
+<html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
@@ -77,93 +84,89 @@ $trem = mysqli_query($conn, $sql);
         </nav>
     </header>
     <main id="main_trens">
-            <h2>Cadastro de Trens</h2>
+        <h2>Cadastro de Trens</h2>
 
-            <form action="visualizar_trens.php" method="POST">
+        <?php if ($erro != "") { ?>
+            <p style="color:red;"><?php echo htmlspecialchars($erro); ?></p>
+        <?php } ?>
 
-                <div>
-                    <label for="nome_linha">Nome da linha:</label>
-                    <input
-                        type="text"
-                        id="nome_linha"
-                        name="nome_linha"
-                        placeholder="Digite o nome da linha do trem"
-                        required
-                    >
-                </div>
+        <form action="trens_cadastro.php" method="POST">
 
-                <div>
-                    <label for="numero_serie">Número de série:</label>
-                    <input
-                        type="text"
-                        id="numero_serie"
-                        name="numero_serie"
-                        placeholder="Digite o número de série do trem"
-                        required
-                    >
-                </div>
+            <div>
+                <label for="nome_linha">Nome da linha:</label>
+                <input
+                    type="text"
+                    id="nome_linha"
+                    name="nome_linha"
+                    placeholder="Digite o nome da linha do trem"
+                    required
+                >
+            </div>
 
-                <div>
-                    <label for="velocidade">Velocidade mínima:</label>
-                    <input
-                        type="number"
-                        id="velocidade"
-                        name="velocidade"
-                        placeholder="Digite a velocidade mínima do trem"
-                        min="0"
-                        step="any"
-                        required
-                    >
-                </div>
+            <div>
+                <label for="numero_serie">Número de série:</label>
+                <input
+                    type="text"
+                    id="numero_serie"
+                    name="numero_serie"
+                    placeholder="Digite o número de série do trem"
+                    required
+                >
+            </div>
 
-                <div>
-                    <label for="estado">Status:</label>
+            <div>
+                <label for="velocidade">Velocidade (km/h):</label>
+                <input
+                    type="number"
+                    id="velocidade"
+                    name="velocidade"
+                    placeholder="Digite a velocidade do trem"
+                    min="0"
+                    step="1"
+                    required
+                >
+            </div>
 
-                    <select name="estado" id="estado" required>
-                        <option value="">Selecione o status:</option>
-                        <option value="Ativo">Ativo</option>
-                        <option value="Inativo">Inativo</option>
-                        <option value="Manutencao">Manutenção</option>
-                    </select>
-                </div>
+            <div>
+                <label for="estado">Status:</label>
 
-                <div>
-                    <label for="funcionario_id">Funcionário responsável:</label>
+                <select name="estado" id="estado" required>
+                    <option value="">Selecione o status:</option>
+                    <option value="Ativo">Ativo</option>
+                    <option value="Inativo">Inativo</option>
+                    <option value="Manutencao">Manutenção</option>
+                </select>
+            </div>
 
-                    <select name="funcionario_id" id="funcionario_id" required>
-                        <option value="">Selecione o funcionário:</option>
+            <div>
+                <label for="funcionario_id">Funcionário responsável:</label>
 
-                        <?php
-                        if ($funcionarios && mysqli_num_rows($funcionarios) > 0) {
-                            while ($funcionario = mysqli_fetch_assoc($funcionarios)) {
-                        ?>
+                <select name="funcionario_id" id="funcionario_id" required>
+                    <option value="">Selecione o funcionário:</option>
 
+                    <?php
+                    if ($funcionarios && mysqli_num_rows($funcionarios) > 0) {
+                        while ($funcionario = mysqli_fetch_assoc($funcionarios)) {
+                    ?>
                             <option value="<?php echo (int) $funcionario['id']; ?>">
-                                <?php
-                                echo htmlspecialchars(
-                                    $funcionario['nome'],
-                                    ENT_QUOTES,
-                                    'UTF-8'
-                                );
-                                ?>
+                                <?php echo htmlspecialchars($funcionario['nome'], ENT_QUOTES, 'UTF-8'); ?>
                             </option>
-
-                        <?php
-                            }
+                    <?php
                         }
-                        ?>
-                    </select>
-                </div>
+                    }
+                    ?>
+                </select>
+            </div>
 
-                <button
-                    id="botao_cadastro_trem"
-                    type="submit"
-                    class="btn btn-outline-danger">
-                    Cadastrar Trem
-                </button>
+            <button
+                id="botao_cadastro_trem"
+                type="submit"
+                class="btn btn-outline-danger">
+                Cadastrar Trem
+            </button>
 
-            </form>
+        </form>
     </main>
 </body>
-    </html>
-    
+
+</html>

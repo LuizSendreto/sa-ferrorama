@@ -1,4 +1,3 @@
-
 CREATE DATABASE IF NOT EXISTS banco_exemplo;
 
 USE banco_exemplo;
@@ -35,7 +34,7 @@ CREATE TABLE IF NOT EXISTS trens (
     nome_linha VARCHAR(100) NOT NULL,
     numero_serie VARCHAR(100) NOT NULL,
     velocidade INT NOT NULL,
-    estado INT NOT NULL,
+    estado VARCHAR(20) NOT NULL,
     funcionario_id INT,
     FOREIGN KEY (funcionario_id)
         REFERENCES funcionarios(id)
@@ -73,7 +72,7 @@ VALUES (
     'Linha Azul (Sul)',
     '1010',
     80,
-    1,
+    'Ativo',
     (SELECT id FROM funcionarios
      WHERE email = 'rafael@strain.com')
 );
