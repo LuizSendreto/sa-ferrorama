@@ -53,45 +53,20 @@ CREATE TABLE IF NOT EXISTS rotas (
         REFERENCES trens(id)
 );
 
--- CADASTRAR FUNCIONARIO
-INSERT INTO funcionarios (
-    nome, email, telefone, senha
-)
-VALUES (
+ALTER TABLE trens MODIFY estado VARCHAR(20) NOT NULL;
+
+UPDATE trens SET estado = 'Ativo' WHERE estado = '1';
+UPDATE trens SET estado = 'Inativo'
+ WHERE estado NOT IN ('Ativo', 'Inativo', 'Manutencao');
+
+
+INSERT INTO funcionarios (nome, email, telefone, senha)
+SELECT
     'Rafael',
     'rafael@strain.com',
     '123456789',
     '$2y$10$tB/pDB0hZTDJt00C2ihAm.73NNb62FNhkFEpg4BIS.iyR8Y8sFwoe'
-);
-
--- CADASTRAR TREM
-INSERT INTO trens (
-    nome_linha, numero_serie, velocidade, estado, funcionario_id
-)
-VALUES (
-    'Linha Azul (Sul)',
-    '1010',
-    80,
-    'Ativo',
-    (SELECT id FROM funcionarios
-     WHERE email = 'rafael@strain.com')
-);
-
--- CADASTRAR ROTA
-INSERT INTO rotas (
-    nome_rota,
-    descricao,
-    distancia,
-    tempo_estimado,
-    data_criacao,
-    trem_id
-)
-VALUES (
-    'Linha Azul',
-    'Rota entre o Terminal Sul e o Terminal Central',
-    12.50,
-    25,
-    '2026-10-21',
-    (SELECT id FROM trens
-     WHERE numero_serie = '1010')
+FROM DUAL
+WHERE NOT EXISTS (
+    SELECT 1 FROM funcionarios WHERE email = 'rafael@strain.com'
 );
