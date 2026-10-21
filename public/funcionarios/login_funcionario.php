@@ -36,6 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['funcionario_id'] = $funcionario['id'];
             $_SESSION['funcionario_nome'] = $funcionario['nome'];
             $_SESSION['funcionario_email'] = $funcionario['email'];
+            $_SESSION['tipo_usuario'] = "funcionario";
 
             // Vai para o dashboard
             header("Location: ../dashboard.php");

@@ -37,11 +37,11 @@ $funcionarios = mysqli_query($conn, $sql_func);
         <nav class="navbar">
 
             <div class="logo-navbar">
-                <img src="../assets/img/logo_navbar2.png" alt="Logo Strain">
+                <img src="../../assets/img/logo_navbar2.png" alt="Logo Strain">
             </div>
 
             <div class="logo-navbar">
-                <img src="../assets/img/icone_da_navbar.png" alt="logo usuario logado">
+                <img src="../../assets/img/icone_da_navbar.png" alt="logo usuario logado">
             </div>
 
         </nav>
@@ -90,9 +90,9 @@ $funcionarios = mysqli_query($conn, $sql_func);
                 <?php while ($cliente = mysqli_fetch_assoc($clientes)) { ?>
                         <tr>
                             <td><?php echo $cliente["id"]; ?></td>
-                            <td><?php echo $cliente["nome"]; ?></td>
-                            <td><?php echo $cliente["email"]; ?></td>
-                            <td><?php echo $cliente["telefone"]; ?></td>
+                            <td><?php echo htmlspecialchars($cliente["nome"]); ?></td>
+                            <td><?php echo htmlspecialchars($cliente["email"]); ?></td>
+                            <td><?php echo htmlspecialchars($cliente["telefone"]); ?></td>
                             <td>
                                 <a href="editar_usuarios.php?id=<?php echo $cliente["id"]; ?>">Editar</a>
                                 <a href="excluir_usuarios.php?id=<?php echo $cliente["id"]; ?>" onclick="return confirm('Tem certeza que deseja excluir este cliente?');">
@@ -122,12 +122,12 @@ $funcionarios = mysqli_query($conn, $sql_func);
                 <?php while ($funcionario = mysqli_fetch_assoc($funcionarios)) { ?>
                         <tr>
                             <td><?php echo $funcionario["id"]; ?></td>
-                            <td><?php echo $funcionario["nome"]; ?></td>
-                            <td><?php echo $funcionario["email"]; ?></td>
-                            <td><?php echo $funcionario["telefone"]; ?></td>
+                            <td><?php echo htmlspecialchars($funcionario["nome"]); ?></td>
+                            <td><?php echo htmlspecialchars($funcionario["email"]); ?></td>
+                            <td><?php echo htmlspecialchars($funcionario["telefone"]); ?></td>
                             <td>
-                                <a href="../../public/funcionarios/editar_funcionarios.php?id=<?php echo $funcionario["id"]; ?>">Editar</a>
-                                <a href="../../public/funcionarios/excluir_funcionarios.php?id=<?php echo $funcionario["id"]; ?>" onclick="return confirm('Tem certeza que deseja excluir este funcionário?');">
+                                <a href="../funcionarios/editar_funcionarios.php?id=<?php echo $funcionario["id"]; ?>">Editar</a>
+                                <a href="../funcionarios/excluir_funcionarios.php?id=<?php echo $funcionario["id"]; ?>" onclick="return confirm('Tem certeza que deseja excluir este funcionário?');">
                                     Excluir
                                 </a>
                             </td>

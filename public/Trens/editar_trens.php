@@ -9,51 +9,76 @@ if (!isset($_SESSION['funcionario_id'])) {
 include "../../infra/conexao.php";
 
 $erro = "";
+$enviado = null; // guarda o que foi digitado, se der erro
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $id             = (int) $_POST["id"];
-    $nome_linha     = trim($_POST["nome_linha"]);
-    $numero_serie   = trim($_POST["numero_serie"]);
-    $velocidade     = (int) $_POST["velocidade"];
-    $estado         = $_POST["estado"];
-    $funcionario_id = (int) $_POST["funcionario_id"];
+    $id             = (int) ($_POST["id"] ?? 0);
+    $nome_linha     = trim($_POST["nome_linha"] ?? "");
+    $numero_serie   = trim($_POST["numero_serie"] ?? "");
+    $velocidade     = trim($_POST["velocidade"] ?? "");
+    $estado         = $_POST["estado"] ?? "";
+    $funcionario_id = $_POST["funcionario_id"] ?? "";
+
+    $enviado = [
+        "nome_linha"     => $nome_linha,
+        "numero_serie"   => $numero_serie,
+        "velocidade"     => $velocidade,
+        "estado"         => $estado,
+        "funcionario_id" => $funcionario_id,
+    ];
 
     $estados_validos = ["Ativo", "Inativo", "Manutencao"];
 
-    if ($nome_linha === "" || $numero_serie === "") {
+    if ($nome_linha === "" || $numero_serie === "" || $velocidade === "") {
         $erro = "Preencha todos os campos.";
-    } elseif ($velocidade < 0) {
-        $erro = "A velocidade não pode ser negativa.";
+    } elseif (!ctype_digit($velocidade)) {
+        $erro = "A velocidade deve ser um número inteiro maior ou igual a zero.";
     } elseif (!in_array($estado, $estados_validos)) {
         $erro = "Status inválido.";
-    } elseif ($funcionario_id <= 0) {
+    } elseif (!ctype_digit((string) $funcionario_id) || (int) $funcionario_id <= 0) {
         $erro = "Selecione um funcionário.";
     } else {
-        $sql = "UPDATE trens
-                SET nome_linha = ?, numero_serie = ?, velocidade = ?,
-                    estado = ?, funcionario_id = ?
-                WHERE id = ?";
+        $velocidade_int = (int) $velocidade;
+        $funcionario_int = (int) $funcionario_id;
 
-        $stmt = mysqli_prepare($conn, $sql);
-
-        mysqli_stmt_bind_param(
-            $stmt,
-            "ssisii",
-            $nome_linha,
-            $numero_serie,
-            $velocidade,
-            $estado,
-            $funcionario_id,
-            $id
-        );
-
-        if (mysqli_stmt_execute($stmt)) {
+        try {
+            // Não deixa repetir o número de série de OUTRO trem
+            $stmt = mysqli_prepare($conn, "SELECT id FROM trens WHERE numero_serie = ? AND id <> ?");
+            mysqli_stmt_bind_param($stmt, "si", $numero_serie, $id);
+            mysqli_stmt_execute($stmt);
+            $ja_existe = mysqli_num_rows(mysqli_stmt_get_result($stmt)) > 0;
             mysqli_stmt_close($stmt);
-            header("Location: visualizar_trens.php");
-            exit();
-        } else {
-            $erro = "Erro ao atualizar: " . mysqli_stmt_error($stmt);
+
+            if ($ja_existe) {
+                $erro = "Já existe outro trem cadastrado com esse número de série.";
+            } else {
+                $sql = "UPDATE trens
+                        SET nome_linha = ?, numero_serie = ?, velocidade = ?,
+                            estado = ?, funcionario_id = ?
+                        WHERE id = ?";
+
+                $stmt = mysqli_prepare($conn, $sql);
+
+                mysqli_stmt_bind_param(
+                    $stmt,
+                    "ssisii",
+                    $nome_linha,
+                    $numero_serie,
+                    $velocidade_int,
+                    $estado,
+                    $funcionario_int,
+                    $id
+                );
+
+                mysqli_stmt_execute($stmt);
+                mysqli_stmt_close($stmt);
+
+                header("Location: visualizar_trens.php");
+                exit();
+            }
+        } catch (Throwable $e) {
+            $erro = "Erro no banco de dados: " . $e->getMessage();
         }
     }
 } else {
@@ -73,6 +98,13 @@ mysqli_stmt_close($stmt);
 
 if (!$trem) {
     die("Trem não encontrado.");
+}
+
+$titulo_trem = $trem["nome_linha"];
+
+// Se deu erro ao salvar, mostra de novo o que a pessoa tinha digitado
+if ($enviado !== null) {
+    $trem = array_merge($trem, $enviado);
 }
 
 $funcionarios = mysqli_query($conn, "SELECT id, nome FROM funcionarios ORDER BY nome ASC");
@@ -97,14 +129,14 @@ $funcionarios = mysqli_query($conn, "SELECT id, nome FROM funcionarios ORDER BY 
     </header>
 
     <main>
-        <h2>Editando o trem <?php echo htmlspecialchars($trem["nome_linha"]); ?>!</h2>
+        <h2>Editando o trem <?php echo htmlspecialchars($titulo_trem); ?>!</h2>
 
         <?php if ($erro != "") { ?>
             <p style="color:red;"><?php echo htmlspecialchars($erro); ?></p>
         <?php } ?>
 
         <form action="editar_trens.php" method="POST">
-            <input type="hidden" name="id" value="<?php echo (int) $trem["id"]; ?>">
+            <input type="hidden" name="id" value="<?php echo (int) $id; ?>">
 
             <label for="nome_linha">Nome da linha:</label>
             <input type="text" id="nome_linha" name="nome_linha"
@@ -118,7 +150,7 @@ $funcionarios = mysqli_query($conn, "SELECT id, nome FROM funcionarios ORDER BY 
 
             <label for="velocidade">Velocidade:</label>
             <input type="number" id="velocidade" name="velocidade" min="0" step="1"
-                   value="<?php echo (int) $trem["velocidade"]; ?>" required>
+                   value="<?php echo htmlspecialchars((string) $trem["velocidade"]); ?>" required>
             <br>
 
             <label for="estado">Status:</label>
@@ -135,7 +167,7 @@ $funcionarios = mysqli_query($conn, "SELECT id, nome FROM funcionarios ORDER BY 
                 <option value="">Selecione o funcionário:</option>
                 <?php while ($f = mysqli_fetch_assoc($funcionarios)) { ?>
                     <option value="<?php echo (int) $f["id"]; ?>"
-                        <?php if ($f["id"] == $trem["funcionario_id"]) echo "selected"; ?>>
+                        <?php if ((string) $f["id"] === (string) $trem["funcionario_id"]) echo "selected"; ?>>
                         <?php echo htmlspecialchars($f["nome"]); ?>
                     </option>
                 <?php } ?>
@@ -143,6 +175,7 @@ $funcionarios = mysqli_query($conn, "SELECT id, nome FROM funcionarios ORDER BY 
             <br>
 
             <button type="submit">Atualizar</button>
+            <a href="visualizar_trens.php">Cancelar</a>
         </form>
     </main>
 

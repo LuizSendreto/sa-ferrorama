@@ -48,7 +48,7 @@ exit();
     <header id="header_cadastro_sensor">
         <nav class="navbar">
             <div class="logo-navbar">
-                <img src="../assets/img/logo_navbar2.png" alt="Logo Strain">
+                <img src="../../assets/img/logo_navbar2.png" alt="Logo Strain">
             </div>
         </nav>
     </header>
@@ -62,7 +62,7 @@ exit();
                 <li><a href="../../index.php">Início</a></li>
                 <li><a href="../dashboard.php" >Dashboard</a></li>
                 <li><a href="../trens/visualizar_trens.php">Trens</a></li>
-                <li><a href="../public/rotas.php">Rotas</a></li>
+                <li><a href="../rotas/rotas.php">Rotas</a></li>
                 <li><a href="../monitoramento.php">Monitoramento</a></li>
                 <li><a href="../alertas.php">Alertas</a></li>
                 <li><a href="../relatorios.php">Relatórios</a></li>

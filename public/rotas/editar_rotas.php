@@ -9,49 +9,67 @@ if (!isset($_SESSION['funcionario_id'])) {
 include "../../infra/conexao.php";
 
 $erro = "";
+$enviado = null; // guarda o que foi digitado, se der erro
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $id             = (int) $_POST["id"];
-    $nome_rota      = trim($_POST["nome_rota"]);
-    $descricao      = trim($_POST["descricao"]);
-    $distancia      = (float) str_replace(",", ".", $_POST["distancia"]);
-    $tempo_estimado = (int) $_POST["tempo_estimado"];
-    $trem_id        = (int) $_POST["trem_id"];
+    $id             = (int) ($_POST["id"] ?? 0);
+    $nome_rota      = trim($_POST["nome_rota"] ?? "");
+    $descricao      = trim($_POST["descricao"] ?? "");
+    $distancia      = trim($_POST["distancia"] ?? "");
+    $tempo_estimado = trim($_POST["tempo_estimado"] ?? "");
+    $trem_id        = $_POST["trem_id"] ?? "";
+
+    $enviado = [
+        "nome_rota"      => $nome_rota,
+        "descricao"      => $descricao,
+        "distancia"      => $distancia,
+        "tempo_estimado" => $tempo_estimado,
+        "trem_id"        => $trem_id,
+    ];
+
+    $distancia_num = (float) str_replace(",", ".", $distancia);
 
     if ($nome_rota === "" || $descricao === "") {
         $erro = "Preencha o nome e a descrição da rota.";
-    } elseif ($distancia <= 0 || $distancia > 9999.99) {
+    } elseif (strlen($descricao) > 255) {
+        $erro = "A descrição pode ter no máximo 255 caracteres.";
+    } elseif ($distancia_num <= 0 || $distancia_num > 9999.99) {
         $erro = "Informe uma distância entre 0,01 e 9999,99 km.";
-    } elseif ($tempo_estimado <= 0) {
-        $erro = "O tempo estimado deve ser maior que zero.";
-    } elseif ($trem_id <= 0) {
+    } elseif (!ctype_digit($tempo_estimado) || (int) $tempo_estimado <= 0) {
+        $erro = "O tempo estimado deve ser um número inteiro maior que zero.";
+    } elseif (!ctype_digit((string) $trem_id) || (int) $trem_id <= 0) {
         $erro = "Selecione um trem.";
     } else {
-        $sql = "UPDATE rotas
-                SET nome_rota = ?, descricao = ?, distancia = ?,
-                    tempo_estimado = ?, trem_id = ?
-                WHERE id = ?";
+        $tempo_int = (int) $tempo_estimado;
+        $trem_int  = (int) $trem_id;
 
-        $stmt = mysqli_prepare($conn, $sql);
+        try {
+            $sql = "UPDATE rotas
+                    SET nome_rota = ?, descricao = ?, distancia = ?,
+                        tempo_estimado = ?, trem_id = ?
+                    WHERE id = ?";
 
-        mysqli_stmt_bind_param(
-            $stmt,
-            "ssdiii",
-            $nome_rota,
-            $descricao,
-            $distancia,
-            $tempo_estimado,
-            $trem_id,
-            $id
-        );
+            $stmt = mysqli_prepare($conn, $sql);
 
-        if (mysqli_stmt_execute($stmt)) {
+            mysqli_stmt_bind_param(
+                $stmt,
+                "ssdiii",
+                $nome_rota,
+                $descricao,
+                $distancia_num,
+                $tempo_int,
+                $trem_int,
+                $id
+            );
+
+            mysqli_stmt_execute($stmt);
             mysqli_stmt_close($stmt);
+
             header("Location: rotas.php");
             exit();
-        } else {
-            $erro = "Erro ao atualizar: " . mysqli_stmt_error($stmt);
+        } catch (Throwable $e) {
+            $erro = "Erro no banco de dados: " . $e->getMessage();
         }
     }
 } else {
@@ -73,7 +91,14 @@ if (!$rota) {
     die("Rota não encontrada.");
 }
 
-$trens = mysqli_query($conn, "SELECT id, nome_linha FROM trens ORDER BY nome_linha ASC");
+$titulo_rota = $rota["nome_rota"];
+
+// Se deu erro ao salvar, mostra de novo o que a pessoa tinha digitado
+if ($enviado !== null) {
+    $rota = array_merge($rota, $enviado);
+}
+
+$trens = mysqli_query($conn, "SELECT id, nome_linha, numero_serie FROM trens ORDER BY nome_linha ASC");
 
 ?>
 
@@ -95,14 +120,14 @@ $trens = mysqli_query($conn, "SELECT id, nome_linha FROM trens ORDER BY nome_lin
     </header>
 
     <main>
-        <h2>Editando a rota <?php echo htmlspecialchars($rota["nome_rota"]); ?>!</h2>
+        <h2>Editando a rota <?php echo htmlspecialchars($titulo_rota); ?>!</h2>
 
         <?php if ($erro != "") { ?>
             <p style="color:red;"><?php echo htmlspecialchars($erro); ?></p>
         <?php } ?>
 
         <form action="editar_rotas.php" method="POST">
-            <input type="hidden" name="id" value="<?php echo (int) $rota["id"]; ?>">
+            <input type="hidden" name="id" value="<?php echo (int) $id; ?>">
 
             <label for="nome_rota">Nome da rota:</label>
             <input type="text" id="nome_rota" name="nome_rota"
@@ -110,17 +135,17 @@ $trens = mysqli_query($conn, "SELECT id, nome_linha FROM trens ORDER BY nome_lin
             <br>
 
             <label for="descricao">Descrição:</label>
-            <textarea id="descricao" name="descricao" required><?php echo htmlspecialchars($rota["descricao"]); ?></textarea>
+            <textarea id="descricao" name="descricao" maxlength="255" required><?php echo htmlspecialchars($rota["descricao"]); ?></textarea>
             <br>
 
             <label for="distancia">Distância (km):</label>
             <input type="number" id="distancia" name="distancia" min="0.01" max="9999.99" step="0.01"
-                   value="<?php echo htmlspecialchars($rota["distancia"]); ?>" required>
+                   value="<?php echo htmlspecialchars((string) $rota["distancia"]); ?>" required>
             <br>
 
             <label for="tempo_estimado">Tempo estimado (minutos):</label>
-            <input type="number" id="tempo_estimado" name="tempo_estimado" min="1"
-                   value="<?php echo (int) $rota["tempo_estimado"]; ?>" required>
+            <input type="number" id="tempo_estimado" name="tempo_estimado" min="1" step="1"
+                   value="<?php echo htmlspecialchars((string) $rota["tempo_estimado"]); ?>" required>
             <br>
 
             <label for="trem_id">Trem:</label>
@@ -128,14 +153,15 @@ $trens = mysqli_query($conn, "SELECT id, nome_linha FROM trens ORDER BY nome_lin
                 <option value="">Selecione o trem</option>
                 <?php while ($t = mysqli_fetch_assoc($trens)) { ?>
                     <option value="<?php echo (int) $t["id"]; ?>"
-                        <?php if ($t["id"] == $rota["trem_id"]) echo "selected"; ?>>
-                        <?php echo htmlspecialchars($t["nome_linha"]); ?>
+                        <?php if ((string) $t["id"] === (string) $rota["trem_id"]) echo "selected"; ?>>
+                        <?php echo htmlspecialchars($t["numero_serie"] . " - " . $t["nome_linha"]); ?>
                     </option>
                 <?php } ?>
             </select>
             <br>
 
             <button type="submit">Atualizar</button>
+            <a href="rotas.php">Cancelar</a>
         </form>
     </main>
 

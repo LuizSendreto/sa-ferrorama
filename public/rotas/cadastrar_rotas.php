@@ -10,50 +10,66 @@ include "../../infra/conexao.php";
 
 $erro = "";
 
+// Valores digitados (para não perder o que a pessoa escreveu se der erro)
+$nome_rota      = "";
+$descricao      = "";
+$distancia      = "";
+$tempo_estimado = "";
+$trem_id        = "";
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $nome_rota      = trim($_POST["nome_rota"]);
-    $descricao      = trim($_POST["descricao"]);
-    $distancia      = (float) str_replace(",", ".", $_POST["distancia"]);
-    $tempo_estimado = (int) $_POST["tempo_estimado"];
-    $trem_id        = (int) $_POST["trem_id"];
+    $nome_rota      = trim($_POST["nome_rota"] ?? "");
+    $descricao      = trim($_POST["descricao"] ?? "");
+    $distancia      = trim($_POST["distancia"] ?? "");
+    $tempo_estimado = trim($_POST["tempo_estimado"] ?? "");
+    $trem_id        = $_POST["trem_id"] ?? "";
+
+    $distancia_num = (float) str_replace(",", ".", $distancia);
 
     if ($nome_rota === "" || $descricao === "") {
         $erro = "Preencha o nome e a descrição da rota.";
-    } elseif ($distancia <= 0 || $distancia > 9999.99) {
+    } elseif (strlen($descricao) > 255) {
+        $erro = "A descrição pode ter no máximo 255 caracteres.";
+    } elseif ($distancia_num <= 0 || $distancia_num > 9999.99) {
         $erro = "Informe uma distância entre 0,01 e 9999,99 km.";
-    } elseif ($tempo_estimado <= 0) {
-        $erro = "O tempo estimado deve ser maior que zero.";
-    } elseif ($trem_id <= 0) {
+    } elseif (!ctype_digit($tempo_estimado) || (int) $tempo_estimado <= 0) {
+        $erro = "O tempo estimado deve ser um número inteiro maior que zero.";
+    } elseif (!ctype_digit((string) $trem_id) || (int) $trem_id <= 0) {
         $erro = "Selecione um trem.";
     } else {
-        $sql = "INSERT INTO rotas
-                (nome_rota, descricao, distancia, tempo_estimado, data_criacao, trem_id)
-                VALUES (?, ?, ?, ?, CURDATE(), ?)";
+        $tempo_int = (int) $tempo_estimado;
+        $trem_int  = (int) $trem_id;
 
-        $stmt = mysqli_prepare($conn, $sql);
+        try {
+            $sql = "INSERT INTO rotas
+                    (nome_rota, descricao, distancia, tempo_estimado, data_criacao, trem_id)
+                    VALUES (?, ?, ?, ?, CURDATE(), ?)";
 
-        mysqli_stmt_bind_param(
-            $stmt,
-            "ssdii",
-            $nome_rota,
-            $descricao,
-            $distancia,
-            $tempo_estimado,
-            $trem_id
-        );
+            $stmt = mysqli_prepare($conn, $sql);
 
-        if (mysqli_stmt_execute($stmt)) {
+            mysqli_stmt_bind_param(
+                $stmt,
+                "ssdii",
+                $nome_rota,
+                $descricao,
+                $distancia_num,
+                $tempo_int,
+                $trem_int
+            );
+
+            mysqli_stmt_execute($stmt);
             mysqli_stmt_close($stmt);
+
             header("Location: rotas.php");
             exit();
-        } else {
-            $erro = "Erro ao cadastrar rota: " . mysqli_stmt_error($stmt);
+        } catch (Throwable $e) {
+            $erro = "Erro no banco de dados: " . $e->getMessage();
         }
     }
 }
 
-$trens = mysqli_query($conn, "SELECT id, nome_linha FROM trens ORDER BY nome_linha ASC");
+$trens = mysqli_query($conn, "SELECT id, nome_linha, numero_serie FROM trens ORDER BY nome_linha ASC");
 
 ?>
 <!DOCTYPE html>
@@ -97,6 +113,7 @@ $trens = mysqli_query($conn, "SELECT id, nome_linha FROM trens ORDER BY nome_lin
                     id="nome_rota"
                     name="nome_rota"
                     placeholder="Digite o nome da rota"
+                    value="<?php echo htmlspecialchars($nome_rota); ?>"
                     required
                 >
             </div>
@@ -107,8 +124,9 @@ $trens = mysqli_query($conn, "SELECT id, nome_linha FROM trens ORDER BY nome_lin
                     id="descricao"
                     name="descricao"
                     placeholder="Digite a descrição da rota"
+                    maxlength="255"
                     required
-                ></textarea>
+                ><?php echo htmlspecialchars($descricao); ?></textarea>
             </div>
 
             <div>
@@ -121,6 +139,7 @@ $trens = mysqli_query($conn, "SELECT id, nome_linha FROM trens ORDER BY nome_lin
                     min="0.01"
                     max="9999.99"
                     step="0.01"
+                    value="<?php echo htmlspecialchars($distancia); ?>"
                     required
                 >
             </div>
@@ -133,6 +152,8 @@ $trens = mysqli_query($conn, "SELECT id, nome_linha FROM trens ORDER BY nome_lin
                     name="tempo_estimado"
                     placeholder="Digite o tempo estimado"
                     min="1"
+                    step="1"
+                    value="<?php echo htmlspecialchars($tempo_estimado); ?>"
                     required
                 >
             </div>
@@ -145,8 +166,9 @@ $trens = mysqli_query($conn, "SELECT id, nome_linha FROM trens ORDER BY nome_lin
                     if ($trens && mysqli_num_rows($trens) > 0) {
                         while ($trem = mysqli_fetch_assoc($trens)) {
                     ?>
-                            <option value="<?php echo (int) $trem['id']; ?>">
-                                <?php echo htmlspecialchars($trem['nome_linha'], ENT_QUOTES, 'UTF-8'); ?>
+                            <option value="<?php echo (int) $trem['id']; ?>"
+                                <?php if ((string) $trem_id === (string) $trem['id']) echo "selected"; ?>>
+                                <?php echo htmlspecialchars($trem['numero_serie'] . " - " . $trem['nome_linha'], ENT_QUOTES, 'UTF-8'); ?>
                             </option>
                     <?php
                         }

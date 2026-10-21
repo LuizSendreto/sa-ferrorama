@@ -10,47 +10,70 @@ include "../../infra/conexao.php";
 
 $erro = "";
 
+// Valores digitados (para não perder o que a pessoa escreveu se der erro)
+$nome_linha     = "";
+$numero_serie   = "";
+$velocidade     = "";
+$estado         = "";
+$funcionario_id = "";
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $nome_linha     = trim($_POST["nome_linha"]);
-    $numero_serie   = trim($_POST["numero_serie"]);
-    $velocidade     = (int) $_POST["velocidade"];
-    $estado         = $_POST["estado"];
-    $funcionario_id = (int) $_POST["funcionario_id"];
+    $nome_linha     = trim($_POST["nome_linha"] ?? "");
+    $numero_serie   = trim($_POST["numero_serie"] ?? "");
+    $velocidade     = trim($_POST["velocidade"] ?? "");
+    $estado         = $_POST["estado"] ?? "";
+    $funcionario_id = $_POST["funcionario_id"] ?? "";
 
     $estados_validos = ["Ativo", "Inativo", "Manutencao"];
 
-    if ($nome_linha === "" || $numero_serie === "") {
+    if ($nome_linha === "" || $numero_serie === "" || $velocidade === "") {
         $erro = "Preencha todos os campos.";
-    } elseif ($velocidade < 0) {
-        $erro = "A velocidade não pode ser negativa.";
+    } elseif (!ctype_digit($velocidade)) {
+        $erro = "A velocidade deve ser um número inteiro maior ou igual a zero.";
     } elseif (!in_array($estado, $estados_validos)) {
         $erro = "Status inválido.";
-    } elseif ($funcionario_id <= 0) {
+    } elseif (!ctype_digit((string) $funcionario_id) || (int) $funcionario_id <= 0) {
         $erro = "Selecione um funcionário.";
     } else {
-        $sql = "INSERT INTO trens
-                (nome_linha, numero_serie, velocidade, estado, funcionario_id)
-                VALUES (?, ?, ?, ?, ?)";
+        $velocidade_int = (int) $velocidade;
+        $funcionario_int = (int) $funcionario_id;
 
-        $stmt = mysqli_prepare($conn, $sql);
-
-        mysqli_stmt_bind_param(
-            $stmt,
-            "ssisi",
-            $nome_linha,
-            $numero_serie,
-            $velocidade,
-            $estado,
-            $funcionario_id
-        );
-
-        if (mysqli_stmt_execute($stmt)) {
+        try {
+            // Não deixa cadastrar dois trens com o mesmo número de série
+            $stmt = mysqli_prepare($conn, "SELECT id FROM trens WHERE numero_serie = ?");
+            mysqli_stmt_bind_param($stmt, "s", $numero_serie);
+            mysqli_stmt_execute($stmt);
+            $ja_existe = mysqli_num_rows(mysqli_stmt_get_result($stmt)) > 0;
             mysqli_stmt_close($stmt);
-            header("Location: visualizar_trens.php");
-            exit();
-        } else {
-            $erro = "Erro ao cadastrar trem: " . mysqli_stmt_error($stmt);
+
+            if ($ja_existe) {
+                $erro = "Já existe um trem cadastrado com esse número de série.";
+            } else {
+                $sql = "INSERT INTO trens
+                        (nome_linha, numero_serie, velocidade, estado, funcionario_id)
+                        VALUES (?, ?, ?, ?, ?)";
+
+                $stmt = mysqli_prepare($conn, $sql);
+
+                mysqli_stmt_bind_param(
+                    $stmt,
+                    "ssisi",
+                    $nome_linha,
+                    $numero_serie,
+                    $velocidade_int,
+                    $estado,
+                    $funcionario_int
+                );
+
+                mysqli_stmt_execute($stmt);
+                mysqli_stmt_close($stmt);
+
+                header("Location: visualizar_trens.php");
+                exit();
+            }
+        } catch (Throwable $e) {
+            $erro = "Erro no banco de dados: " . $e->getMessage();
         }
     }
 }
@@ -99,6 +122,7 @@ $funcionarios = mysqli_query($conn, "SELECT id, nome FROM funcionarios ORDER BY 
                     id="nome_linha"
                     name="nome_linha"
                     placeholder="Digite o nome da linha do trem"
+                    value="<?php echo htmlspecialchars($nome_linha); ?>"
                     required
                 >
             </div>
@@ -110,6 +134,7 @@ $funcionarios = mysqli_query($conn, "SELECT id, nome FROM funcionarios ORDER BY 
                     id="numero_serie"
                     name="numero_serie"
                     placeholder="Digite o número de série do trem"
+                    value="<?php echo htmlspecialchars($numero_serie); ?>"
                     required
                 >
             </div>
@@ -123,6 +148,7 @@ $funcionarios = mysqli_query($conn, "SELECT id, nome FROM funcionarios ORDER BY 
                     placeholder="Digite a velocidade do trem"
                     min="0"
                     step="1"
+                    value="<?php echo htmlspecialchars($velocidade); ?>"
                     required
                 >
             </div>
@@ -132,9 +158,9 @@ $funcionarios = mysqli_query($conn, "SELECT id, nome FROM funcionarios ORDER BY 
 
                 <select name="estado" id="estado" required>
                     <option value="">Selecione o status:</option>
-                    <option value="Ativo">Ativo</option>
-                    <option value="Inativo">Inativo</option>
-                    <option value="Manutencao">Manutenção</option>
+                    <option value="Ativo" <?php if ($estado == "Ativo") echo "selected"; ?>>Ativo</option>
+                    <option value="Inativo" <?php if ($estado == "Inativo") echo "selected"; ?>>Inativo</option>
+                    <option value="Manutencao" <?php if ($estado == "Manutencao") echo "selected"; ?>>Manutenção</option>
                 </select>
             </div>
 
@@ -148,7 +174,8 @@ $funcionarios = mysqli_query($conn, "SELECT id, nome FROM funcionarios ORDER BY 
                     if ($funcionarios && mysqli_num_rows($funcionarios) > 0) {
                         while ($funcionario = mysqli_fetch_assoc($funcionarios)) {
                     ?>
-                            <option value="<?php echo (int) $funcionario['id']; ?>">
+                            <option value="<?php echo (int) $funcionario['id']; ?>"
+                                <?php if ((string) $funcionario_id === (string) $funcionario['id']) echo "selected"; ?>>
                                 <?php echo htmlspecialchars($funcionario['nome'], ENT_QUOTES, 'UTF-8'); ?>
                             </option>
                     <?php
