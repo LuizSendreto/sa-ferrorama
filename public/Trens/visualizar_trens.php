@@ -2,7 +2,21 @@
 <?php
 include "../../infra/conexao.php";
 
-$sql = "SELECT id, nome_linha, numero_serie, velocidade, estado FROM trens";
+
+$sql = "SELECT
+            trens.id,
+            trens.nome_linha,
+            trens.numero_serie,
+            trens.velocidade,
+            trens.estado,
+            trens.funcionario_id,
+            funcionarios.nome AS funcionario_responsavel
+        FROM trens
+        LEFT JOIN funcionarios
+            ON trens.funcionario_id = funcionarios.id";
+
+$trens = mysqli_query($conn, $sql);
+
 $trens = mysqli_query($conn, $sql);
 
 $sql_funcionarios = "SELECT id, nome FROM funcionarios ORDER BY nome ASC";
@@ -116,16 +130,16 @@ $funcionarios = mysqli_query($conn, $sql_funcionarios);
                     <th class="text-center">Ações</th>
                     <th class="text-center">Funcionário responsável</th>
                 </tr>
-                <?php while ($trens = mysqli_fetch_assoc($trens)) { ?>
+                <?php while ($trem = mysqli_fetch_assoc($trens)) { ?>
                         <tr>
-                            <td><?php echo $trens["id"]; ?></td>
-                            <td><?php echo $trens["numero_serie"]; ?></td>
-                            <td><?php echo $trens["velocidade"]; ?></td>
-                            <td><?php echo $trens["estado"]; ?></td>
-                            <td><?php echo $trens["funcionarios_id"]; ?></td>
+                            <td><?php echo $trem["id"]; ?></td>
+                            <td><?php echo $trem["numero_serie"]; ?></td>
+                            <td><?php echo $trem["velocidade"]; ?></td>
+                            <td><?php echo $trem["estado"]; ?></td>
+                            <td><?php echo $trem["funcionario_id"]; ?></td>
                             <td>
-                                <a href="editar_trens.php?id=<?php echo $trens["id"]; ?>">Editar</a>
-                                <a href="excluir_trens.php?id=<?php echo $trens["id"]; ?>" onclick="return confirm('Tem certeza que deseja excluir este trem?');">
+                                <a href="editar_trens.php?id=<?php echo $trem["id"]; ?>">Editar</a>
+                                <a href="excluir_trens.php?id=<?php echo $trem["id"]; ?>" onclick="return confirm('Tem certeza que deseja excluir este trem?');">
                                     Excluir
                                 </a>
                             </td>

@@ -107,9 +107,22 @@ if (!$trem) {
             <input type="text" name="velocidade" value="<?php echo $trem["velocidade"]; ?>">
             <br>
 
-            <label for="estado">Estado:</label>
-            <input type="number" name="estado" value="<?php echo $trem["estado"]; ?>">
-            <br>
+            <label for="estado">Status:</label>
+                <select name="estado" id="estado" required>
+                    <option value="">Selecione o status:</option>
+
+                    <option value="Ativo" <?php if ($trem["estado"] == "Ativo") echo "selected"; ?>>
+                    Ativo
+                    </option>
+
+                    <option value="Inativo" <?php if ($trem["estado"] == "Inativo") echo "selected"; ?>>
+                    Inativo
+                    </option>
+
+                    <option value="Manutencao" <?php if ($trem["estado"] == "Manutencao") echo "selected"; ?>>
+                    Manutenção
+                    </option>
+                </select>
 
             <button type="submit">Atualizar</button>
 
