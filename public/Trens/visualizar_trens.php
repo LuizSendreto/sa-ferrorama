@@ -2,14 +2,11 @@
 <?php
 include "../../infra/conexao.php";
 
-$sql_funcionarios = "SELECT id, nome FROM funcionarios ORDER BY nome ASC";
-$funcionarios = mysqli_query($conn, $sql_funcionarios);
-
-?>
- <?php
-
 $sql = "SELECT id, nome_linha, numero_serie, velocidade, estado FROM trens";
 $trens = mysqli_query($conn, $sql);
+
+$sql_funcionarios = "SELECT id, nome FROM funcionarios ORDER BY nome ASC";
+$funcionarios = mysqli_query($conn, $sql_funcionarios);
 
 ?>  
 
@@ -48,7 +45,7 @@ $trens = mysqli_query($conn, $sql);
             <ul class="menu_sidebar">
                 <li><a href="../../index.php">Início</a></li>
                 <li><a href="../dashboard.php" >Dashboard</a></li>
-                <li><a href="../trens/cadastrar_trens.php" class="active_sidebar">Trens</a></li>
+                <li><a href="../trens/visualizar_trens.php" class="active_sidebar">Trens</a></li>
                 <li><a href="../rotas.php">Rotas</a></li>
                 <li><a href="../monitoramento.php">Monitoramento</a></li>
                 <li><a href="../alertas.php">Alertas</a></li>
@@ -106,7 +103,8 @@ $trens = mysqli_query($conn, $sql);
        
  <div class="table_trens">
             <h1 id="table_trens">Visualização de trens</h1>
-    <section id="tabela_cadastro_trens">
+    <section id="tabela_visualizar_trens">
+
         <div class="text-center">
             <h2 class="titulo_tabela">Trens Cadastrados</h2>
             <table class="table_t" style="width: 70%;">
@@ -116,6 +114,7 @@ $trens = mysqli_query($conn, $sql);
                     <th class="text-center">Velocidade</th>
                     <th class="text-center">Estado</th>
                     <th class="text-center">Ações</th>
+                    <th class="text-center">Funcionário responsável</th>
                 </tr>
                 <?php while ($trem = mysqli_fetch_assoc($trens)) { ?>
                         <tr>
@@ -123,6 +122,7 @@ $trens = mysqli_query($conn, $sql);
                             <td><?php echo $trem["numero_serie"]; ?></td>
                             <td><?php echo $trem["velocidade"]; ?></td>
                             <td><?php echo $trem["estado"]; ?></td>
+                            <td><?php echo $trem["funcionarios_id"]; ?></td>
                             <td>
                                 <a href="editar_trens.php?id=<?php echo $trem["id"]; ?>">Editar</a>
                                 <a href="excluir_trens.php?id=<?php echo $trem["id"]; ?>" onclick="return confirm('Tem certeza que deseja excluir este trem?');">
