@@ -1,4 +1,11 @@
 <?php
+session_start();
+
+if (!isset($_SESSION['funcionario_id'])) {
+    header("Location: ../usuarios/login.php");
+    exit;
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 include "../../infra/conexao.php";
@@ -61,7 +68,7 @@ exit();
                 <li><a href="../relatorios.php">Relatórios</a></li>
                 <li><a href="../usuarios/visu_usuarios.php">Visualização de Usuarios</a></li>
                 <li><a href="../sensores/visu_sensores.php" class="active_sidebar">Cadastro de Sensores</a></li>
-                <li><a href="../usuarios/login.php">Logout</a></li>
+                <li><a href="../usuarios/logout.php">Logout</a></li>
         </ul>
     </aside>
 

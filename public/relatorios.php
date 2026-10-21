@@ -1,3 +1,11 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['funcionario_id'])) {
+    header("Location: usuarios/login.php");
+    exit;
+}
+?>
 <html lang="en">
 
 <head>
@@ -43,7 +51,7 @@
                 <li><a href="../public/relatorios.php" class="active_sidebar">Relatórios</a></li>
                 <li><a href="../public/usuarios/visu_usuarios.php">Visualização de Usuarios</a></li>
                 <li><a href="../public/sensores/visu_sensores.php">Visualização de Sensores</a></li>
-                <li><a href="../public/usuarios/login.php">Logout</a></li>
+                <li><a href="../public/usuarios/logout.php">Logout</a></li>
             </ul>
 
         </aside>

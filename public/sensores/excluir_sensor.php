@@ -1,4 +1,11 @@
 <?php
+session_start();
+
+if (!isset($_SESSION['funcionario_id'])) {
+    header("Location: ../usuarios/login.php");
+    exit;
+}
+
 // conexão com o banco
 include "../../infra/conexao.php";
 

@@ -1,4 +1,11 @@
 <?php
+session_start();
+
+if (!isset($_SESSION['funcionario_id'])) {
+    header("Location: login.php");
+    exit;
+}
+
 
 include '../../infra/conexao.php';
 
@@ -55,7 +62,7 @@ $funcionarios = mysqli_query($conn, $sql_func);
                 <li><a href="../relatorios.php" >Relatórios</a></li>
                 <li><a href="../usuarios/visu_usuarios.php" class="active_sidebar">Visualização de Usuarios</a></li>
                 <li><a href="../sensores/visu_sensores.php">Visualização de Sensores</a></li>
-                <li><a href="../usuarios/login.php">Logout</a></li>
+                <li><a href="../usuarios/logout.php">Logout</a></li>
             </ul>
 
         </aside>

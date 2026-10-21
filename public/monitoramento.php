@@ -1,3 +1,11 @@
+<?php
+session_start();
+
+if (!isset($_SESSION['funcionario_id'])) {
+    header("Location: usuarios/login.php");
+    exit;
+}
+?>
 <html lang="pt-BR">
 
 <head>
