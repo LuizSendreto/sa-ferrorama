@@ -149,7 +149,7 @@ $funcionarios = mysqli_query($conn, $sql_funcionarios);
         </div>
     </section>
      <div class="div_button">
-            <button class="button-container" onclick="location.href='../funcionarios/cadastro_funcionarios.php'"> <b>Cadastrar trem</b></button>
+            <button class="button-container" onclick="location.href='../Trens/trens_cadastro.php'"> <b>Cadastrar trem</b></button>
         </div>
         </container>
         <br>

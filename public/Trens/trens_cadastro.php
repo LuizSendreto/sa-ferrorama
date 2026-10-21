@@ -8,7 +8,7 @@ $funcionarios = mysqli_query($conn, $sql_funcionarios);
 ?>
  <?php
 
-$sql = "SELECT id, nome_linha, numero_serie, velocidade, estado FROM trem";
+$sql = "SELECT id, nome_linha, numero_serie, velocidade, estado FROM trens";
 $trem = mysqli_query($conn, $sql);
 
 ?>  
@@ -120,7 +120,6 @@ $trem = mysqli_query($conn, $sql);
                     id="botao_cadastro_trem"
                     type="submit"
                     class="btn btn-outline-danger"
-                    >Cadastrar Trem
                 </button>
 
             </form>
