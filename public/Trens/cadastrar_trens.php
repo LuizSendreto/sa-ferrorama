@@ -103,8 +103,6 @@ $trens = mysqli_query($conn, $sql);
 
         </div>
        
-
-
  <div class="table_trens">
             <h1 id="table_trens">Visualização de trens</h1>
     <section id="tabela_cadastro_trens">
