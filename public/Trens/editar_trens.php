@@ -37,7 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Volta para a visualização dos usuários
-    header("Location: cadastrar_trens.php");
+    header("Location: visualizar_trens.php");
     exit();
 }
 

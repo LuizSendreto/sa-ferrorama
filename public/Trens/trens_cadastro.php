@@ -40,7 +40,7 @@ $trem = mysqli_query($conn, $sql);
     <main id="main_trens">
             <h2>Cadastro de Trens</h2>
 
-            <form action="cadastrar_trem.php" method="POST">
+            <form action="visualizar_trens.php" method="POST">
 
                 <div>
                     <label for="nome_linha">Nome da linha:</label>
