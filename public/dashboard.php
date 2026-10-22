@@ -41,7 +41,11 @@ if (!isset($_SESSION['funcionario_id'])) {
                 <li><a href="../index.php">Início</a></li>
                 <li><a href="dashboard.php" class="active_sidebar">Dashboard</a></li>
                 <li><a href="trens/visualizar_trens.php">Trens</a></li>
-                <li><a href="rotas/rotas.php">Rotas</a></li>
+                <li>
+                <a href="/luiz_sendreto/sa-ferrorama/public/rotas/rotas.php">
+                Rotas
+                </a>
+                </li>
                 <li><a href="monitoramento.php">Monitoramento</a></li>
                 <li><a href="alertas.php">Alertas</a></li>
                 <li><a href="relatorios.php">Relatórios</a></li>
