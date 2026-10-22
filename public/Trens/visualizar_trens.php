@@ -65,7 +65,9 @@ $lista_trens = mysqli_fetch_all($resultado, MYSQLI_ASSOC);
                 <li><a href="../../index.php">Início</a></li>
                 <li><a href="../dashboard.php">Dashboard</a></li>
                 <li><a href="../trens/visualizar_trens.php" class="active_sidebar">Trens</a></li>
-                <li><a href="../rotas/rotas.php">Rotas</a></li>
+                <li>
+    <a href="../rotas/rotas.php">Rotas</a>
+</li>
                 <li><a href="../monitoramento.php">Monitoramento</a></li>
                 <li><a href="../alertas.php">Alertas</a></li>
                 <li><a href="../relatorios.php">Relatórios</a></li>

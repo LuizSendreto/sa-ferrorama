@@ -45,7 +45,7 @@ if (!isset($_SESSION['funcionario_id'])) {
                 <li><a href="../index.php">Início</a></li>
                 <li><a href="../public/dashboard.php" >Dashboard</a></li>
                 <li><a href="../public/trens/visualizar_trens.php">Trens</a></li>
-                <li><a href="../public/rotas/rotas.php">Rotas</a></li>
+                <li><a href="rotas/rotas.php">Rotas</a></li>
                 <li><a href="../public/monitoramento.php">Monitoramento</a></li>
                 <li><a href="../public/alertas.php">Alertas</a></li>
                 <li><a href="../public/relatorios.php" class="active_sidebar">Relatórios</a></li>
