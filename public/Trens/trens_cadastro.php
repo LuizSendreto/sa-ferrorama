@@ -96,12 +96,14 @@ $funcionarios = mysqli_query($conn, "SELECT id, nome FROM funcionarios ORDER BY 
     <header id="header_trens">
         <nav class="navbar">
 
-            <div class="logo-navbar">
-                <img src="../../assets/img/logo_navbar2.png" alt="Logo Strain">
+              <div>
+                 <button class="btn" type="button" onclick="location.href='../trens/visualizar_trens.php'">Voltar</button>
+                
             </div>
 
             <div class="logo-navbar">
                 <img src="../../assets/img/icone_da_navbar.png" alt="logo usuario logado">
+                
             </div>
 
         </nav>
