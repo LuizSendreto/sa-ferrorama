@@ -1,4 +1,11 @@
 <?php
+session_start();
+
+if (!isset($_SESSION['funcionario_id'])) {
+    header("Location: ../usuarios/login.php");
+    exit;
+}
+
 
 include "../../infra/conexao.php";
 
@@ -102,14 +109,14 @@ $resultado = mysqli_query($conn, $sql);
             <ul class="menu_sidebar">
                 <li><a href="../../index.php">Início</a></li>
                 <li><a href="../dashboard.php" >Dashboard</a></li>
-                <li><a href="../trens/cadastrar_trens.php">Trens</a></li>
+                <li><a href="../Trens/visualizar_trens.php">Trens</a></li>
                 <li><a href="../rotas/rotas.php">Rotas</a></li>
                 <li><a href="../monitoramento.php">Monitoramento</a></li>
                 <li><a href="../alertas.php">Alertas</a></li>
                 <li><a href="../relatorios.php">Relatórios</a></li>
                 <li><a href="../usuarios/visu_usuarios.php">Visualização de Usuarios</a></li>
                 <li><a href="../sensores/visu_sensores.php" class="active_sidebar">Visualização de Sensores</a></li>
-                <li><a href="../usuarios/login.php">Logout</a></li>
+                <li><a href="../usuarios/logout.php">Logout</a></li>
             </ul>
 
         </aside>
@@ -132,10 +139,10 @@ $resultado = mysqli_query($conn, $sql);
         <?php while ($sensor = mysqli_fetch_assoc($resultado)) { ?>
 
             <tr>
-                <td><?php echo $sensor["id"]; ?></td>
-                <td><?php echo $sensor["tipo"]; ?></td>
-                <td><?php echo $sensor["localizacao"]; ?></td>
-                <td><?php echo $sensor["posicao"]; ?></td>
+                <td><?php echo htmlspecialchars((string) $sensor["id"]); ?></td>
+                <td><?php echo htmlspecialchars((string) $sensor["tipo"]); ?></td>
+                <td><?php echo htmlspecialchars((string) $sensor["localizacao"]); ?></td>
+                <td><?php echo htmlspecialchars((string) $sensor["posicao"]); ?></td>
                 <td>
                     <a href="excluir_sensor.php?id=<?php echo $sensor["id"]; ?>" onclick="return confirm('Tem certeza que deseja excluir este sensor?');">
                         Excluir

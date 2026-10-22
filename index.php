@@ -21,9 +21,9 @@
 
     </nav>
 
-    ..<section class="banner">
+    <section class="banner">
         
-        <img class="Strain" src="assets/img/logo_nova.png" alt="Strain">
+        <img class="Strain" src="assets/img/Logo_index.png" alt="Strain">
       
   
         <p id="frase1"> Olá, seja bem-vindo ao Strain, o sistema de  transporte público de Joinville! </p>
@@ -106,8 +106,6 @@
             </div>
 
 
-
-
             <div>
                 <img class="Mapa" src="assets/img/Mockup- SA Juana, Luiz, Nicole, Rafael.png" alt="Mapa dos trens">
 
@@ -175,8 +173,9 @@
 
     </script>
 
+        </footer>
+
+    <script src="Scripts/botoes.js"></script>
 </body>
 
 </html>
-</footer>
-<script src="Scripts/botoes.js"></script>

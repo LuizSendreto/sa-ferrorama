@@ -1,24 +1,28 @@
 <?php
+session_start();
+
+if (!isset($_SESSION['funcionario_id'])) {
+    header("Location: ../usuarios/login.php");
+    exit;
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 include "../../infra/conexao.php";
 
-$tipo_sensor = $_POST["tipo_sensor"];
-$localizacao = $_POST["localizacao"];
-$posicao = $_POST["posicao"];
+$tipo_sensor = trim($_POST["tipo_sensor"] ?? "");
+$localizacao = trim($_POST["localizacao"] ?? "");
+$posicao = trim($_POST["posicao"] ?? "");
 
 $sql = "INSERT INTO sensores (tipo, localizacao, posicao) VALUES (?,?,?)";
 
-
-$stmt=mysqli_prepare($conn, $sql);
-
-if($stmt){
-
-mysqli_stmt_bind_param($stmt, "sss", $tipo_sensor, $localizacao, $posicao);
-
-mysqli_stmt_execute($stmt);
-mysqli_stmt_close($stmt);
-
+try {
+    $stmt = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($stmt, "sss", $tipo_sensor, $localizacao, $posicao);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+} catch (Throwable $e) {
+    die("Erro ao cadastrar o sensor: " . htmlspecialchars($e->getMessage()));
 }
 
 header("Location: visu_sensores.php");
@@ -41,7 +45,7 @@ exit();
     <header id="header_cadastro_sensor">
         <nav class="navbar">
             <div class="logo-navbar">
-                <img src="../assets/img/logo_navbar2.png" alt="Logo Strain">
+                <img src="../../assets/img/logo_navbar2.png" alt="Logo Strain">
             </div>
         </nav>
     </header>
@@ -54,14 +58,14 @@ exit();
         <ul class="menu_sidebar">
                 <li><a href="../../index.php">Início</a></li>
                 <li><a href="../dashboard.php" >Dashboard</a></li>
-                <li><a href="../trens/cadastrar_trens.php">Trens</a></li>
-                <li><a href="../public/rotas.php">Rotas</a></li>
+                <li><a href="../Trens/visualizar_trens.php">Trens</a></li>
+                <li><a href="../rotas/rotas.php">Rotas</a></li>
                 <li><a href="../monitoramento.php">Monitoramento</a></li>
                 <li><a href="../alertas.php">Alertas</a></li>
                 <li><a href="../relatorios.php">Relatórios</a></li>
                 <li><a href="../usuarios/visu_usuarios.php">Visualização de Usuarios</a></li>
-                <li><a href="../sensores/visu_sensores.php" class="active_sidebar">Cadastro de Sensores</a></li>
-                <li><a href="../usuarios/login.php">Logout</a></li>
+                <li><a href="../sensores/visu_sensores.php" class="active_sidebar">Visualização de Sensores</a></li>
+                <li><a href="../usuarios/logout.php">Logout</a></li>
         </ul>
     </aside>
 

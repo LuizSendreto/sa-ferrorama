@@ -9,32 +9,38 @@ if (!isset($_SESSION['funcionario_id'])) {
 
 include '../../infra/conexao.php';
 
+$erro = "";
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $nome = $_POST['nomeUsuario'];
-    $email = $_POST['email'];
-    $telefone = $_POST['telefone'];
+    $nome = trim($_POST['nomeUsuario']);
+    $email = trim($_POST['email']);
+    $telefone = trim($_POST['telefone']);
     $senha = $_POST['senha'];
     $confirmarSenha = $_POST['confirmarSenha'];
 
     if ($senha != $confirmarSenha) {
-        die("As senhas não são iguais.");
-    }
-
-    $senha = password_hash($senha, PASSWORD_DEFAULT);
-
-    $sql = "INSERT INTO funcionarios (nome, email, telefone, senha) VALUES (?, ?, ?, ?)";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssss", $nome, $email, $telefone, $senha);
-
-    if ($stmt->execute()) {
-        $stmt->close();
-        header("Location: ../usuarios/login.php");
-        exit;
+        $erro = "As senhas não são iguais.";
     } else {
-        echo "Erro ao cadastrar: " . $stmt->error;
-    }
+        $senha = password_hash($senha, PASSWORD_DEFAULT);
 
-    $stmt->close();
+        try {
+            $sql = "INSERT INTO funcionarios (nome, email, telefone, senha) VALUES (?, ?, ?, ?)";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("ssss", $nome, $email, $telefone, $senha);
+            $stmt->execute();
+            $stmt->close();
+
+            // Volta para a lista de usuários (quem cadastra já está logado)
+            header("Location: ../usuarios/visu_usuarios.php");
+            exit;
+        } catch (mysqli_sql_exception $e) {
+            if ($e->getCode() == 1062) {
+                $erro = "Já existe um funcionário com esse e-mail.";
+            } else {
+                $erro = "Erro ao cadastrar: " . $e->getMessage();
+            }
+        }
+    }
 }
 
 ?>
@@ -67,6 +73,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="container_login">
 
                 <h2 id="titulo_cadastro">Cadastrar Funcionário</h2>
+
+                <?php if ($erro != "") { ?>
+                    <div class="alert alert-danger">
+                        <?php echo htmlspecialchars($erro); ?>
+                    </div>
+                <?php } ?>
 
                 <form id="form_cadastro" method="POST" action="">
 
