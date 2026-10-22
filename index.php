@@ -21,7 +21,7 @@
 
     </nav>
 
-    ..<section class="banner">
+    <section class="banner">
         
         <img class="Strain" src="assets/img/Logo_index.png" alt="Strain">
       
@@ -173,8 +173,9 @@
 
     </script>
 
+        </footer>
+
+    <script src="Scripts/botoes.js"></script>
 </body>
 
 </html>
-</footer>
-<script src="Scripts/botoes.js"></script>

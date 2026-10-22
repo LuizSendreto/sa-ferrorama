@@ -76,6 +76,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id = isset($_GET["id"]) ? (int) $_GET["id"] : 0;
 }
 
+// Se o ID não chegou pela URL nem pelo formulário, volta para a lista
+if ($id <= 0) {
+    header("Location: rotas.php");
+    exit;
+}
+
 if ($id <= 0) {
     die("O ID da rota não foi informado.");
 }

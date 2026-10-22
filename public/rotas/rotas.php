@@ -116,7 +116,7 @@ if (!$resultado) {
             <ul class="menu_sidebar">
                 <li><a href="../../index.php">Início</a></li>
                 <li><a href="../dashboard.php" >Dashboard</a></li>
-                <li><a href="../trens/visualizar_trens.php">Trens</a></li>
+                <li><a href="../Trens/visualizar_trens.php">Trens</a></li>
                 <li><a href="rotas.php" class="active_sidebar">Rotas</a></li>
                 <li><a href="../monitoramento.php">Monitoramento</a></li>
                 <li><a href="../alertas.php">Alertas</a></li>
@@ -132,7 +132,7 @@ if (!$resultado) {
 
     <button
     type="button"
-    onclick="window.location.href='/luiz_sendreto/sa-ferrorama/public/rotas/cadastrar_rotas.php'">
+    onclick="window.location.href='cadastrar_rotas.php'">
     Cadastrar Rota
 </button>
 

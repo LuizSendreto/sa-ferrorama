@@ -109,7 +109,7 @@ $resultado = mysqli_query($conn, $sql);
             <ul class="menu_sidebar">
                 <li><a href="../../index.php">Início</a></li>
                 <li><a href="../dashboard.php" >Dashboard</a></li>
-                <li><a href="../trens/visualizar_trens.php">Trens</a></li>
+                <li><a href="../Trens/visualizar_trens.php">Trens</a></li>
                 <li><a href="../rotas/rotas.php">Rotas</a></li>
                 <li><a href="../monitoramento.php">Monitoramento</a></li>
                 <li><a href="../alertas.php">Alertas</a></li>
@@ -139,10 +139,10 @@ $resultado = mysqli_query($conn, $sql);
         <?php while ($sensor = mysqli_fetch_assoc($resultado)) { ?>
 
             <tr>
-                <td><?php echo $sensor["id"]; ?></td>
-                <td><?php echo $sensor["tipo"]; ?></td>
-                <td><?php echo $sensor["localizacao"]; ?></td>
-                <td><?php echo $sensor["posicao"]; ?></td>
+                <td><?php echo htmlspecialchars((string) $sensor["id"]); ?></td>
+                <td><?php echo htmlspecialchars((string) $sensor["tipo"]); ?></td>
+                <td><?php echo htmlspecialchars((string) $sensor["localizacao"]); ?></td>
+                <td><?php echo htmlspecialchars((string) $sensor["posicao"]); ?></td>
                 <td>
                     <a href="excluir_sensor.php?id=<?php echo $sensor["id"]; ?>" onclick="return confirm('Tem certeza que deseja excluir este sensor?');">
                         Excluir

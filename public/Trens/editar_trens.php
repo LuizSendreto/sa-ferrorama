@@ -85,6 +85,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id = isset($_GET["id"]) ? (int) $_GET["id"] : 0;
 }
 
+// Se o ID não chegou pela URL nem pelo formulário, volta para a lista
+if ($id <= 0) {
+    header("Location: visualizar_trens.php");
+    exit;
+}
+
 if ($id <= 0) {
     die("O ID do trem não foi informado.");
 }
