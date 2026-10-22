@@ -36,8 +36,7 @@ CREATE TABLE IF NOT EXISTS trens (
     velocidade INT NOT NULL,
     estado VARCHAR(20) NOT NULL,
     funcionario_id INT,
-    FOREIGN KEY (funcionario_id)
-        REFERENCES funcionarios(id)
+    FOREIGN KEY (funcionario_id) REFERENCES funcionarios(id)
 );
 
 -- TABELA ROTAS
@@ -49,12 +48,8 @@ CREATE TABLE IF NOT EXISTS rotas (
     tempo_estimado INT NOT NULL,
     data_criacao DATE NOT NULL,
     trem_id INT,
-    FOREIGN KEY (trem_id)
-        REFERENCES trens(id)
+    FOREIGN KEY (trem_id) REFERENCES trens(id)
 );
-
-ALTER TABLE trens MODIFY estado VARCHAR(20) NOT NULL;
-
 UPDATE trens SET estado = 'Ativo' WHERE estado = '1';
 UPDATE trens SET estado = 'Inativo'
  WHERE estado NOT IN ('Ativo', 'Inativo', 'Manutencao');
