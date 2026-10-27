@@ -1,34 +1,63 @@
 <?php
-// Exclui uma rota do banco de dados (com prepared statements).
-session_start();
 
-if (!isset($_SESSION['funcionario_id'])) {
-    header("Location: ../usuarios/login.php");
-    exit;
-}
+// Apenas administradores podem excluir rotas
+require_once '../../infra/verificar_acesso.php';
+verificarAdmin();
 
 include "../../infra/conexao.php";
 
-if (!isset($_GET["id"]) || !ctype_digit($_GET["id"])) {
+// Permitir exclusão somente por POST
+if ($_SERVER["REQUEST_METHOD"] != "POST") {
+    header("Location: rotas.php");
+    exit;
+}
+
+// Verificar o token CSRF
+if (
+    !isset($_POST['csrf_token']) ||
+    !is_string($_POST['csrf_token']) ||
+    !hash_equals($_SESSION['csrf_token'] ?? '', $_POST['csrf_token'])
+) {
+    http_response_code(403);
+    exit("Solicitação inválida.");
+}
+
+// Verificar o ID recebido
+if (
+    !isset($_POST["id"]) ||
+    !ctype_digit((string) $_POST["id"]) ||
+    (int) $_POST["id"] <= 0
+) {
     die("ID inválido.");
 }
 
-$id = (int) $_GET["id"];
+$id = (int) $_POST["id"];
 
 try {
-    $stmt = mysqli_prepare($conn, "DELETE FROM rotas WHERE id = ?");
+
+    // Excluir a rota usando prepared statement
+    $stmt = mysqli_prepare(
+        $conn,
+        "DELETE FROM rotas WHERE id = ?"
+    );
+
     mysqli_stmt_bind_param($stmt, "i", $id);
     mysqli_stmt_execute($stmt);
+
     $apagou = mysqli_stmt_affected_rows($stmt);
+
     mysqli_stmt_close($stmt);
 
     if ($apagou == 0) {
         die("Nenhuma rota foi encontrada para exclusão.");
     }
+
 } catch (Throwable $e) {
-    die("Erro ao excluir a rota: " . htmlspecialchars($e->getMessage()));
+    error_log($e->getMessage());
+    die("Erro ao excluir a rota.");
 }
 
+// Voltar para a listagem
 header("Location: rotas.php");
 exit;
 

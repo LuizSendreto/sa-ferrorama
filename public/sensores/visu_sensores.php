@@ -1,21 +1,30 @@
 <?php
-session_start();
 
-if (!isset($_SESSION['funcionario_id'])) {
-    header("Location: ../usuarios/login.php");
-    exit;
-}
-
+require_once '../../infra/verificar_acesso.php';
+verificarFuncionario();
 
 include "../../infra/conexao.php";
 
+// Verificar se o usuário é administrador
+$admin = ($_SESSION['nivel_acesso'] ?? '') == 'admin';
+
+// Criar token de segurança para exclusões
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
+// Buscar sensores cadastrados
 $sql = "SELECT * FROM sensores";
 
 $resultado = mysqli_query($conn, $sql);
 
+if (!$resultado) {
+    die("Erro ao consultar sensores.");
+}
+
 ?>
 
-<html lang="en">
+<html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
@@ -41,65 +50,71 @@ $resultado = mysqli_query($conn, $sql);
 
     <main>
 
+        <style>
+            #conteudo_sensores {
+                position: fixed;
+                top: 100px;
+                left: 250px;
+                right: 0;
+                bottom: 0;
 
-    <style>
-        #conteudo_sensores {
-            position: fixed;
-            top: 100px;
-            left: 250px;
-            right: 0;
-            bottom: 0;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
 
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+                padding: 40px;
+                box-sizing: border-box;
 
-            padding: 40px;
-            box-sizing: border-box;
+                overflow-y: auto;
+            }
 
-            overflow-y: auto;
-        }
+            /* Botão de cadastrar */
+            #conteudo_sensores button {
+                background-color: #940404;
+                color: white;
 
-        /* Botão de cadastrar */
-        #conteudo_sensores button {
-            background-color: #940404;
-            color: white;
+                border: none;
+                border-radius: 5px;
 
-            border: none;
-            border-radius: 5px;
+                padding: 12px 25px;
 
-            padding: 12px 25px;
+                font-size: 16px;
+                font-weight: bold;
 
-            font-size: 16px;
-            font-weight: bold;
+                cursor: pointer;
 
-            cursor: pointer;
+                margin-bottom: 30px;
+            }
 
-            margin-bottom: 30px;
-        }
+            #conteudo_sensores button:hover {
+                background-color: #700303;
+            }
 
-        #conteudo_sensores button:hover {
-            background-color: #700303;
-        }
+            /* Tabela */
+            #tabela_registro_sensores {
+                width: 90%;
+                border-collapse: collapse;
+            }
 
-        /* Tabela */
-        #tabela_registro_sensores {
-            width: 90%;
-            border-collapse: collapse;
-        }
+            #tabela_registro_sensores th,
+            #tabela_registro_sensores td {
+                border: 1px solid #ccc;
+                padding: 12px;
+                text-align: center;
+            }
 
-        #tabela_registro_sensores th,
-        #tabela_registro_sensores td {
-            border: 1px solid #ccc;
-            padding: 12px;
-            text-align: center;
-        }
+            #tabela_registro_sensores th {
+                background-color: #940404;
+                color: white;
+            }
 
-        #tabela_registro_sensores th {
-            background-color: #940404;
-            color: white;
-        }
-    </style>
+            /* Botão de excluir dentro da tabela */
+            #tabela_registro_sensores button {
+                margin-bottom: 0;
+                padding: 6px 12px;
+                font-size: 14px;
+            }
+        </style>
 
         <!-- Parte do menu de navegação lateral -->
         <aside id="sidebar_dashboard">
@@ -108,7 +123,7 @@ $resultado = mysqli_query($conn, $sql);
 
             <ul class="menu_sidebar">
                 <li><a href="../../index.php">Início</a></li>
-                <li><a href="../dashboard.php" >Dashboard</a></li>
+                <li><a href="../dashboard.php">Dashboard</a></li>
                 <li><a href="../Trens/visualizar_trens.php">Trens</a></li>
                 <li><a href="../rotas/rotas.php">Rotas</a></li>
                 <li><a href="../monitoramento.php">Monitoramento</a></li>
@@ -120,41 +135,59 @@ $resultado = mysqli_query($conn, $sql);
             </ul>
 
         </aside>
-        <!-- finalização do menu de navegação lateral -->
-     <div id="conteudo_sensores">
+        <!-- Finalização do menu de navegação lateral -->
 
-    <button onclick="location.href='cadastro_sensor.php'">
-        Cadastrar Sensor
-    </button>
+        <div id="conteudo_sensores">
 
-    <table id="tabela_registro_sensores">
-        <tr>
-            <th>ID</th>
-            <th>Tipo</th>
-            <th>Localização</th>
-            <th>Posição</th>
-            <th>Ações</th>
-        </tr>
+            <?php if ($admin) { ?>
+                <button onclick="location.href='cadastro_sensor.php'">
+                    Cadastrar Sensor
+                </button>
+            <?php } ?>
 
-        <?php while ($sensor = mysqli_fetch_assoc($resultado)) { ?>
+            <table id="tabela_registro_sensores">
+                <tr>
+                    <th>ID</th>
+                    <th>Tipo</th>
+                    <th>Localização</th>
+                    <th>Posição</th>
 
-            <tr>
-                <td><?php echo htmlspecialchars((string) $sensor["id"]); ?></td>
-                <td><?php echo htmlspecialchars((string) $sensor["tipo"]); ?></td>
-                <td><?php echo htmlspecialchars((string) $sensor["localizacao"]); ?></td>
-                <td><?php echo htmlspecialchars((string) $sensor["posicao"]); ?></td>
-                <td>
-                    <a href="excluir_sensor.php?id=<?php echo $sensor["id"]; ?>" onclick="return confirm('Tem certeza que deseja excluir este sensor?');">
-                        Excluir
-                    </a>
-                </td>
-            </tr>
+                    <?php if ($admin) { ?>
+                        <th>Ações</th>
+                    <?php } ?>
+                </tr>
 
-        <?php } ?>
+                <?php while ($sensor = mysqli_fetch_assoc($resultado)) { ?>
 
-    </table>
+                    <tr>
+                        <td><?php echo (int) $sensor["id"]; ?></td>
+                        <td><?php echo htmlspecialchars((string) $sensor["tipo"]); ?></td>
+                        <td><?php echo htmlspecialchars((string) $sensor["localizacao"]); ?></td>
+                        <td><?php echo htmlspecialchars((string) $sensor["posicao"]); ?></td>
 
-</div>
+                        <?php if ($admin) { ?>
+                            <td>
+                                <form action="excluir_sensor.php" method="POST"
+                                      onsubmit="return confirm('Tem certeza que deseja excluir este sensor?');">
+
+                                    <input type="hidden" name="id"
+                                           value="<?php echo (int) $sensor['id']; ?>">
+
+                                    <input type="hidden" name="csrf_token"
+                                           value="<?php echo htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8'); ?>">
+
+                                    <button type="submit">Excluir</button>
+                                </form>
+                            </td>
+                        <?php } ?>
+
+                    </tr>
+
+                <?php } ?>
+
+            </table>
+
+        </div>
 
     </main>
 

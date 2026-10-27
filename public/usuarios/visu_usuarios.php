@@ -1,19 +1,25 @@
 <?php
-session_start();
 
-if (!isset($_SESSION['funcionario_id'])) {
-    header("Location: login.php");
-    exit;
-}
-
+require_once '../../infra/verificar_acesso.php';
+verificarAdmin();
 
 include '../../infra/conexao.php';
 
-$sql = "SELECT id, nome, email, telefone FROM clientes";
-$clientes = mysqli_query($conn, $sql);
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
 
-$sql_func = "SELECT id, nome, email, telefone FROM funcionarios";
-$funcionarios = mysqli_query($conn, $sql_func);
+// Buscar todos os usuários
+$sql = "SELECT id, nome, email, telefone, tipo, nivel_acesso
+        FROM usuarios
+        ORDER BY nome ASC";
+
+$usuarios = mysqli_query($conn, $sql);
+
+if (!$usuarios) {
+    die("Erro ao consultar usuários.");
+}
+
 ?>
 
 
@@ -71,76 +77,97 @@ $funcionarios = mysqli_query($conn, $sql_func);
         <div class="container_dashboard">
 
             <h1 id="titulo_cadastro">Visualização de Usuários</h1>
-    <section id="tabela_cadastro_clientes">
+    
+<section id="tabela_cadastro_clientes">
 
-        <div class="text-center">
+    <div class="text-center">
 
-            <h2 class="titulo_tabela">Clientes Cadastrados</h2>
+        <h2 class="titulo_tabela">Usuários Cadastrados</h2>
 
-            <table class="table table-bordered mx-auto" style="width: 70%;">
+        <table class="table table-bordered mx-auto" style="width: 90%;">
+
+            <tr>
+                <th class="text-center">ID</th>
+                <th class="text-center">Nome</th>
+                <th class="text-center">Email</th>
+                <th class="text-center">Telefone</th>
+                <th class="text-center">Tipo</th>
+                <th class="text-center">Nível de acesso</th>
+                <th class="text-center">Ações</th>
+            </tr>
+
+            <?php while ($usuario = mysqli_fetch_assoc($usuarios)) { ?>
 
                 <tr>
-                    <th class="text-center">ID</th>
-                    <th class="text-center">Nome</th>
-                    <th class="text-center">Email</th>
-                    <th class="text-center">Telefone</th>
-                    <th class="text-center">Ações</th>
+                    <td><?php echo (int) $usuario["id"]; ?></td>
+
+                    <td><?php echo htmlspecialchars($usuario["nome"]); ?></td>
+
+                    <td><?php echo htmlspecialchars($usuario["email"]); ?></td>
+
+                    <td><?php echo htmlspecialchars($usuario["telefone"]); ?></td>
+
+                    <td>
+                        <?php
+                        if ($usuario["tipo"] == "funcionario") {
+                            echo "Funcionário";
+                        } else {
+                            echo "Cliente";
+                        }
+                        ?>
+                    </td>
+
+                    <td>
+                        <?php
+                        if ($usuario["nivel_acesso"] == "admin") {
+                            echo "Administrador";
+                        } else {
+                            echo "Comum";
+                        }
+                        ?>
+                    </td>
+
+                    <td>
+                        <a href="editar_usuarios.php?id=<?php echo (int) $usuario["id"]; ?>">
+                            Editar
+                        </a>
+
+                        <?php if ((int) $usuario["id"] !== (int) $_SESSION["usuario_id"]) { ?>
+
+                            <form action="excluir_usuarios.php" method="POST"
+                                  onsubmit="return confirm('Tem certeza que deseja excluir este usuário?');">
+
+                                <input type="hidden" name="id"
+                                       value="<?php echo (int) $usuario["id"]; ?>">
+
+                                <input type="hidden" name="csrf_token"
+                                       value="<?php echo htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8'); ?>">
+
+                                <button type="submit" class="btn btn-danger btn-sm">
+                                    Excluir
+                                </button>
+
+                            </form>
+
+                        <?php } ?>
+                    </td>
                 </tr>
 
-                <?php while ($cliente = mysqli_fetch_assoc($clientes)) { ?>
-                        <tr>
-                            <td><?php echo $cliente["id"]; ?></td>
-                            <td><?php echo htmlspecialchars($cliente["nome"]); ?></td>
-                            <td><?php echo htmlspecialchars($cliente["email"]); ?></td>
-                            <td><?php echo htmlspecialchars($cliente["telefone"]); ?></td>
-                            <td>
-                                <a href="editar_usuarios.php?id=<?php echo $cliente["id"]; ?>">Editar</a>
-                                <a href="excluir_usuarios.php?id=<?php echo $cliente["id"]; ?>" onclick="return confirm('Tem certeza que deseja excluir este cliente?');">
-                                    Excluir
-                                </a>
-                            </td>
-                        </tr>
-                <?php } ?>
-            </table>
-        </div>
-    </section>
+            <?php } ?>
 
-    <section id="tabela_cadastro_funcionarios">
+        </table>
 
-        <div class="text-center">
-            <h2 class="titulo_tabela">Funcionários Cadastrados</h2>
+    </div>
 
-            <table class="table table-bordered mx-auto" style="width: 70%;">
-                <tr>
-                    <th class="text-center">ID</th>
-                    <th class="text-center">Nome</th>
-                    <th class="text-center">Email</th>
-                    <th class="text-center">Telefone</th>
-                    <th class="text-center">Ações</th>
-                </tr>
+    <div class="div_button">
+        <button class="button-container"
+                onclick="location.href='../funcionarios/cadastro_funcionarios.php'">
+            <b>Cadastrar Funcionário</b>
+        </button>
+    </div>
 
-                <?php while ($funcionario = mysqli_fetch_assoc($funcionarios)) { ?>
-                        <tr>
-                            <td><?php echo $funcionario["id"]; ?></td>
-                            <td><?php echo htmlspecialchars($funcionario["nome"]); ?></td>
-                            <td><?php echo htmlspecialchars($funcionario["email"]); ?></td>
-                            <td><?php echo htmlspecialchars($funcionario["telefone"]); ?></td>
-                            <td>
-                                <a href="../funcionarios/editar_funcionarios.php?id=<?php echo $funcionario["id"]; ?>">Editar</a>
-                                <a href="../funcionarios/excluir_funcionarios.php?id=<?php echo $funcionario["id"]; ?>" onclick="return confirm('Tem certeza que deseja excluir este funcionário?');">
-                                    Excluir
-                                </a>
-                            </td>
-                        </tr>
-                <?php } ?>
-            </table>
-        </div>
+</section>
 
-        <div class="div_button">
-            <button class="button-container" onclick="location.href='../funcionarios/cadastro_funcionarios.php'"> <b>Cadastrar Funcionário</b></button>
-        </div>
-        </div>
-    </section>
 
     </main>
 

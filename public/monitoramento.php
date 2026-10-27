@@ -1,11 +1,8 @@
 <?php
-session_start();
-
-if (!isset($_SESSION['funcionario_id'])) {
-    header("Location: usuarios/login.php");
-    exit;
-}
+require_once '../infra/verificar_acesso.php';
+verificarFuncionario();
 ?>
+  
 <html lang="pt-BR">
 
 <head>

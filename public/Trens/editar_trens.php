@@ -1,101 +1,31 @@
 <?php
-session_start();
 
-if (!isset($_SESSION['funcionario_id'])) {
-    header("Location: ../usuarios/login.php");
-    exit;
-}
+require_once '../../infra/verificar_acesso.php';
+verificarAdmin();
 
 include "../../infra/conexao.php";
 
 $erro = "";
-$enviado = null; // guarda o que foi digitado, se der erro
+$enviado = null;
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-    $id             = (int) ($_POST["id"] ?? 0);
-    $nome_linha     = trim($_POST["nome_linha"] ?? "");
-    $numero_serie   = trim($_POST["numero_serie"] ?? "");
-    $velocidade     = trim($_POST["velocidade"] ?? "");
-    $estado         = $_POST["estado"] ?? "";
-    $funcionario_id = $_POST["funcionario_id"] ?? "";
-
-    $enviado = [
-        "nome_linha"     => $nome_linha,
-        "numero_serie"   => $numero_serie,
-        "velocidade"     => $velocidade,
-        "estado"         => $estado,
-        "funcionario_id" => $funcionario_id,
-    ];
-
-    $estados_validos = ["Ativo", "Inativo", "Manutencao"];
-
-    if ($nome_linha === "" || $numero_serie === "" || $velocidade === "") {
-        $erro = "Preencha todos os campos.";
-    } elseif (!ctype_digit($velocidade)) {
-        $erro = "A velocidade deve ser um número inteiro maior ou igual a zero.";
-    } elseif (!in_array($estado, $estados_validos)) {
-        $erro = "Status inválido.";
-    } elseif (!ctype_digit((string) $funcionario_id) || (int) $funcionario_id <= 0) {
-        $erro = "Selecione um funcionário.";
-    } else {
-        $velocidade_int = (int) $velocidade;
-        $funcionario_int = (int) $funcionario_id;
-
-        try {
-            // Não deixa repetir o número de série de OUTRO trem
-            $stmt = mysqli_prepare($conn, "SELECT id FROM trens WHERE numero_serie = ? AND id <> ?");
-            mysqli_stmt_bind_param($stmt, "si", $numero_serie, $id);
-            mysqli_stmt_execute($stmt);
-            $ja_existe = mysqli_num_rows(mysqli_stmt_get_result($stmt)) > 0;
-            mysqli_stmt_close($stmt);
-
-            if ($ja_existe) {
-                $erro = "Já existe outro trem cadastrado com esse número de série.";
-            } else {
-                $sql = "UPDATE trens
-                        SET nome_linha = ?, numero_serie = ?, velocidade = ?,
-                            estado = ?, funcionario_id = ?
-                        WHERE id = ?";
-
-                $stmt = mysqli_prepare($conn, $sql);
-
-                mysqli_stmt_bind_param(
-                    $stmt,
-                    "ssisii",
-                    $nome_linha,
-                    $numero_serie,
-                    $velocidade_int,
-                    $estado,
-                    $funcionario_int,
-                    $id
-                );
-
-                mysqli_stmt_execute($stmt);
-                mysqli_stmt_close($stmt);
-
-                header("Location: visualizar_trens.php");
-                exit();
-            }
-        } catch (Throwable $e) {
-            $erro = "Erro no banco de dados: " . $e->getMessage();
-        }
-    }
-} else {
-    $id = isset($_GET["id"]) ? (int) $_GET["id"] : 0;
+// Criar token de segurança para o formulário
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
 
-// Se o ID não chegou pela URL nem pelo formulário, volta para a lista
+// Receber o ID do trem
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $id = (int) ($_POST["id"] ?? 0);
+} else {
+    $id = (int) ($_GET["id"] ?? 0);
+}
+
 if ($id <= 0) {
     header("Location: visualizar_trens.php");
     exit;
 }
 
-if ($id <= 0) {
-    die("O ID do trem não foi informado.");
-}
-
-// Busca o trem no banco
+// Buscar o trem no banco
 $stmt = mysqli_prepare($conn, "SELECT * FROM trens WHERE id = ?");
 mysqli_stmt_bind_param($stmt, "i", $id);
 mysqli_stmt_execute($stmt);
@@ -108,12 +38,144 @@ if (!$trem) {
 
 $titulo_trem = $trem["nome_linha"];
 
-// Se deu erro ao salvar, mostra de novo o que a pessoa tinha digitado
+// Processar a edição
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    // Verificar o token de segurança
+    if (
+        !isset($_POST['csrf_token']) ||
+        !is_string($_POST['csrf_token']) ||
+        !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])
+    ) {
+        http_response_code(403);
+        exit("Solicitação inválida.");
+    }
+
+    $nome_linha = trim($_POST["nome_linha"] ?? "");
+    $numero_serie = trim($_POST["numero_serie"] ?? "");
+    $velocidade = trim($_POST["velocidade"] ?? "");
+    $estado = $_POST["estado"] ?? "";
+    $funcionario_id = $_POST["funcionario_id"] ?? "";
+
+    $enviado = [
+        "nome_linha" => $nome_linha,
+        "numero_serie" => $numero_serie,
+        "velocidade" => $velocidade,
+        "estado" => $estado,
+        "funcionario_id" => $funcionario_id
+    ];
+
+    $estados_validos = ["Ativo", "Inativo", "Manutencao"];
+
+    if ($nome_linha === "" || $numero_serie === "" || $velocidade === "") {
+        $erro = "Preencha todos os campos.";
+
+    } elseif (!ctype_digit($velocidade)) {
+        $erro = "A velocidade deve ser um número inteiro maior ou igual a zero.";
+
+    } elseif (!in_array($estado, $estados_validos, true)) {
+        $erro = "Status inválido.";
+
+    } elseif (!ctype_digit((string) $funcionario_id) || (int) $funcionario_id <= 0) {
+        $erro = "Selecione um funcionário.";
+
+    } else {
+
+        $velocidade_int = (int) $velocidade;
+        $funcionario_int = (int) $funcionario_id;
+
+        try {
+
+            // Conferir se o responsável é um funcionário
+            $stmt = mysqli_prepare(
+                $conn,
+                "SELECT id FROM usuarios WHERE id = ? AND tipo = 'funcionario'"
+            );
+
+            mysqli_stmt_bind_param($stmt, "i", $funcionario_int);
+            mysqli_stmt_execute($stmt);
+
+            $funcionario_existe = mysqli_num_rows(
+                mysqli_stmt_get_result($stmt)
+            ) > 0;
+
+            mysqli_stmt_close($stmt);
+
+            if (!$funcionario_existe) {
+                $erro = "O funcionário selecionado é inválido.";
+
+            } else {
+
+                // Verificar número de série duplicado
+                $stmt = mysqli_prepare(
+                    $conn,
+                    "SELECT id FROM trens WHERE numero_serie = ? AND id <> ?"
+                );
+
+                mysqli_stmt_bind_param($stmt, "si", $numero_serie, $id);
+                mysqli_stmt_execute($stmt);
+
+                $ja_existe = mysqli_num_rows(
+                    mysqli_stmt_get_result($stmt)
+                ) > 0;
+
+                mysqli_stmt_close($stmt);
+
+                if ($ja_existe) {
+                    $erro = "Já existe outro trem cadastrado com esse número de série.";
+
+                } else {
+
+                    // Atualizar o trem
+                    $sql = "UPDATE trens
+                            SET nome_linha = ?,
+                                numero_serie = ?,
+                                velocidade = ?,
+                                estado = ?,
+                                funcionario_id = ?
+                            WHERE id = ?";
+
+                    $stmt = mysqli_prepare($conn, $sql);
+
+                    mysqli_stmt_bind_param(
+                        $stmt,
+                        "ssisii",
+                        $nome_linha,
+                        $numero_serie,
+                        $velocidade_int,
+                        $estado,
+                        $funcionario_int,
+                        $id
+                    );
+
+                    mysqli_stmt_execute($stmt);
+                    mysqli_stmt_close($stmt);
+
+                    header("Location: visualizar_trens.php");
+                    exit;
+                }
+            }
+
+        } catch (Throwable $e) {
+            error_log($e->getMessage());
+            $erro = "Erro ao atualizar o trem.";
+        }
+    }
+}
+
+// Se houver erro, manter os dados digitados
 if ($enviado !== null) {
     $trem = array_merge($trem, $enviado);
 }
 
-$funcionarios = mysqli_query($conn, "SELECT id, nome FROM funcionarios ORDER BY nome ASC");
+// Buscar somente funcionários da nova tabela
+$funcionarios = mysqli_query(
+    $conn,
+    "SELECT id, nome
+     FROM usuarios
+     WHERE tipo = 'funcionario'
+     ORDER BY nome ASC"
+);
 
 ?>
 
@@ -142,7 +204,12 @@ $funcionarios = mysqli_query($conn, "SELECT id, nome FROM funcionarios ORDER BY 
         <?php } ?>
 
         <form action="editar_trens.php" method="POST">
-            <input type="hidden" name="id" value="<?php echo (int) $id; ?>">
+
+            <input type="hidden" name="id"
+                   value="<?php echo (int) $id; ?>">
+
+            <input type="hidden" name="csrf_token"
+                   value="<?php echo htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8'); ?>">
 
             <label for="nome_linha">Nome da linha:</label>
             <input type="text" id="nome_linha" name="nome_linha"
@@ -171,17 +238,20 @@ $funcionarios = mysqli_query($conn, "SELECT id, nome FROM funcionarios ORDER BY 
             <label for="funcionario_id">Funcionário responsável:</label>
             <select name="funcionario_id" id="funcionario_id" required>
                 <option value="">Selecione o funcionário:</option>
+
                 <?php while ($f = mysqli_fetch_assoc($funcionarios)) { ?>
                     <option value="<?php echo (int) $f["id"]; ?>"
                         <?php if ((string) $f["id"] === (string) $trem["funcionario_id"]) echo "selected"; ?>>
                         <?php echo htmlspecialchars($f["nome"]); ?>
                     </option>
                 <?php } ?>
+
             </select>
             <br>
 
             <button type="submit">Atualizar</button>
             <a href="visualizar_trens.php">Cancelar</a>
+
         </form>
     </main>
 
