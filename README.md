@@ -144,3 +144,118 @@ As funcionalidades do site são:
 * XAMPP — Ambiente de desenvolvimento local;
 * Git e GitHub — Versionamento e colaboração da equipe.
 
+sa-ferrorama/
+│
+├── assets/
+│   ├── img/
+│   │   ├── 10.png
+│   │   ├── 11.png
+│   │   ├── 12.png
+│   │   ├── 13.png
+│   │   ├── alertas.png
+│   │   ├── banner_logo2.png
+│   │   ├── Captura de tela 2026-05-07 095347.png
+│   │   ├── Captura de tela 2026-05-12 072739.png
+│   │   ├── dashboard_2.png
+│   │   ├── dashboard_certo.png
+│   │   ├── dashboard.png
+│   │   ├── desktop.ini
+│   │   ├── dshb.png
+│   │   ├── fundo_index.png
+│   │   ├── fundo_index2.jpg
+│   │   ├── fundo_index3.avif
+│   │   ├── fundo_index4.jpg
+│   │   ├── icone_da_navbar.png
+│   │   ├── icons8-location-50.png
+│   │   ├── icons8-location-update-50.png
+│   │   ├── icons8-train-50.png
+│   │   ├── image.png
+│   │   ├── Linha azul.png
+│   │   ├── Logo_index.png
+│   │   ├── logo_navbar.png
+│   │   ├── logo_navbar2.png
+│   │   ├── logo_sesi_index.png
+│   │   ├── logo.png
+│   │   ├── Mapa.png
+│   │   ├── Mockup- SA Juana, Luiz, Nicole, Rafael.png
+│   │   ├── monitoramento.png
+│   │   ├── Purple and Pink Modern Illustration Happy Halloween Circle Sticker (1).png
+│   │   ├── Purple and Pink Modern Illustration Happy Halloween Circle Sticker (2).png
+│   │   ├── Purple and Pink Modern Illustration Happy Halloween Circle Sticker (3).png
+│   │   ├── relatorio_exemplo.png
+│   │   ├── relatorios.png
+│   │   ├── rotas_html.png
+│   │   ├── Strain_navbar_index
+│   │   ├── Strain.png
+│   │   ├── Tela de login atualizada.png
+│   │   ├── Tela de login.png
+│   │   ├── teste
+│   │   ├── trem_amarelo.png
+│   │   ├── trem_azul.png
+│   │   ├── trem_verde.png
+│   │   ├── trem_vermelho.png
+│   │   └── trens.png
+│   │
+│   └── style/
+│       └── style.css
+│
+├── database/
+│   └── db.sql
+│
+├── doc/
+│   ├── apis.md
+│   ├── pdo.md
+│   ├── pesquisa-crude.md
+│   ├── pesquisa-scrum.md
+│   └── pesquisa-XAMPP.md
+│
+├── infra/
+│   ├── conexao.php
+│   └── verificar_acesso.php
+│
+├── public/
+│   ├── funcionarios/
+│   │   ├── cadastro_funcionarios.php
+│   │   ├── editar_funcionarios.php
+│   │   ├── excluir_funcionarios.php
+│   │   └── login_funcionario.php
+│   │
+│   ├── rotas/
+│   │   ├── cadastrar_rotas.php
+│   │   ├── editar_rotas.php
+│   │   ├── excluir_rotas.php
+│   │   └── rotas.php
+│   │
+│   ├── sensores/
+│   │   ├── cadastro_sensor.php
+│   │   ├── excluir_sensor.php
+│   │   └── visu_sensores.php
+│   │
+│   ├── Trens/
+│   │   ├── editar_trens.php
+│   │   ├── excluir_trens.php
+│   │   ├── trens_cadastro.php
+│   │   └── visualizar_trens.php
+│   │
+│   ├── usuarios/
+│   │   ├── cadastro_usuarios.php
+│   │   ├── editar_usuarios.php
+│   │   ├── excluir_usuarios.php
+│   │   ├── home_usuario.php
+│   │   ├── login.php
+│   │   ├── logout.php
+│   │   └── visu_usuarios.php
+│   │
+│   ├── alertas.php
+│   ├── dashboard.php
+│   ├── monitoramento.php
+│   └── relatorios.php
+│
+├── Scripts/
+│   ├── botoes.js
+│   ├── converter_senhas.php
+│   ├── script.js
+│   └── validacao.js
+│
+├── index.php
+└── README.md
