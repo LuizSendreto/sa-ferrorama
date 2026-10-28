@@ -11,7 +11,7 @@ $database = "banco_exemplo";
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 try {
-    $conn = new mysqli($host, $user, $password, $database, 3306);
+    $conn = new mysqli($host, $user, $password, $database, 6608);
     $conn->set_charset("utf8mb4");
 } catch (mysqli_sql_exception $e) {
     die("Erro na conexão com o banco: " . htmlspecialchars($e->getMessage()));

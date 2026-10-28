@@ -531,88 +531,6 @@ form {
 
 }
 
-/* Posição de tabela de registro de sensores */
-#tabela_registro_sensores {
-    width: 100%;
-    padding: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-
-}
-
-/* Estilização da tabela de registro de sensores */
-#tabela_registro_sensores table {
-    max-width: 900px;
-    background-color: white;
-    border-radius: 15px;
-    overflow: hidden;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-    border-collapse: collapse;
-}
-
-/* Estilização do cabeçalho da tabela */
-#tabela_registro_sensores .table thead {
-    background-color: #0d1b2a;
-    color: white;
-}
-
-#tabela_registro_sensores .table thead th {
-    padding: 18px;
-    text-align: center;
-    font-size: 18px;
-}
-
-/* Estilização das linhas da tabela */
-#tabela_registro_sensores .table tbody td {
-    padding: 16px;
-    text-align: center;
-    font-size: 16px;
-    border-bottom: 1px solid #ddd;
-}
-
-/* Linhas alternadas */
-#tabela_registro_sensores .table tbody tr:nth-child(even) {
-    background-color: white;
-}
-
-/* Hover */
-#tabela_registro_sensores .table tbody tr:hover {
-    background-color: white;
-    transition: 0.3s;
-}
-
-/* Status */
-#tabela_registro_sensores .table tbody td:last-child {
-    font-weight: bold;
-}
-
-@media (max-width: 768px) {
-    #tabela_registro_sensores {
-        padding: 20px;
-    }
-
-    #tabela_registro_sensores .table thead {
-        display: none;
-    }
-
-    #tabela_registro_sensores .table tbody td {
-        display: block;
-        text-align: right;
-        position: relative;
-        padding-left: 50%;
-    }
-
-    #tabela_registro_sensores .table tbody td::before {
-        content: attr(data-label);
-        position: absolute;
-        left: 0;
-        top: 0;
-        padding-left: 15px;
-        font-weight: bold;
-        text-align: left;
-    }
-}
 
 .fotos {
    display: flex;
@@ -994,4 +912,164 @@ a{
 
 .conjunto{
     background-color: #ebdcc7;
+}
+
+
+/* =========================================================
+   STRAIN - VISUALIZACAO DE SENSORES
+   Painel vermelho com tabela branca (modelo visual Trens)
+   ========================================================= */
+    
+#conteudo_sensores {
+    margin: 100px auto 30px;
+    position: relative;
+    left: 125px;
+
+    padding: 40px 60px;
+    width: fit-content;
+    max-width: calc(100% - 290px);
+    min-height: auto;
+
+    background-color: #850000;
+    border-radius: 20px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+
+    box-sizing: border-box;
+}
+
+
+#titulo_visualizacao_sensores {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 50px;
+    font-weight: bold;
+    text-align: center;
+    color: white;
+    margin: 0;
+}
+
+#subtitulo_visualizacao_sensores {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+    color: white;
+    margin: 0 0 18px;
+}
+
+/* A tabela e o elemento TABLE (nao um container). */
+#conteudo_sensores #tabela_registro_sensores {
+    display: table;
+    width: 100%;
+    max-width: 1000px;
+    border-collapse: separate;
+    border-spacing: 0;
+    background-color: #ffffff;
+    border: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .22);
+    color: #333;
+}
+
+#conteudo_sensores #tabela_registro_sensores th {
+    padding: 17px 14px;
+    background-color: #f1e6e6;
+    color: #850000;
+    font-size: 16px;
+    font-weight: 700;
+    text-align: center;
+    border: 0;
+    border-bottom: 2px solid #850000;
+}
+
+#conteudo_sensores #tabela_registro_sensores td {
+    padding: 16px 14px;
+    background-color: transparent;
+    color: #333333;
+    font-size: 15px;
+    text-align: center;
+    vertical-align: middle;
+    border: 0;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+#conteudo_sensores #tabela_registro_sensores tr:nth-child(odd):not(:first-child) {
+    background-color: #f9f5f5;
+}
+
+#conteudo_sensores #tabela_registro_sensores tr:not(:first-child):hover {
+    background-color: #f3dddd;
+}
+
+#conteudo_sensores #tabela_registro_sensores tr:last-child td {
+    border-bottom: 0;
+}
+
+/* Cadastrar aparece no HTML antes da tabela; order coloca abaixo dela. */
+#conteudo_sensores > button {
+    order: 3;
+    background-color: white;
+    color: #850000;
+    border: 0;
+    border-radius: 6px;
+    padding: 11px 22px;
+    margin-top: 12px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color .2s, transform .2s;
+}
+
+#conteudo_sensores > button:hover {
+    background-color: #ebdcc7;
+    transform: translateY(-2px);
+}
+
+#conteudo_sensores #tabela_registro_sensores form {
+    background: transparent;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#conteudo_sensores #tabela_registro_sensores button {
+    background-color: #850000;
+    color: white;
+    border: 0;
+    border-radius: 6px;
+    padding: 9px 16px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color .2s, transform .2s;
+}
+
+#conteudo_sensores #tabela_registro_sensores button:hover {
+    background-color: #ae1515;
+    transform: translateY(-1px);
+}
+
+@media (max-width: 1050px) {
+    #conteudo_sensores {
+        margin-left: 260px;
+        margin-right: 10px;
+        width: calc(100% - 270px);
+        padding: 30px 15px;
+        overflow-x: auto;
+        align-items: stretch;
+    }
+
+    #conteudo_sensores #tabela_registro_sensores {
+        min-width: 520px;
+    }
+
+    #conteudo_sensores > button {
+        align-self: center;
+    }
 }
