@@ -71,56 +71,16 @@ if (!$resultado) {
             <h2 id="titulo_sidebar">Dashboard</h2>
 
             <ul class="menu_sidebar">
-
-                <li>
-                    <a href="../../index.php">Início</a>
-                </li>
-
-                <li>
-                    <a href="../dashboard.php">Dashboard</a>
-                </li>
-
-                <li>
-                    <a href="../Trens/visualizar_trens.php">Trens</a>
-                </li>
-
-                <li>
-                    <a href="../rotas/rotas.php">Rotas</a>
-                </li>
-
-                <li>
-                    <a href="../monitoramento.php">Monitoramento</a>
-                </li>
-
-                <li>
-                    <a href="../alertas.php">Alertas</a>
-                </li>
-
-                <li>
-                    <a href="../relatorios.php">Relatórios</a>
-                </li>
-
-                <?php if ($admin) { ?>
-                    <li>
-                        <a href="../usuarios/visu_usuarios.php">
-                            Visualização de Usuários
-                        </a>
-                    </li>
-                <?php } ?>
-
-                <li>
-                    <a
-                        href="visu_sensores.php"
-                        class="active_sidebar"
-                    >
-                        Visualização de Sensores
-                    </a>
-                </li>
-
-                <li>
-                    <a href="../usuarios/logout.php">Logout</a>
-                </li>
-
+               
+                <li><a href="../dashboard.php">Dashboard</a></li>
+                <li><a href="../Trens/visualizar_trens.php">Trens</a></li>
+                <li><a href="../rotas/rotas.php">Rotas</a></li>
+                <li><a href="../monitoramento.php">Monitoramento</a></li>
+                <li><a href="../alertas.php">Alertas</a></li>
+                <li><a href="../relatorios.php">Relatórios</a></li>
+                <li><a href="../usuarios/visu_usuarios.php">Visualização de Usuarios</a></li>
+                <li><a href="../sensores/visu_sensores.php" class="active_sidebar">Visualização de Sensores</a></li>
+                <li><a href="../usuarios/logout.php">Logout</a></li>
             </ul>
 
         </aside>
