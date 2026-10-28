@@ -59,7 +59,7 @@ if (!$usuarios) {
             <h2 id="titulo_sidebar">Dashboard</h2>
 
             <ul class="menu_sidebar">
-                <li><a href="../../index.php">Início</a></li>
+               
                 <li><a href="../dashboard.php" >Dashboard</a></li>
                 <li><a href="../trens/visualizar_trens.php">Trens</a></li>
                 <li><a href="../rotas/rotas.php">Rotas</a></li>
