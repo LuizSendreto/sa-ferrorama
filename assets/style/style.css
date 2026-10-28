@@ -1073,3 +1073,237 @@ a{
         align-self: center;
     }
 }
+
+
+/* =========================================================
+   STRAIN - COMPONENTES REUTILIZAVEIS DE TABELAS
+   Uso atual: visu_usuarios.php
+   Pode ser aplicado futuramente a Sensores, Rotas e Trens.
+   ========================================================= */
+
+/* Centraliza o painel no espaco a direita da sidebar fixa. */
+.area_registros {
+    margin-left: 250px;
+    margin-top: 70px;
+    width: calc(100% - 250px);
+    min-height: calc(100vh - 70px);
+    padding: 35px 25px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-width: 0;
+}
+
+.painel_registros {
+    width: 100%;
+    max-width: 1150px;
+    min-width: 0;
+    padding: 35px 30px;
+    box-sizing: border-box;
+    border-radius: 20px;
+    background-color: #850000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.titulo_registros,
+.subtitulo_registros {
+    margin: 0;
+    color: #ffffff;
+    text-align: center;
+    font-weight: 700;
+}
+
+.titulo_registros { font-size: 30px; }
+.subtitulo_registros { font-size: 23px; margin-bottom: 10px; }
+
+/* Impede que e-mails longos estourem o painel. */
+.container_tabela {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: auto;
+    border-radius: 12px;
+    background-color: #ffffff;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, .15);
+}
+
+.tabela_registros {
+    display: table;
+    width: 100%;
+    min-width: 900px;
+    margin: 0;
+    border-collapse: collapse;
+    table-layout: auto;
+    color: #333333;
+    background-color: #ffffff;
+}
+
+.tabela_registros thead { display: table-header-group; }
+.tabela_registros tbody { display: table-row-group; }
+.tabela_registros tr { display: table-row; }
+
+.tabela_registros th,
+.tabela_registros td {
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+    border: 0;
+}
+
+.tabela_registros th {
+    padding: 16px 12px;
+    background-color: #f1e6e6;
+    color: #850000;
+    font-size: 14px;
+    font-weight: bold;
+    white-space: nowrap;
+    border-bottom: 2px solid #850000;
+}
+
+.tabela_registros td {
+    padding: 14px 12px;
+    background: transparent;
+    color: #333333;
+    font-size: 13px;
+    line-height: 1.45;
+    border-bottom: 1px solid #e5e5e5;
+    overflow-wrap: anywhere;
+}
+
+.tabela_registros tbody tr:nth-child(even) { background-color: #f9f5f5; }
+.tabela_registros tbody tr:hover { background-color: #f3dddd; }
+.tabela_registros tbody tr:last-child td { border-bottom: 0; }
+
+/* Impede que a coluna de email fique estreita demais. */
+.tabela_registros th:nth-child(3),
+.tabela_registros td:nth-child(3) { min-width: 195px; }
+
+.acoes_registros {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+}
+
+.tabela_registros .acoes_registros form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+}
+
+.botao_editar,
+.botao_excluir {
+    display: inline-block;
+    width: 85px;
+    padding: 8px 10px;
+    border: 0;
+    border-radius: 6px;
+    box-sizing: border-box;
+    color: white;
+    font-size: 12px;
+    line-height: 1.4;
+    font-weight: bold;
+    text-decoration: none;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color .2s;
+}
+
+.botao_editar { background-color: #850000; }
+.botao_excluir { background-color: #c82333; }
+.botao_editar:hover { background-color: #ab1111; color: white; }
+.botao_excluir:hover { background-color: #a71d2a; color: white; }
+
+.botao_cadastrar {
+    padding: 12px 22px;
+    margin-top: 10px;
+    background-color: white;
+    color: #850000;
+    border: 0;
+    border-radius: 7px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color .2s, transform .2s;
+}
+
+.botao_cadastrar:hover {
+    background-color: #ebdcc7;
+    transform: translateY(-2px);
+}
+
+@media (max-width: 1100px) {
+    .area_registros { padding: 20px 15px; }
+    .painel_registros { padding: 25px 15px; }
+}
+
+@media (max-width: 700px) {
+    .titulo_registros { font-size: 24px; }
+    .subtitulo_registros { font-size: 18px; }
+    .tabela_registros { min-width: 900px; }
+}
+
+
+/* ==========================================
+   STRAIN - AJUSTE DA SIDEBAR
+   ========================================== */
+
+#sidebar_dashboard {
+    width: 250px;
+    height: calc(100vh - 70px);
+
+    position: fixed;
+    top: 70px;
+    left: 0;
+
+    background-color: #850000;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+/* Título */
+#titulo_sidebar {
+    font-size: 30px;
+    margin: 20px 12px 25px;
+    color: white;
+}
+
+/* Lista */
+.menu_sidebar {
+    list-style: none;
+    padding: 0 12px;
+    margin: 0;
+}
+
+/* Espaçamento entre opções */
+.menu_sidebar li {
+    margin-bottom: 5px;
+}
+
+/* Links */
+.menu_sidebar a {
+    display: block;
+
+    padding: 10px 12px;
+    font-size: 20px;
+
+    color: white;
+    text-decoration: none;
+
+    border-radius: 10px;
+    transition: background-color 0.2s;
+}
+
+/* Destaque */
+.menu_sidebar a:hover,
+.menu_sidebar a.active_sidebar {
+    background-color: #a52a2a;
+}

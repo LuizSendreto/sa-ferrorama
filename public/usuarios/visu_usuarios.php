@@ -1,18 +1,20 @@
+
 <?php
 
 require_once '../../infra/verificar_acesso.php';
 verificarAdmin();
 
-include '../../infra/conexao.php';
+require_once '../../infra/conexao.php';
 
+// Criar token de segurança
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
 
-// Buscar todos os usuários
+// Consultar usuários
 $sql = "SELECT id, nome, email, telefone, tipo, nivel_acesso
         FROM usuarios
-        ORDER BY nome ASC";
+        ORDER BY nome ASC, id ASC";
 
 $usuarios = mysqli_query($conn, $sql);
 
@@ -22,156 +24,279 @@ if (!$usuarios) {
 
 ?>
 
-
-<html lang="en">
+<!DOCTYPE html>
+<html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visualização de Usuário</title>
 
-    <link rel="stylesheet" href="../../assets/style/style.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+    <title>Visualização de Usuários • Strain</title>
+
+    <!-- Bootstrap -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <!-- CSS do Strain -->
+    <link
+        rel="stylesheet"
+        href="../../assets/style/style.css?v=5"
+    >
 </head>
-
-            <!--Campos verificado(adicionado o campo de senhas)-->
 
 <body class="body_dashboard">
 
+    <!-- NAVBAR -->
     <header>
         <nav class="navbar">
 
             <div class="logo-navbar">
-                <img src="../../assets/img/logo_navbar2.png" alt="Logo Strain">
+                <img
+                    src="../../assets/img/logo_navbar2.png"
+                    alt="Logo Strain"
+                >
             </div>
 
             <div class="logo-navbar">
-                <img src="../../assets/img/icone_da_navbar.png" alt="logo usuario logado">
+                <img
+                    src="../../assets/img/icone_da_navbar.png"
+                    alt="Usuário logado"
+                >
             </div>
 
         </nav>
     </header>
 
-    <main class="main_dashboard">
+    <!-- ÁREA PRINCIPAL PADRONIZADA -->
+    <main class="area_registros">
+
+        <!-- SIDEBAR -->
         <aside id="sidebar_dashboard">
 
             <h2 id="titulo_sidebar">Dashboard</h2>
 
             <ul class="menu_sidebar">
-               
-                <li><a href="../dashboard.php" >Dashboard</a></li>
-                <li><a href="../trens/visualizar_trens.php">Trens</a></li>
-                <li><a href="../rotas/rotas.php">Rotas</a></li>
-                <li><a href="../monitoramento.php" >Monitoramento</a></li>
-                <li><a href="../alertas.php">Alertas</a></li>
-                <li><a href="../relatorios.php" >Relatórios</a></li>
-                <li><a href="../usuarios/visu_usuarios.php" class="active_sidebar">Visualização de Usuarios</a></li>
-                <li><a href="../sensores/visu_sensores.php">Visualização de Sensores</a></li>
-                <li><a href="../usuarios/logout.php">Logout</a></li>
+
+                <li>
+                    <a href="../dashboard.php">Dashboard</a>
+                </li>
+
+                <li>
+                    <a href="../Trens/visualizar_trens.php">Trens</a>
+                </li>
+
+                <li>
+                    <a href="../rotas/rotas.php">Rotas</a>
+                </li>
+
+                <li>
+                    <a href="../monitoramento.php">Monitoramento</a>
+                </li>
+
+                <li>
+                    <a href="../alertas.php">Alertas</a>
+                </li>
+
+                <li>
+                    <a href="../relatorios.php">Relatórios</a>
+                </li>
+
+                <li>
+                    <a
+                        href="visu_usuarios.php"
+                        class="active_sidebar"
+                    >
+                        Visualização de Usuários
+                    </a>
+                </li>
+
+                <li>
+                    <a href="../sensores/visu_sensores.php">
+                        Visualização de Sensores
+                    </a>
+                </li>
+
+                <li>
+                    <a href="../usuarios/logout.php">Logout</a>
+                </li>
+
             </ul>
 
         </aside>
 
-        
-        <div class="container_dashboard">
+        <!-- PAINEL VERMELHO -->
+        <section class="painel_registros">
 
-            <h1 id="titulo_cadastro">Visualização de Usuários</h1>
-    
-<section id="tabela_cadastro_clientes">
+            <h1 class="titulo_registros">
+                Visualização de Usuários
+            </h1>
 
-    <div class="text-center">
+            <h2 class="subtitulo_registros">
+                Usuários Cadastrados
+            </h2>
 
-        <h2 class="titulo_tabela">Usuários Cadastrados</h2>
+            <!-- TABELA PADRONIZADA -->
+            <div class="container_tabela">
 
-        <table class="table table-bordered mx-auto" style="width: 90%;">
+                <table class="tabela_registros">
 
-            <tr>
-                <th class="text-center">ID</th>
-                <th class="text-center">Nome</th>
-                <th class="text-center">Email</th>
-                <th class="text-center">Telefone</th>
-                <th class="text-center">Tipo</th>
-                <th class="text-center">Nível de acesso</th>
-                <th class="text-center">Ações</th>
-            </tr>
+                    <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Nome</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Telefone</th>
+                            <th scope="col">Tipo</th>
+                            <th scope="col">Nível de acesso</th>
+                            <th scope="col">Ações</th>
+                        </tr>
+                    </thead>
 
-            <?php while ($usuario = mysqli_fetch_assoc($usuarios)) { ?>
+                    <tbody>
 
-                <tr>
-                    <td><?php echo (int) $usuario["id"]; ?></td>
+                        <?php if (mysqli_num_rows($usuarios) > 0) { ?>
 
-                    <td><?php echo htmlspecialchars($usuario["nome"]); ?></td>
+                            <?php while ($usuario = mysqli_fetch_assoc($usuarios)) { ?>
 
-                    <td><?php echo htmlspecialchars($usuario["email"]); ?></td>
+                                <tr>
 
-                    <td><?php echo htmlspecialchars($usuario["telefone"]); ?></td>
+                                    <td>
+                                        <?php echo (int) $usuario['id']; ?>
+                                    </td>
 
-                    <td>
-                        <?php
-                        if ($usuario["tipo"] == "funcionario") {
-                            echo "Funcionário";
-                        } else {
-                            echo "Cliente";
-                        }
-                        ?>
-                    </td>
+                                    <td>
+                                        <?php
+                                        echo htmlspecialchars(
+                                            (string) $usuario['nome'],
+                                            ENT_QUOTES,
+                                            'UTF-8'
+                                        );
+                                        ?>
+                                    </td>
 
-                    <td>
-                        <?php
-                        if ($usuario["nivel_acesso"] == "admin") {
-                            echo "Administrador";
-                        } else {
-                            echo "Comum";
-                        }
-                        ?>
-                    </td>
+                                    <td>
+                                        <?php
+                                        echo htmlspecialchars(
+                                            (string) $usuario['email'],
+                                            ENT_QUOTES,
+                                            'UTF-8'
+                                        );
+                                        ?>
+                                    </td>
 
-                    <td>
-                        <a href="editar_usuarios.php?id=<?php echo (int) $usuario["id"]; ?>">
-                            Editar
-                        </a>
+                                    <td>
+                                        <?php
+                                        echo htmlspecialchars(
+                                            (string) $usuario['telefone'],
+                                            ENT_QUOTES,
+                                            'UTF-8'
+                                        );
+                                        ?>
+                                    </td>
 
-                        <?php if ((int) $usuario["id"] !== (int) $_SESSION["usuario_id"]) { ?>
+                                    <td>
+                                        <?php
+                                        echo $usuario['tipo'] === 'funcionario'
+                                            ? 'Funcionário'
+                                            : 'Cliente';
+                                        ?>
+                                    </td>
 
-                            <form action="excluir_usuarios.php" method="POST"
-                                  onsubmit="return confirm('Tem certeza que deseja excluir este usuário?');">
+                                    <td>
+                                        <?php
+                                        echo $usuario['nivel_acesso'] === 'admin'
+                                            ? 'Administrador'
+                                            : 'Comum';
+                                        ?>
+                                    </td>
 
-                                <input type="hidden" name="id"
-                                       value="<?php echo (int) $usuario["id"]; ?>">
+                                    <!-- AÇÕES -->
+                                    <td>
 
-                                <input type="hidden" name="csrf_token"
-                                       value="<?php echo htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8'); ?>">
+                                        <div class="acoes_registros">
 
-                                <button type="submit" class="btn btn-danger btn-sm">
-                                    Excluir
-                                </button>
+                                            <a
+                                                class="botao_editar"
+                                                href="editar_usuarios.php?id=<?php echo (int) $usuario['id']; ?>"
+                                            >
+                                                Editar
+                                            </a>
 
-                            </form>
+                                            <?php if ((int) $usuario['id'] !== (int) $_SESSION['usuario_id']) { ?>
+
+                                                <form
+                                                    action="excluir_usuarios.php"
+                                                    method="POST"
+                                                    onsubmit="return confirm('Tem certeza que deseja excluir este usuário?');"
+                                                >
+
+                                                    <input
+                                                        type="hidden"
+                                                        name="id"
+                                                        value="<?php echo (int) $usuario['id']; ?>"
+                                                    >
+
+                                                    <input
+                                                        type="hidden"
+                                                        name="csrf_token"
+                                                        value="<?php
+                                                        echo htmlspecialchars(
+                                                            $_SESSION['csrf_token'],
+                                                            ENT_QUOTES,
+                                                            'UTF-8'
+                                                        );
+                                                        ?>"
+                                                    >
+
+                                                    <button
+                                                        type="submit"
+                                                        class="botao_excluir"
+                                                    >
+                                                        Excluir
+                                                    </button>
+
+                                                </form>
+
+                                            <?php } ?>
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+
+                            <?php } ?>
+
+                        <?php } else { ?>
+
+                            <tr>
+                                <td colspan="7">
+                                    Nenhum usuário cadastrado.
+                                </td>
+                            </tr>
 
                         <?php } ?>
-                    </td>
-                </tr>
 
-            <?php } ?>
+                    </tbody>
 
-        </table>
+                </table>
 
-    </div>
+            </div>
 
-    <div class="div_button">
-        <button class="button-container"
-                onclick="location.href='../funcionarios/cadastro_funcionarios.php'">
-            <b>Cadastrar Funcionário</b>
-        </button>
-    </div>
+            <!-- CADASTRO DE FUNCIONÁRIOS -->
+            <button
+                type="button"
+                class="botao_cadastrar"
+                onclick="location.href='../funcionarios/cadastro_funcionarios.php'"
+            >
+                Cadastrar Funcionário
+            </button>
 
-</section>
-
+        </section>
 
     </main>
-
-    <footer></footer>
 
 </body>
 
