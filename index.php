@@ -7,7 +7,7 @@
     <title>Strain</title>
 
     <link rel="stylesheet" href="./assets/style/style.css">
-
+    
 </head>
 
 <body class="body_index">
@@ -30,6 +30,7 @@
 
     </section>
     <hr class="linha">
+
     <main class="blue.index">
         <div class="Introducao1">
 
@@ -45,7 +46,7 @@
                 com o pé no chão e o código em dia.</h4>
         </div>
 
-         <hr class="linha1">
+            <hr class="linha1">
 
         <div class="container_index">
        
@@ -110,6 +111,11 @@
                 <img class="Mapa" src="assets/img/Mockup- SA Juana, Luiz, Nicole, Rafael.png" alt="Mapa dos trens">
 
             </div>
+
+
+        
+
+
     </main>
 
 
