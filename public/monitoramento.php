@@ -17,10 +17,17 @@ verificarFuncionario();
 
     <header id="header_monitoramento">
         <nav class="navbar">
-            <div class="logo-navbar">
-                <img src="../assets/img/logo_navbar2.png" alt="Logo Strain">
-            </div>
-        </nav>
+        <div class="marca-strain">
+            <i data-lucide="train-front"></i>
+            <span>STRAIN</span>
+        </div>
+
+        <div class="saudacao-navbar">
+            <p>
+                Olá, <?php echo htmlspecialchars($nome, ENT_QUOTES, 'UTF-8'); ?>!
+            </p>
+        </div>
+    </nav>
     </header>
 
     <main id="main_monitoramento">
@@ -94,7 +101,10 @@ verificarFuncionario();
         </div>
 
     </main>
-
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>
+    lucide.createIcons();
+</script>
 </body>
 
 </html>

@@ -374,50 +374,89 @@ form {
     overflow-y: auto;
 }
 
+/* ==========================================
+   STRAIN - SIDEBAR PADRONIZADA
+   Aplicada a todas as paginas com #sidebar_dashboard
+   ========================================== */
+
 #sidebar_dashboard {
-    width: 250px;
-    background-color:#850000;
-    height: calc(100vh - 70px);
     position: fixed;
     top: 70px;
     left: 0;
+    width: 250px;
+    height: calc(100vh - 70px);
+    padding: 20px 12px;
+    background-color: #850000;
+    box-sizing: border-box;
+    overflow-y: auto;
+    overflow-x: hidden;
+    z-index: 900;
 }
-
 
 #titulo_sidebar {
-    margin-left: 12px;
-    color: white;
-    font-size: 35px;
-    margin-bottom: 40px;
+    margin: 0 0 25px;
+    padding-left: 8px;
+    color: #ffffff;
     font-family: Arial, Helvetica, sans-serif;
-}
-
-.menu_sidebar {
-    list-style: none;
-}
-
-.menu_sidebar li {
-    margin-bottom: 15px;
-}
-
-.menu_sidebar a {
-    text-decoration: none;
-    color: white;
-    font-size: 22px;
-    font-family: Arial, Helvetica, sans-serif;
-    display: block;
-    padding: 12px 15px;
-    border-radius: 30px;
-    transition: 0.3s;
-}
-
-.menu_sidebar a:hover {
-    background-color: #850000;
-}
-
-.active_sidebar {
-    background-color: #850000;
+    font-size: 30px;
     font-weight: bold;
+}
+
+#sidebar_dashboard .menu_sidebar {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#sidebar_dashboard .menu_sidebar li {
+    padding: 0;
+    margin: 0 0 5px;
+}
+
+#sidebar_dashboard .menu_sidebar a {
+    display: block;
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 10px;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 17px;
+    font-weight: normal;
+    line-height: 1.3;
+    color: #ffffff;
+    text-decoration: none;
+    transition: background-color .2s ease;
+}
+
+#sidebar_dashboard .menu_sidebar a:hover,
+#sidebar_dashboard .menu_sidebar a.active_sidebar {
+    background-color: #a52a2a;
+    color: #ffffff;
+}
+
+#sidebar_dashboard .menu_sidebar a.active_sidebar {
+    font-weight: bold;
+}
+
+#sidebar_dashboard .menu_sidebar a:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: -2px;
+}
+
+#sidebar_dashboard::-webkit-scrollbar {
+    width: 6px;
+}
+
+#sidebar_dashboard::-webkit-scrollbar-track {
+    background-color: #850000;
+}
+
+#sidebar_dashboard::-webkit-scrollbar-thumb {
+    background-color: #b84a4a;
+    border-radius: 10px;
 }
 
 #main_monitoramento {
@@ -1251,59 +1290,127 @@ a{
     .tabela_registros { min-width: 900px; }
 }
 
-
 /* ==========================================
-   STRAIN - AJUSTE DA SIDEBAR
+   STRAIN - NAVBAR PADRONIZADA (PAGINAS INTERNAS)
+   Icone + STRAIN a esquerda | Ola, usuario! a direita
    ========================================== */
 
-#sidebar_dashboard {
-    width: 250px;
-    height: calc(100vh - 70px);
-
+/* Mantem a estrutura horizontal de 70px nas paginas internas. */
+.body_dashboard .navbar {
     position: fixed;
-    top: 70px;
+    top: 0;
     left: 0;
-
-    background-color: #850000;
-    overflow-y: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap;
+    width: 100%;
+    height: 70px;
+    padding: 0 30px;
     box-sizing: border-box;
+    background-color: #850000;
+    z-index: 1000;
 }
 
-/* Título */
-#titulo_sidebar {
-    font-size: 30px;
-    margin: 20px 12px 25px;
-    color: white;
+/* Mantem compatibilidade com as paginas que usam logo em imagem. */
+.body_dashboard .navbar .logo-navbar {
+    opacity: 1;
 }
 
-/* Lista */
-.menu_sidebar {
-    list-style: none;
-    padding: 0 12px;
-    margin: 0;
-}
-
-/* Espaçamento entre opções */
-.menu_sidebar li {
-    margin-bottom: 5px;
-}
-
-/* Links */
-.menu_sidebar a {
+.body_dashboard .navbar .logo-navbar img {
     display: block;
-
-    padding: 10px 12px;
-    font-size: 20px;
-
-    color: white;
-    text-decoration: none;
-
-    border-radius: 10px;
-    transition: background-color 0.2s;
+    width: auto;
+    max-width: 220px;
+    height: 50px;
+    object-fit: contain;
 }
 
-/* Destaque */
-.menu_sidebar a:hover,
-.menu_sidebar a.active_sidebar {
-    background-color: #a52a2a;
+/* Icone de trem e texto STRAIN sempre lado a lado. */
+.navbar .marca-strain {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    gap: 10px;
+    flex-shrink: 0;
+    color: #ffffff;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 21px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+/* Lucide converte <i data-lucide> em <svg>. */
+.navbar .marca-strain i,
+.navbar .marca-strain svg {
+    display: block;
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    color: #ffffff;
+    stroke: #ffffff;
+}
+
+.navbar .marca-strain span {
+    display: inline-block;
+    color: #ffffff;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 21px;
+    font-weight: 700;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+/* Saudacao alinhada no canto direito. */
+.navbar .saudacao-navbar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    margin-left: auto;
+    min-width: 0;
+}
+
+.navbar .saudacao-navbar p {
+    margin: 0;
+    padding: 0;
+    color: #ffffff;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.4;
+    text-align: right;
+    overflow-wrap: anywhere;
+}
+
+@media (max-width: 600px) {
+    .body_dashboard .navbar {
+        padding-left: 14px;
+        padding-right: 14px;
+    }
+
+    .body_dashboard .navbar .logo-navbar img {
+        max-width: 130px;
+        height: 40px;
+    }
+
+    .navbar .marca-strain {
+        gap: 7px;
+    }
+
+    .navbar .marca-strain i,
+    .navbar .marca-strain svg {
+        width: 23px;
+        height: 23px;
+    }
+
+    .navbar .marca-strain span {
+        font-size: 17px;
+    }
+
+    .navbar .saudacao-navbar p {
+        font-size: 14px;
+    }
 }
