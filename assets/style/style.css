@@ -363,9 +363,11 @@ form {
 }
 
 .body_dashboard {
-    background-image: url("../img/Tela\ de\ login.png");
-    background-repeat: no-repeat;
-    background-size: cover;
+   background-image: url("../img/Estação Ferroviária ao Entardecer.png");
+   background-position: center;
+   background-attachment: fixed;
+   background-repeat: no-repeat;
+   background-size: cover;
     margin: 0;
     display: flex;
     flex-direction: column;
