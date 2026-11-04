@@ -17,7 +17,7 @@ $admin = ($_SESSION['nivel_acesso'] ?? '') === 'admin';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Alertas • Strain</title>
+    <title>Alertas ● Strain</title>
 
     <link
         rel="stylesheet"
@@ -79,14 +79,14 @@ $admin = ($_SESSION['nivel_acesso'] ?? '') === 'admin';
             <?php if ($admin) { ?>
                 <li>
                     <a href="usuarios/visu_usuarios.php">
-                        Visualização de Usuários
+                        Usuários
                     </a>
                 </li>
             <?php } ?>
 
             <li>
                 <a href="sensores/visu_sensores.php">
-                    Visualização de Sensores
+                    Sensores
                 </a>
             </li>
 

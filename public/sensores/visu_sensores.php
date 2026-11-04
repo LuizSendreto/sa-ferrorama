@@ -8,6 +8,7 @@ require_once '../../infra/conexao.php';
 
 // Verificar se o usuário é administrador
 $admin = ($_SESSION['nivel_acesso'] ?? '') === 'admin';
+$nome = $_SESSION['usuario_nome'] ?? 'Funcionário';
 
 // Criar token de segurança para exclusões
 if (empty($_SESSION['csrf_token'])) {
@@ -34,7 +35,7 @@ if (!$resultado) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Visualização de Sensores • Strain</title>
+    <title>Sensores • Strain</title>
 
     <!-- Bootstrap -->
     <link
@@ -54,15 +55,17 @@ if (!$resultado) {
     <!-- NAVBAR -->
     <header>
         <nav class="navbar">
+        <div class="marca-strain">
+            <i data-lucide="train-front"></i>
+            <span>STRAIN</span>
+        </div>
 
-            <div class="logo-navbar">
-                <img
-                    src="../../assets/img/logo_navbar2.png"
-                    alt="Logo Strain"
-                >
-            </div>
-
-        </nav>
+        <div class="saudacao-navbar">
+            <p>
+                Olá, <?php echo htmlspecialchars($nome, ENT_QUOTES, 'UTF-8'); ?>!
+            </p>
+        </div>
+    </nav>
     </header>
 
     <!-- ÁREA PRINCIPAL PADRONIZADA -->
@@ -115,7 +118,7 @@ if (!$resultado) {
 
                     <li>
                         <a href="../usuarios/visu_usuarios.php">
-                            Visualização de Usuários
+                            Usuários
                         </a>
                     </li>
 
@@ -126,7 +129,7 @@ if (!$resultado) {
                         href="visu_sensores.php"
                         class="active_sidebar"
                     >
-                        Visualização de Sensores
+                        Sensores
                     </a>
                 </li>
 
@@ -294,7 +297,10 @@ if (!$resultado) {
         </section>
 
     </main>
-
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>
+    lucide.createIcons();
+</script>
 </body>
 
 </html>

@@ -1,6 +1,9 @@
 <?php
 require_once '../infra/verificar_acesso.php';
 verificarFuncionario();
+
+$admin = ($_SESSION['nivel_acesso'] ?? '') === 'admin';
+$nome = $_SESSION['usuario_nome'] ?? 'Funcionário';
 ?>
   
 <html lang="en">
@@ -8,7 +11,7 @@ verificarFuncionario();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Relatórios</title>
+    <title>Relatórios ● Strain</title>
 
     <link rel="stylesheet" href="../assets/style/style.css">
 
@@ -17,7 +20,7 @@ verificarFuncionario();
 <body class ="body_dashboard">
 
     <header id="header_relatorios">
-        <nav class="navbar">
+    <nav class="navbar">
         <div class="marca-strain">
             <i data-lucide="train-front"></i>
             <span>STRAIN</span>
@@ -47,8 +50,8 @@ verificarFuncionario();
                 <li><a href="../public/monitoramento.php">Monitoramento</a></li>
                 <li><a href="../public/alertas.php">Alertas</a></li>
                 <li><a href="../public/relatorios.php" class="active_sidebar">Relatórios</a></li>
-                <li><a href="../public/usuarios/visu_usuarios.php">Visualização de Usuarios</a></li>
-                <li><a href="../public/sensores/visu_sensores.php">Visualização de Sensores</a></li>
+                <li><a href="../public/usuarios/visu_usuarios.php">Usuarios</a></li>
+                <li><a href="../public/sensores/visu_sensores.php">Sensores</a></li>
                 <li><a href="../public/usuarios/logout.php">Logout</a></li>
             </ul>
 

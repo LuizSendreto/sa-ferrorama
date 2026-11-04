@@ -22,6 +22,9 @@ if (!$usuarios) {
     die("Erro ao consultar usuários.");
 }
 
+$admin = ($_SESSION['nivel_acesso'] ?? '') === 'admin';
+$nome = $_SESSION['usuario_nome'] ?? 'Funcionário';
+
 ?>
 
 <!DOCTYPE html>
@@ -31,7 +34,7 @@ if (!$usuarios) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Visualização de Usuários • Strain</title>
+    <title>Usuários ● Strain</title>
 
     <!-- Bootstrap -->
     <link
@@ -51,22 +54,17 @@ if (!$usuarios) {
     <!-- NAVBAR -->
     <header>
         <nav class="navbar">
+        <div class="marca-strain">
+            <i data-lucide="train-front"></i>
+            <span>STRAIN</span>
+        </div>
 
-            <div class="logo-navbar">
-                <img
-                    src="../../assets/img/logo_navbar2.png"
-                    alt="Logo Strain"
-                >
-            </div>
-
-            <div class="logo-navbar">
-                <img
-                    src="../../assets/img/icone_da_navbar.png"
-                    alt="Usuário logado"
-                >
-            </div>
-
-        </nav>
+        <div class="saudacao-navbar">
+            <p>
+                Olá, <?php echo htmlspecialchars($nome, ENT_QUOTES, 'UTF-8'); ?>!
+            </p>
+        </div>
+    </nav>
     </header>
 
     <!-- ÁREA PRINCIPAL PADRONIZADA -->
@@ -108,13 +106,13 @@ if (!$usuarios) {
                         href="visu_usuarios.php"
                         class="active_sidebar"
                     >
-                        Visualização de Usuários
+                        Usuários
                     </a>
                 </li>
 
                 <li>
                     <a href="../sensores/visu_sensores.php">
-                        Visualização de Sensores
+                        Sensores
                     </a>
                 </li>
 
@@ -297,7 +295,10 @@ if (!$usuarios) {
         </section>
 
     </main>
-
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>
+    lucide.createIcons();
+</script>
 </body>
 
 </html>

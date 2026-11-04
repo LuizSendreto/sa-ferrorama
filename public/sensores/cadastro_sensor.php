@@ -77,7 +77,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastrar Sensor</title>
+    <title>Cadastrar Sensor ● Strain</title>
 
     <link rel="stylesheet" href="../../assets/style/style.css">
 
@@ -105,8 +105,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <li><a href="../monitoramento.php">Monitoramento</a></li>
                 <li><a href="../alertas.php">Alertas</a></li>
                 <li><a href="../relatorios.php">Relatórios</a></li>
-                <li><a href="../usuarios/visu_usuarios.php">Visualização de Usuarios</a></li>
-                <li><a href="../sensores/visu_sensores.php" class="active_sidebar">Visualização de Sensores</a></li>
+                <li><a href="../usuarios/visu_usuarios.php">Usuarios</a></li>
+                <li><a href="../sensores/visu_sensores.php" class="active_sidebar">Sensores</a></li>
                 <li><a href="../usuarios/logout.php">Logout</a></li>
             </ul>
         </aside>

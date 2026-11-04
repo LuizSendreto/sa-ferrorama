@@ -147,7 +147,7 @@ $funcionarios = mysqli_query(
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trens</title>
+    <title>Trens ● Strain</title>
 
     <link rel="stylesheet" href="../../assets/style/style.css">
 </head>
