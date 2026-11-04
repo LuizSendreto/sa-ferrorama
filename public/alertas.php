@@ -1,15 +1,3 @@
-
-<?php
-
-require_once '../infra/verificar_acesso.php';
-verificarFuncionario();
-
-// Informações do usuário logado
-$nome = $_SESSION['usuario_nome'] ?? 'Usuário';
-$admin = ($_SESSION['nivel_acesso'] ?? '') === 'admin';
-
-?>
-
 <!DOCTYPE html>
 <html lang="pt-br">
 
