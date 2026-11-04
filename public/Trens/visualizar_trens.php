@@ -118,79 +118,133 @@ $lista_trens = mysqli_fetch_all($resultado, MYSQLI_ASSOC);
                     </div>
                 <?php } ?>
 
-                <div class="table_trens" style="width:100%;">
-                    <h1 id="table_trens">Visualização de trens</h1>
+                
+                        <div class="table_trens">
 
-                    <section id="tabela_visualizar_trens">
-                        <h2 class="titulo_tabela">Trens Cadastrados</h2>
+                            <h1 class="titulo_registros">
+                                Visualização de Trens
+                            </h1>
 
-                        <table class="table_t">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Linha</th>
-                                    <th>Número de série</th>
-                                    <th>Velocidade</th>
-                                    <th>Estado</th>
-                                    <th>Funcionário responsável</th>
+    <h2 class="subtitulo_registros">
+        Trens Cadastrados
+    </h2>
 
-                                    <?php if ($admin) { ?>
-                                        <th>Ações</th>
-                                    <?php } ?>
+    <div class="container_tabela">
 
-                                </tr>
-                            </thead>
+        <table class="tabela_registros">
 
-                            <tbody>
-                                <?php foreach ($lista_trens as $t) { ?>
-                                    <tr>
-                                        <td><?php echo (int) $t["id"]; ?></td>
-                                        <td><?php echo htmlspecialchars($t["nome_linha"]); ?></td>
-                                        <td><?php echo htmlspecialchars($t["numero_serie"]); ?></td>
-                                        <td><?php echo (int) $t["velocidade"]; ?> km/h</td>
-                                        <td><?php echo htmlspecialchars($t["estado"]); ?></td>
-                                        <td><?php echo htmlspecialchars($t["funcionario_responsavel"] ?? "Não atribuído"); ?></td>
-
-                                        <?php if ($admin) { ?>
-                                            <td>
-                                                <a href="editar_trens.php?id=<?php echo (int) $t["id"]; ?>">
-                                                    Editar
-                                                </a>
-
-                                                
-                                                <form action="excluir_trens.php" method="POST"
-                                                    onsubmit="return confirm('Tem certeza que deseja excluir este trem e suas rotas?');">
-
-                                                    <input type="hidden" name="id"
-                                                        value="<?php echo (int) $t['id']; ?>">
-
-                                                    <input type="hidden" name="csrf_token"
-                                                       value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
-
-                                                    <button type="submit">Excluir</button>
-
-                                                </form>
-
-                                            </td>
-                                        <?php } ?>
-
-                                    </tr>
-                                <?php } ?>
-                            </tbody>
-                        </table>
-                    </section>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Linha</th>
+                    <th>Número de série</th>
+                    <th>Velocidade</th>
+                    <th>Estado</th>
+                    <th>Funcionário responsável</th>
 
                     <?php if ($admin) { ?>
-                        <div class="div_button">
-                            <button type="button"
-                                    class="button-container"
-                                    onclick="location.href='trens_cadastro.php'">
-                                <b>Cadastrar trem</b>
-                            </button>
-                        </div>
+                        <th>Ações</th>
                     <?php } ?>
+                </tr>
+            </thead>
 
-                </div>
+            <tbody>
+
+                <?php foreach ($lista_trens as $t) { ?>
+
+                    <tr>
+
+                        <td><?= (int) $t['id'] ?></td>
+
+                        <td>
+                            <?= htmlspecialchars($t['nome_linha'], ENT_QUOTES, 'UTF-8') ?>
+                        </td>
+
+                        <td>
+                            <?= htmlspecialchars($t['numero_serie'], ENT_QUOTES, 'UTF-8') ?>
+                        </td>
+
+                        <td>
+                            <?= (int) $t['velocidade'] ?> km/h
+                        </td>
+
+                        <td>
+                            <?= htmlspecialchars($t['estado'], ENT_QUOTES, 'UTF-8') ?>
+                        </td>
+
+                        <td>
+                            <?= htmlspecialchars($t['funcionario_responsavel'] ?? 'Não atribuído', ENT_QUOTES, 'UTF-8') ?>
+                        </td>
+
+                        <?php if ($admin) { ?>
+
+                            <td>
+                                <div class="acoes_registros">
+
+                                    <a
+                                        class="botao_editar"
+                                        href="editar_trens.php?id=<?= (int) $t['id'] ?>"
+                                    >
+                                        Editar
+                                    </a>
+
+                                    <form
+                                        action="excluir_trens.php"
+                                        method="POST"
+                                        onsubmit="return confirm('Tem certeza que deseja excluir este trem e suas rotas?');"
+                                    >
+
+                                        <input
+                                            type="hidden"
+                                            name="id"
+                                            value="<?= (int) $t['id'] ?>"
+                                        >
+
+                                        <input
+                                            type="hidden"
+                                            name="csrf_token"
+                                            value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>"
+                                        >
+
+                                        <button
+                                            type="submit"
+                                            class="botao_excluir"
+                                        >
+                                            Excluir
+                                        </button>
+
+                                    </form>
+
+                                </div>
+                            </td>
+
+                        <?php } ?>
+
+                    </tr>
+
+                <?php } ?>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <?php if ($admin) { ?>
+
+        <div class="div_button">
+            <a
+                href="trens_cadastro.php"
+                class="botao_cadastrar"
+            >
+                Cadastrar Trem
+            </a>
+        </div>
+
+    <?php } ?>
+
+</div>
+
 
             </div>
         </div>

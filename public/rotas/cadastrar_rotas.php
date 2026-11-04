@@ -43,8 +43,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         FILTER_VALIDATE_FLOAT
     );
 
-    $estados_validos = ["Ativo", "Inativo", "Manutencao"];
-
     if ($nome_rota === "" || $descricao === "") {
         $erro = "Preencha o nome e a descrição da rota.";
 
@@ -54,13 +52,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } elseif (mb_strlen($descricao) > 255) {
         $erro = "A descrição pode ter no máximo 255 caracteres.";
 
-    } elseif ($distancia_num === false || $distancia_num < 0.01 || $distancia_num > 9999.99) {
+    } elseif (
+        $distancia_num === false ||
+        $distancia_num < 0.01 ||
+        $distancia_num > 9999.99
+    ) {
         $erro = "Informe uma distância entre 0,01 e 9999,99 km.";
 
-    } elseif (!ctype_digit((string) $tempo_estimado) || (int) $tempo_estimado <= 0) {
+    } elseif (
+        !ctype_digit((string) $tempo_estimado) ||
+        (int) $tempo_estimado <= 0
+    ) {
         $erro = "O tempo estimado deve ser um número inteiro maior que zero.";
 
-    } elseif (!ctype_digit((string) $trem_id) || (int) $trem_id <= 0) {
+    } elseif (
+        !ctype_digit((string) $trem_id) ||
+        (int) $trem_id <= 0
+    ) {
         $erro = "Selecione um trem.";
 
     } else {
@@ -130,129 +138,217 @@ $trens = mysqli_query(
 );
 
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Cadastro de Rotas ● Strain</title>
 
-    <link rel="stylesheet" href="../../assets/style/style.css">
+    <link rel="stylesheet"
+          href="../../assets/style/style.css?v=rotas2">
 </head>
 
 <body class="body_dashboard">
-    <header id="header_trens">
+
+    <!-- NAVBAR -->
+    <header id="header_rotas">
         <nav class="navbar">
 
-              <div>
-                <button class="btn" type="button"
-                        onclick="location.href='rotas.php'">
-                    Voltar
-                </button>
+            <div class="marca-strain">
+                <i data-lucide="train-front"></i>
+                <span>STRAIN</span>
             </div>
 
-            <div class="logo-navbar">
-                <img src="../../assets/img/icone_da_navbar.png" alt="logo usuario logado">
-            </div>
+            <button
+                class="btn"
+                type="button"
+                onclick="location.href='rotas.php'"
+            >
+                Voltar
+            </button>
 
         </nav>
     </header>
 
-    <main id="main_trens">
-        <h2>Cadastro de Rotas</h2>
+    <!-- FORMULÁRIO CENTRALIZADO -->
+    <main class="area_formulario">
 
-        <?php if ($erro != "") { ?>
-            <p style="color:red;"><?php echo htmlspecialchars($erro); ?></p>
-        <?php } ?>
+        <section class="painel_formulario">
 
-        <form action="cadastrar_rotas.php" method="POST">
+            <h1 class="titulo_formulario">
+                Cadastro de Rotas
+            </h1>
 
-            <input type="hidden" name="csrf_token"
-                   value="<?php echo htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8'); ?>">
+            <!-- MENSAGEM DE ERRO -->
+            <?php if ($erro !== "") { ?>
 
-            <div>
-                <label for="nome_rota">Nome da rota:</label>
-                <input
-                    type="text"
-                    id="nome_rota"
-                    name="nome_rota"
-                    placeholder="Digite o nome da rota"
-                    maxlength="100"
-                    value="<?php echo htmlspecialchars($nome_rota); ?>"
-                    required
+                <div
+                    class="mensagem_erro_formulario"
+                    role="alert"
                 >
-            </div>
+                    <?= htmlspecialchars($erro, ENT_QUOTES, 'UTF-8') ?>
+                </div>
 
-            <div>
-                <label for="descricao">Descrição:</label>
-                <textarea
-                    id="descricao"
-                    name="descricao"
-                    placeholder="Digite a descrição da rota"
-                    maxlength="255"
-                    required
-                ><?php echo htmlspecialchars($descricao); ?></textarea>
-            </div>
+            <?php } ?>
 
-            <div>
-                <label for="distancia">Distância (km):</label>
+            <form
+                action="cadastrar_rotas.php"
+                method="POST"
+                class="formulario_strain"
+            >
+
+                <!-- TOKEN CSRF -->
                 <input
-                    type="number"
-                    id="distancia"
-                    name="distancia"
-                    placeholder="Digite a distância da rota"
-                    min="0.01"
-                    max="9999.99"
-                    step="0.01"
-                    value="<?php echo htmlspecialchars($distancia); ?>"
-                    required
+                    type="hidden"
+                    name="csrf_token"
+                    value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>"
                 >
-            </div>
 
-            <div>
-                <label for="tempo_estimado">Tempo estimado (minutos):</label>
-                <input
-                    type="number"
-                    id="tempo_estimado"
-                    name="tempo_estimado"
-                    placeholder="Digite o tempo estimado"
-                    min="1"
-                    step="1"
-                    value="<?php echo htmlspecialchars($tempo_estimado); ?>"
-                    required
-                >
-            </div>
+                <!-- NOME DA ROTA -->
+                <div class="campo_formulario">
 
-            <div>
-                <label for="trem_id">Trem:</label>
-                <select name="trem_id" id="trem_id" required>
-                    <option value="">Selecione o trem</option>
+                    <label for="nome_rota">
+                        Nome da rota
+                    </label>
 
-                    <?php
-                    if ($trens && mysqli_num_rows($trens) > 0) {
-                        while ($trem = mysqli_fetch_assoc($trens)) {
-                    ?>
-                            <option value="<?php echo (int) $trem['id']; ?>"
-                                <?php if ((string) $trem_id === (string) $trem['id']) echo "selected"; ?>>
-                                <?php echo htmlspecialchars($trem['numero_serie'] . " - " . $trem['nome_linha'], ENT_QUOTES, 'UTF-8'); ?>
+                    <input
+                        type="text"
+                        id="nome_rota"
+                        name="nome_rota"
+                        placeholder="Digite o nome da rota"
+                        maxlength="100"
+                        value="<?= htmlspecialchars($nome_rota, ENT_QUOTES, 'UTF-8') ?>"
+                        required
+                    >
+
+                </div>
+
+                <!-- DESCRIÇÃO -->
+                <div class="campo_formulario">
+
+                    <label for="descricao">
+                        Descrição
+                    </label>
+
+                    <textarea
+                        id="descricao"
+                        name="descricao"
+                        placeholder="Digite a descrição da rota"
+                        maxlength="255"
+                        rows="3"
+                        required
+                    ><?= htmlspecialchars($descricao, ENT_QUOTES, 'UTF-8') ?></textarea>
+
+                </div>
+
+                <!-- DISTÂNCIA -->
+                <div class="campo_formulario">
+
+                    <label for="distancia">
+                        Distância (km)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="distancia"
+                        name="distancia"
+                        placeholder="Digite a distância da rota"
+                        min="0.01"
+                        max="9999.99"
+                        step="0.01"
+                        value="<?= htmlspecialchars($distancia, ENT_QUOTES, 'UTF-8') ?>"
+                        required
+                    >
+
+                </div>
+
+                <!-- TEMPO ESTIMADO -->
+                <div class="campo_formulario">
+
+                    <label for="tempo_estimado">
+                        Tempo estimado (minutos)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="tempo_estimado"
+                        name="tempo_estimado"
+                        placeholder="Digite o tempo estimado"
+                        min="1"
+                        step="1"
+                        value="<?= htmlspecialchars($tempo_estimado, ENT_QUOTES, 'UTF-8') ?>"
+                        required
+                    >
+
+                </div>
+
+                <!-- SELEÇÃO DO TREM -->
+                <div class="campo_formulario">
+
+                    <label for="trem_id">
+                        Trem responsável
+                    </label>
+
+                    <select
+                        name="trem_id"
+                        id="trem_id"
+                        required
+                    >
+
+                        <option value="">
+                            Selecione o trem
+                        </option>
+
+                        <?php
+                        if ($trens && mysqli_num_rows($trens) > 0) {
+                            while ($trem = mysqli_fetch_assoc($trens)) {
+                        ?>
+
+                            <option
+                                value="<?= (int) $trem['id'] ?>"
+                                <?= (string) $trem_id === (string) $trem['id'] ? 'selected' : '' ?>
+                            >
+                                <?= htmlspecialchars(
+                                    $trem['numero_serie'] . " - " . $trem['nome_linha'],
+                                    ENT_QUOTES,
+                                    'UTF-8'
+                                ) ?>
                             </option>
-                    <?php
+
+                        <?php
+                            }
                         }
-                    }
-                    ?>
-                </select>
-            </div>
+                        ?>
 
-            <button
-                id="botao_cadastro_trem"
-                type="submit"
-                class="btn btn-outline-danger">
-                Cadastrar Rota
-            </button>
+                    </select>
 
-        </form>
+                </div>
+
+                <!-- BOTÃO CADASTRAR -->
+                <button
+                    type="submit"
+                    id="botao_cadastro_rota"
+                    class="botao_formulario"
+                >
+                    Cadastrar Rota
+                </button>
+
+            </form>
+
+        </section>
+
     </main>
-</body>
 
+    <!-- ÍCONES LUCIDE -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+    <script>
+        lucide.createIcons();
+    </script>
+
+</body>
 </html>
