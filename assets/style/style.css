@@ -579,9 +579,10 @@ body::before {
     margin-left: 250px;
     margin-top: 70px;
     width: calc(100% - 250px);
-    height: calc(1050px - 70px);
-    overflow: hidden;
-
+    min-height: calc(100vh - 70px);
+    height: auto;
+    overflow: visible;
+    box-sizing: border-box;
 }
 
 
@@ -1294,7 +1295,7 @@ a{
 .botao_cadastrar {
     padding: 12px 22px;
     margin-top: 10px;
-    background-color: white;
+    background-color: #ffffff;
     color: #850000;
     border: 0;
     border-radius: 7px;
@@ -1647,44 +1648,272 @@ a{
 }
 
 /* ==========================================
-   STRAIN - BOTOES DE CADASTRO NAS LISTAGENS
-   Fundo branco, texto vermelho, mantendo
-   dimensoes, alinhamento e bordas existentes.
-   Nao altera o botao de envio dos formularios.
+   STRAIN - BOTAO UNICO DE CADASTRO
+   Usar class="botao_cadastrar" nos botoes/links
+   Cadastrar Trem, Cadastrar Rota e demais cadastros.
    ========================================== */
 
-/* Botao de cadastrar trem e demais registros */
 .botao_cadastrar,
-.table_trens .btn,
-.table_trens .btn.btn-outline-danger,
-.table_trens .botao_cadastrar {
+a.botao_cadastrar:visited {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    padding: 12px 22px;
+    margin-top: 10px;
     background-color: #ffffff;
     color: #850000;
-    border-color: #ffffff;
+    border: none;
+    border-radius: 7px;
+    box-sizing: border-box;
+    font: 700 14px Arial, Helvetica, sans-serif;
+    line-height: 1.4;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color .2s ease, transform .2s ease;
 }
 
 .botao_cadastrar:hover,
-.table_trens .btn:hover,
-.table_trens .btn.btn-outline-danger:hover,
-.table_trens .botao_cadastrar:hover {
+a.botao_cadastrar:visited:hover {
     background-color: #ebdcc7;
     color: #850000;
-    border-color: #ebdcc7;
+    transform: translateY(-2px);
+    text-decoration: none;
 }
 
-/* Botao Cadastrar Rota (classes utilizadas em rotas) */
-.btn.btn-outline3,
-.btn_cadastrar_rota,
-.botao_cadastrar_rota {
+.botao_cadastrar:focus-visible {
+    outline: 3px solid #ffffff;
+    outline-offset: 3px;
+}
+
+/* ==========================================
+   STRAIN - TABELA DE TRENS CADASTRADOS
+   Usar HTML com container_tabela + tabela_registros
+   ========================================== */
+
+/* Evita que a altura antiga das fotos crie espacos
+   ou corte a tabela quando houver muitos trens. */
+#main_trens .container_trens {
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+    box-sizing: border-box;
+}
+
+#main_trens .fotos {
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    box-sizing: border-box;
+}
+
+#main_trens .table_trens {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 18px;
+    width: 100%;
+    max-width: 1150px;
+    margin: 30px auto;
+    padding: 30px;
+    border-radius: 20px;
+    box-sizing: border-box;
+    background-color: #850000;
+    color: #ffffff;
+}
+
+#main_trens .table_trens .titulo_registros,
+#main_trens .table_trens .subtitulo_registros {
+    color: #ffffff;
+    text-align: center;
+}
+
+#main_trens .table_trens .container_tabela {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: auto;
+    border-radius: 12px;
     background-color: #ffffff;
-    color: #850000;
-    border-color: #ffffff;
 }
 
-.btn.btn-outline3:hover,
-.btn_cadastrar_rota:hover,
-.botao_cadastrar_rota:hover {
-    background-color: #ebdcc7;
-    color: #850000;
-    border-color: #ebdcc7;
+#main_trens .table_trens .tabela_registros {
+    display: table;
+    width: 100%;
+    min-width: 850px;
+    margin: 0;
+    border-collapse: collapse;
+    color: #333333;
+    background-color: #ffffff;
+}
+
+#main_trens .table_trens .acoes_registros {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+#main_trens .table_trens .acoes_registros form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+}
+
+#main_trens .table_trens .div_button {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: 5px;
+}
+
+@media (max-width: 900px) {
+    #main_trens .table_trens {
+        padding: 20px 12px;
+    }
+}
+
+/* ==========================================
+   STRAIN - AJUSTES DO CADASTRO DE ROTAS
+   ========================================== */
+
+.formulario_strain .campo_formulario textarea {
+    width: 100%;
+    min-height: 90px;
+    resize: vertical;
+    box-sizing: border-box;
+}
+
+.area_formulario {
+    height: auto;
+    overflow: visible;
+}
+
+@media (max-height: 800px) {
+    .area_formulario {
+        align-items: flex-start;
+    }
+}
+
+
+/* ==========================================
+   STRAIN - VISUALIZAÇÃO DE ROTAS
+   ========================================== */
+
+/* Área principal */
+.area_registros {
+    margin-left: 250px;
+    margin-top: 70px;
+
+    width: calc(100% - 250px);
+    min-height: calc(100vh - 70px);
+
+    padding: 35px 25px;
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+
+    box-sizing: border-box;
+}
+
+/* Painel vermelho */
+.area_registros .painel_registros {
+    width: 100%;
+    max-width: 1150px;
+    min-width: 0;
+
+    padding: 35px 30px;
+    background-color: #850000;
+    border-radius: 20px;
+
+    box-sizing: border-box;
+}
+
+/* Área da tabela */
+.area_registros .container_tabela {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+
+    background-color: #ffffff;
+    border-radius: 12px;
+}
+
+/* Tabela */
+.area_registros .tabela_registros {
+    width: 100%;
+    min-width: 1000px;
+    border-collapse: collapse;
+}
+
+/* Ações */
+.area_registros .acoes_registros {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+/* Remove o fundo bege do formulário de exclusão */
+.area_registros .acoes_registros form {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+}
+
+/* Botão de cadastro centralizado */
+.area_registros .div_button {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: 5px;
+}
+
+/* Responsividade */
+@media (max-width: 900px) {
+    .area_registros {
+        padding: 20px 15px;
+    }
+
+    .area_registros .painel_registros {
+        padding: 25px 15px;
+    }
+}
+
+/* ==========================================
+   STRAIN - PADRONIZAÇÃO DOS CAMPOS
+   ========================================== */
+
+.formulario_strain .campo_formulario input,
+.formulario_strain .campo_formulario select,
+.formulario_strain .campo_formulario textarea,
+.formulario_strain .campo_formulario #email,
+.formulario_strain .campo_formulario #telefone {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    min-height: 44px;
+
+    padding: 11px 12px;
+    margin: 0;
+
+    border: 2px solid #850000;
+    border-radius: 8px;
+
+    background-color: #ffffff;
+    color: #333333;
+
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+
+    box-sizing: border-box;
 }
