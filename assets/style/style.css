@@ -1486,6 +1486,8 @@ a{
     box-sizing: border-box;
 }
 
+
+
 /* PAINEL VERMELHO */
 
 .painel_formulario {
@@ -1642,4 +1644,47 @@ a{
     .painel_formulario { padding: 20px 15px; }
     .titulo_formulario { font-size: 24px; }
     .painel_formulario .formulario_strain { padding: 20px 15px; }
+}
+
+/* ==========================================
+   STRAIN - BOTOES DE CADASTRO NAS LISTAGENS
+   Fundo branco, texto vermelho, mantendo
+   dimensoes, alinhamento e bordas existentes.
+   Nao altera o botao de envio dos formularios.
+   ========================================== */
+
+/* Botao de cadastrar trem e demais registros */
+.botao_cadastrar,
+.table_trens .btn,
+.table_trens .btn.btn-outline-danger,
+.table_trens .botao_cadastrar {
+    background-color: #ffffff;
+    color: #850000;
+    border-color: #ffffff;
+}
+
+.botao_cadastrar:hover,
+.table_trens .btn:hover,
+.table_trens .btn.btn-outline-danger:hover,
+.table_trens .botao_cadastrar:hover {
+    background-color: #ebdcc7;
+    color: #850000;
+    border-color: #ebdcc7;
+}
+
+/* Botao Cadastrar Rota (classes utilizadas em rotas) */
+.btn.btn-outline3,
+.btn_cadastrar_rota,
+.botao_cadastrar_rota {
+    background-color: #ffffff;
+    color: #850000;
+    border-color: #ffffff;
+}
+
+.btn.btn-outline3:hover,
+.btn_cadastrar_rota:hover,
+.botao_cadastrar_rota:hover {
+    background-color: #ebdcc7;
+    color: #850000;
+    border-color: #ebdcc7;
 }

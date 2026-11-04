@@ -226,18 +226,34 @@ $funcionarios = mysqli_query(
                         Nome da linha
                     </label>
 
-                    <input
-                        type="text"
+                    <select
                         id="nome_linha"
-                        name="nome_linha"
-                        placeholder="Digite o nome da linha do trem"
-                        value="<?php echo htmlspecialchars(
-                            $nome_linha,
-                            ENT_QUOTES,
-                            'UTF-8'
-                        ); ?>"
-                        required
-                    >
+                        name="nome_linha" required>
+                            <option value="">
+                                Selecione a linha do trem
+                            </option>
+
+                            <option value="Linha Azul (Sul)"
+                                    <?= $nome_linha === 'Linha Azul (Sul)' ? 'selected' : '' ?>>
+                                    🔵 Linha Azul (Sul)
+                            </option>
+
+                            <option value="Linha Verde (Centro)"
+                                <?= $nome_linha === 'Linha Verde (Centro)' ? 'selected' : '' ?>>
+                                🟢 Linha Verde (Centro)
+                            </option>
+
+                            <option value="Linha Amarela (Itaum)"
+                                <?= $nome_linha === 'Linha Amarela (Itaum)' ? 'selected' : '' ?>>
+                                🟡 Linha Amarela (Itaum)
+                            </option>
+
+                            <option value="Linha Vermelha (Villa Nova)"
+                            <?= $nome_linha === 'Linha Vermelha (Villa Nova)' ? 'selected' : '' ?>>
+                            🔴 Linha Vermelha (Villa Nova)
+                            </option>
+
+                    </select>
 
                 </div>
 

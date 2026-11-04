@@ -182,7 +182,8 @@ $lista_trens = mysqli_fetch_all($resultado, MYSQLI_ASSOC);
 
                     <?php if ($admin) { ?>
                         <div class="div_button">
-                            <button class="button-container"
+                            <button type="button"
+                                    class="button-container"
                                     onclick="location.href='trens_cadastro.php'">
                                 <b>Cadastrar trem</b>
                             </button>
