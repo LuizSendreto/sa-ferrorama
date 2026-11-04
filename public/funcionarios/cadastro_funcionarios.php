@@ -227,183 +227,112 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
-
 <!DOCTYPE html>
-<html class="login" lang="pt-br">
-
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Cadastrar Funcionário ● Strain</title>
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
-          rel="stylesheet">
-
-    <link rel="stylesheet" href="../../assets/style/style.css">
-
-    <!-- CSS da API ViaCEP -->
-    <link rel="stylesheet" href="../../assets/style/cep.css">
-
+    <link rel="stylesheet" href="../../assets/style/style.css?v=cadastrofuncionarios2">
 </head>
-
-<body class="body_telalogin">
+<body class="body_dashboard">
 
     <header>
-        <nav></nav>
+        <nav class="navbar">
+            <div class="marca-strain">
+                <i data-lucide="train-front"></i>
+                <span>STRAIN</span>
+            </div>
+            <a href="../usuarios/visu_usuarios.php" class="btn">Voltar</a>
+        </nav>
     </header>
 
-    <div class="Strain">
-        <img class="Strain"
-             src="../../assets/img/Tela de login atualizada.png"
-             alt="Strain">
-    </div>
+    <main class="area_formulario">
+        <section class="painel_formulario">
+            <h1 class="titulo_formulario">Cadastrar Funcionário</h1>
 
-    <div class="flex">
+            <?php if ($erro !== "") { ?>
+                <div class="mensagem_erro_formulario" role="alert">
+                    <?= htmlspecialchars($erro, ENT_QUOTES, 'UTF-8') ?>
+                </div>
+            <?php } ?>
 
-        <main class="blue">
+            <form id="form_cadastro" class="formulario_strain" action="cadastro_funcionarios.php" method="POST">
+                <input type="hidden" name="csrf_token"
+                       value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>">
 
-            <div class="container_login">
+                <div class="campo_formulario">
+                    <label for="nomeUsuario">Nome do funcionário</label>
+                    <input type="text" id="nomeUsuario" name="nomeUsuario" maxlength="100"
+                           placeholder="Digite o nome completo"
+                           value="<?= htmlspecialchars($nome, ENT_QUOTES, 'UTF-8') ?>" required>
+                </div>
 
-                <h2 id="titulo_cadastro">Cadastrar Funcionário</h2>
+                <div class="campo_formulario">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" name="email" maxlength="100"
+                           placeholder="Digite o e-mail"
+                           value="<?= htmlspecialchars($email, ENT_QUOTES, 'UTF-8') ?>" required>
+                </div>
 
-                <?php if ($erro != "") { ?>
-                    <div class="alert alert-danger">
-                        <?php echo htmlspecialchars($erro); ?>
-                    </div>
-                <?php } ?>
+                <div class="campo_formulario">
+                    <label for="telefone">Telefone</label>
+                    <input type="tel" id="telefone" name="telefone" maxlength="20"
+                           placeholder="Digite o telefone"
+                           value="<?= htmlspecialchars($telefone, ENT_QUOTES, 'UTF-8') ?>" required>
+                </div>
 
-                <form id="form_cadastro" method="POST" action="">
+                <div class="campo_formulario">
+                    <label for="senha">Senha</label>
+                    <input type="password" id="senha" name="senha" minlength="8"
+                           autocomplete="new-password" placeholder="Mínimo de 8 caracteres" required>
+                </div>
 
-                    <input type="hidden" name="csrf_token"
-                           value="<?php echo htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8'); ?>">
+                <div class="campo_formulario">
+                    <label for="confirmarSenha">Confirmar senha</label>
+                    <input type="password" id="confirmarSenha" name="confirmarSenha" minlength="8"
+                           autocomplete="new-password" placeholder="Digite novamente a senha" required>
+                </div>
 
-                    <div class="conjunto">
-                        <input type="email"
-                               id="email"
-                               name="email"
-                               placeholder="Digite seu email"
-                               maxlength="100"
-                               value="<?php echo htmlspecialchars($email, ENT_QUOTES, 'UTF-8'); ?>"
-                               required>
-                    </div>
+                <h2 class="titulo_endereco_formulario">Endereço do funcionário</h2>
+                <p class="descricao_endereco_formulario">Digite o CEP para preencher o endereço automaticamente.</p>
 
-                    <div class="conjunto">
-                        <input type="text"
-                               id="nomeUsuario"
-                               name="nomeUsuario"
-                               placeholder="Digite o nome do funcionário"
-                               maxlength="100"
-                               value="<?php echo htmlspecialchars($nome, ENT_QUOTES, 'UTF-8'); ?>"
-                               required>
-                    </div>
+                <div class="campo_formulario">
+                    <label for="cep">CEP</label>
+                    <input type="text" id="cep" name="cep" maxlength="9" inputmode="numeric"
+                           autocomplete="postal-code" placeholder="00000-000"
+                           value="<?= htmlspecialchars($cep, ENT_QUOTES, 'UTF-8') ?>" required>
+                </div>
 
-                    <div class="conjunto">
-                        <input type="password"
-                               id="senha"
-                               name="senha"
-                               placeholder="Digite sua senha"
-                               minlength="8"
-                               required>
-                    </div>
+                <div class="campo_formulario">
+                    <label for="logradouro">Logradouro</label>
+                    <input type="text" id="logradouro" placeholder="Preenchido pelo CEP" readonly>
+                </div>
 
-                    <div class="conjunto">
-                        <input type="password"
-                               id="confirmarSenha"
-                               name="confirmarSenha"
-                               placeholder="Confirme sua senha"
-                               minlength="8"
-                               required>
-                    </div>
+                <div class="campo_formulario">
+                    <label for="bairro">Bairro</label>
+                    <input type="text" id="bairro" placeholder="Preenchido pelo CEP" readonly>
+                </div>
 
-                    <div class="conjunto">
-                        <input type="text"
-                               id="telefone"
-                               name="telefone"
-                               placeholder="Digite seu telefone"
-                               maxlength="20"
-                               value="<?php echo htmlspecialchars($telefone, ENT_QUOTES, 'UTF-8'); ?>"
-                               required>
-                    </div>
+                <div class="campo_formulario">
+                    <label for="cidade">Cidade</label>
+                    <input type="text" id="cidade" placeholder="Preenchido pelo CEP" readonly>
+                </div>
 
-                    <!-- NOVO: CADASTRO DE ENDEREÇO -->
-                    <fieldset class="cadastro-endereco">
+                <div class="campo_formulario">
+                    <label for="uf">Estado (UF)</label>
+                    <input type="text" id="uf" placeholder="Preenchido pelo CEP" readonly>
+                </div>
 
-                        <legend>Endereço do funcionário</legend>
+                <p id="mensagem_cep_cadastro" role="status" aria-live="polite"></p>
 
-                        <p>Digite o CEP para preencher o endereço automaticamente.</p>
+                <button type="submit" class="botao_formulario">Cadastrar Funcionário</button>
+            </form>
+        </section>
+    </main>
 
-                        <div class="conjunto">
-                            <label for="cep">CEP:</label>
-
-                            <input type="text"
-                                   id="cep"
-                                   name="cep"
-                                   placeholder="00000-000"
-                                   maxlength="9"
-                                   inputmode="numeric"
-                                   value="<?php echo htmlspecialchars($cep, ENT_QUOTES, 'UTF-8'); ?>"
-                                   required>
-                        </div>
-
-                        <div class="conjunto">
-                            <label for="logradouro">Logradouro:</label>
-
-                            <input type="text"
-                                   id="logradouro"
-                                   placeholder="Rua ou avenida"
-                                   readonly>
-                        </div>
-
-                        <div class="conjunto">
-                            <label for="bairro">Bairro:</label>
-
-                            <input type="text"
-                                   id="bairro"
-                                   placeholder="Bairro"
-                                   readonly>
-                        </div>
-
-                        <div class="conjunto">
-                            <label for="cidade">Cidade:</label>
-
-                            <input type="text"
-                                   id="cidade"
-                                   placeholder="Cidade"
-                                   readonly>
-                        </div>
-
-                        <div class="conjunto">
-                            <label for="uf">Estado (UF):</label>
-
-                            <input type="text"
-                                   id="uf"
-                                   placeholder="UF"
-                                   readonly>
-                        </div>
-
-                        <p id="mensagem_cep_cadastro"
-                           role="status"
-                           aria-live="polite"></p>
-
-                    </fieldset>
-                    <!-- FIM DO CADASTRO DE ENDEREÇO -->
-
-                    <button id="botao_cadastro"
-                            type="submit"
-                            class="btn btn-outline-danger">
-                        Cadastrar Funcionário
-                    </button>
-
-                </form>
-            </div>
-        </main>
-    </div>
-
-    <footer></footer>
-
-    <!-- NOVO: JAVASCRIPT DA API ViaCEP -->
-    <script>
+    <!-- O cep.js já consulta e preenche os campos no cadastro. -->
+     <script>
     document.addEventListener("DOMContentLoaded", function () {
 
         const campoCep = document.getElementById("cep");
@@ -547,6 +476,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     });
     </script>
-
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script>lucide.createIcons();</script>
 </body>
 </html>
