@@ -151,106 +151,58 @@ if (empty($_SESSION['csrf_cep'])) {
     <!-- FIM Clima -->
         
  
-<!-- CONSULTA DE CEP -->
 
-    <section class="secao_cep_dashboard strain-cep"
-            id="strain-cep"
-            data-api="api/cep_usuario.php"
-            data-csrf="<?= htmlspecialchars($_SESSION['csrf_cep'], ENT_QUOTES, 'UTF-8') ?>">
+    <!-- CONSULTA DE CEP - STRAIN -->
 
-        <h2>📍 Consulta de CEP</h2>
-        <p>Digite um CEP para localizar e salvar seu endereço.</p>
+    <div class="consulta_cep">
 
-        <form id="strain-cep-form">
+        <h3>Consultar Endereço</h3>
 
-            <label for="strain-cep-input">CEP:</label>
+        <div class="conjunto">
+            <label for="cep">CEP:</label>
 
-            <div class="busca_cep strain-cep-busca">
-
+            <div class="linha_cep">
                 <input
                     type="text"
-                    id="strain-cep-input"
+                    id="cep"
+                    name="cep"
                     placeholder="00000-000"
                     maxlength="9"
                     inputmode="numeric"
                     required
                 >
 
-                <button type="submit" id="strain-cep-consultar">
+                <button type="button" id="consultar_cep">
                     Consultar
                 </button>
-
             </div>
+        </div>
 
-            <p id="strain-cep-mensagem"
-            role="status"
-            aria-live="polite"></p>
+        <div class="conjunto">
+            <label for="logradouro">Logradouro:</label>
+            <input type="text" id="logradouro" readonly>
+        </div>
 
-            <div class="campos_endereco strain-cep-campos">
+        <div class="conjunto">
+            <label for="bairro">Bairro:</label>
+            <input type="text" id="bairro" readonly>
+        </div>
 
-                <div>
-                    <label for="strain-cep-logradouro">
-                        Logradouro:
-                    </label>
+        <div class="conjunto">
+            <label for="cidade">Cidade:</label>
+            <input type="text" id="cidade" readonly>
+        </div>
 
-                    <input
-                        type="text"
-                        id="strain-cep-logradouro"
-                        readonly
-                    >
-                </div>
+        <div class="conjunto">
+            <label for="uf">Estado (UF):</label>
+            <input type="text" id="uf" readonly>
+        </div>
 
-                <div>
-                    <label for="strain-cep-bairro">
-                        Bairro:
-                    </label>
+        <p id="mensagem_cep" role="status" aria-live="polite"></p>
 
-                    <input
-                        type="text"
-                        id="strain-cep-bairro"
-                        readonly
-                    >
-                </div>
+    </div>
+    <!-- FIM CONSULTA DE CEP -->
 
-                <div>
-                    <label for="strain-cep-cidade">
-                        Cidade:
-                    </label>
-
-                    <input
-                        type="text"
-                        id="strain-cep-cidade"
-                        readonly
-                    >
-                </div>
-
-                <div>
-                    <label for="strain-cep-uf">
-                        Estado (UF):
-                    </label>
-
-                    <input
-                        type="text"
-                        id="strain-cep-uf"
-                        maxlength="2"
-                        readonly
-                    >
-            </div>
-
-                </div>
-
-            <!-- SALVAR ENDEREÇO NO BANCO -->
-            <button type="button"
-                    id="strain-cep-salvar"
-                    disabled>
-                Salvar endereço
-            </button>
-
-        </form>
-
-    </section>
-
-<!-- FIM CONSULTA DE CEP -->
 </div>
 
 

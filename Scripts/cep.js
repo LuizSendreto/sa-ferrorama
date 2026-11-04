@@ -1,73 +1,267 @@
 
 /* API ViaCEP - Projeto Strain
-   Consulta, salva e recupera o CEP do usuário
+   Um único arquivo para cadastro de usuários, cadastro de funcionários e Dashboard.
+   Consulta real ao ViaCEP; o salvamento no Dashboard é opcional e usa o PHP existente.
 */
 
-const secaoCep = document.getElementById("strain-cep");
+document.addEventListener("DOMContentLoaded", () => {
+    const porId = (id) => document.getElementById(id);
+    const somenteNumeros = (valor) => String(valor || "").replace(/\D/g, "");
+    const formatarCep = (valor) => {
+        const digitos = somenteNumeros(valor).slice(0, 8);
+        return digitos.length > 5
+            ? digitos.slice(0, 5) + "-" + digitos.slice(5)
+            : digitos;
+    };
 
-if (secaoCep) {
+    function iniciarConsulta({ input, campos, mensagem, botaoConsultar, formulario, botaoSalvar }) {
+        if (!input || !mensagem || Object.values(campos).some((campo) => !campo)) {
+            return null;
+        }
 
-    const formCep = document.getElementById("strain-cep-form");
-    const campoCep = document.getElementById("strain-cep-input");
-    const mensagemCep = document.getElementById("strain-cep-mensagem");
+        let temporizador = null;
+        let controlador = null;
+        let consultaAtual = 0;
+        let cepValidado = "";
 
-    const botaoCep = document.getElementById("strain-cep-consultar");
-    const botaoSalvar = document.getElementById("strain-cep-salvar");
+        function avisar(texto, tipo = "") {
+            mensagem.textContent = texto;
+            mensagem.dataset.tipo = tipo;
+        }
 
-    const apiCep = secaoCep.dataset.api;
-    const tokenCep = secaoCep.dataset.csrf;
+        function limpar() {
+            Object.values(campos).forEach((campo) => { campo.value = ""; });
+            cepValidado = "";
+            if (botaoSalvar) botaoSalvar.disabled = true;
+        }
 
-    let cepValidado = "";
+        function preencher(dados) {
+            input.value = formatarCep(dados.cep || input.value);
+            campos.logradouro.value = dados.logradouro || "";
+            campos.bairro.value = dados.bairro || "";
+            campos.cidade.value = dados.localidade || dados.cidade || "";
+            campos.uf.value = dados.uf || "";
+        }
 
-    // Exibir mensagens
-    function mostrarMensagem(texto, tipo = "") {
-        mensagemCep.textContent = texto;
-        mensagemCep.dataset.tipo = tipo;
+        function cancelarConsulta() {
+            clearTimeout(temporizador);
+            consultaAtual++;
+
+            if (controlador) {
+                controlador.abort();
+                controlador = null;
+            }
+
+            if (botaoConsultar) botaoConsultar.disabled = false;
+        }
+
+        // CONSULTAR O CEP NA API REAL
+        async function consultar() {
+            cancelarConsulta();
+            limpar();
+
+            const cep = somenteNumeros(input.value);
+
+            if (!/^\d{8}$/.test(cep)) {
+                avisar("CEP inválido. Digite exatamente 8 números.", "erro");
+                return;
+            }
+
+            const id = consultaAtual;
+            const requisicao = new AbortController();
+
+            controlador = requisicao;
+
+            if (botaoConsultar) botaoConsultar.disabled = true;
+
+            avisar("Consultando CEP...");
+
+            const limite = setTimeout(() => requisicao.abort(), 10000);
+
+            try {
+                const resposta = await fetch(
+                    `https://viacep.com.br/ws/${cep}/json/`,
+                    { signal: requisicao.signal }
+                );
+
+                if (!resposta.ok) {
+                    throw new Error("Erro de comunicação com o ViaCEP.");
+                }
+
+                const dados = await resposta.json();
+
+                // Não preencher com o resultado de uma consulta antiga
+                if (
+                    id !== consultaAtual ||
+                    somenteNumeros(input.value) !== cep
+                ) {
+                    return;
+                }
+
+                // CEP inexistente
+                if (dados.erro) {
+                    avisar("CEP não encontrado.", "erro");
+                    return;
+                }
+
+                if (!dados.localidade || !dados.uf) {
+                    avisar("A API retornou um endereço incompleto.", "erro");
+                    return;
+                }
+
+                // Preencher os campos automaticamente
+                preencher(dados);
+                cepValidado = cep;
+
+                if (botaoSalvar && !botaoSalvar.hidden) {
+                    botaoSalvar.disabled = false;
+                }
+
+                avisar("Endereço encontrado com sucesso!", "sucesso");
+
+            } catch (erro) {
+                if (id !== consultaAtual) return;
+
+                avisar(
+                    erro.name === "AbortError"
+                        ? "Tempo de consulta esgotado. Tente novamente."
+                        : "Não foi possível consultar o ViaCEP. Verifique sua internet.",
+                    "erro"
+                );
+
+                console.error("ViaCEP:", erro);
+
+            } finally {
+                clearTimeout(limite);
+
+                if (id === consultaAtual) {
+                    controlador = null;
+
+                    if (botaoConsultar) {
+                        botaoConsultar.disabled = false;
+                    }
+                }
+            }
+        }
+
+        // CONSULTAR AUTOMATICAMENTE AO DIGITAR OU COLAR
+        input.addEventListener("input", () => {
+            cancelarConsulta();
+
+            input.value = formatarCep(input.value);
+
+            limpar();
+            avisar("");
+
+            if (somenteNumeros(input.value).length === 8) {
+                temporizador = setTimeout(consultar, 450);
+            }
+        });
+
+        // FORMULÁRIO DE CONSULTA DO DASHBOARD
+        if (formulario) {
+            formulario.addEventListener("submit", (evento) => {
+                evento.preventDefault();
+                consultar();
+            });
+        }
+
+        // BOTÃO CONSULTAR DOS CADASTROS
+        if (
+            botaoConsultar &&
+            (!formulario || botaoConsultar.type !== "submit")
+        ) {
+            botaoConsultar.addEventListener("click", (evento) => {
+                evento.preventDefault();
+                consultar();
+            });
+        }
+
+        // Consultar CEP recuperado após erro de cadastro
+        if (somenteNumeros(input.value).length === 8) {
+            consultar();
+        }
+
+        return {
+            consultar,
+            preencher,
+            avisar,
+            obterCepValidado: () => cepValidado
+        };
     }
 
-    // Limpar campos do endereço
-    function limparEndereco() {
+    // =====================================
+    // CADASTRO DE CLIENTES E FUNCIONÁRIOS
+    // =====================================
 
-        document.getElementById("strain-cep-logradouro").value = "";
-        document.getElementById("strain-cep-bairro").value = "";
-        document.getElementById("strain-cep-cidade").value = "";
-        document.getElementById("strain-cep-uf").value = "";
+    iniciarConsulta({
+        input: porId("cep"),
 
-        cepValidado = "";
-        botaoSalvar.disabled = true;
+        campos: {
+            logradouro: porId("logradouro"),
+            bairro: porId("bairro"),
+            cidade: porId("cidade"),
+            uf: porId("uf")
+        },
+
+        mensagem:
+            porId("mensagem_cep_cadastro") ||
+            porId("mensagem_cep"),
+
+        botaoConsultar:
+            porId("consultar_cep") ||
+            porId("btn_consultar_cep"),
+
+        formulario: null,
+        botaoSalvar: null
+    });
+
+    // =====================================
+    // DASHBOARD DO STRAIN
+    // =====================================
+
+    const secao = porId("strain-cep");
+
+    // Se não estiver no Dashboard, não executar esta parte
+    if (!secao) return;
+
+    const botaoSalvar = porId("strain-cep-salvar");
+    const apiPhp = secao.dataset.api;
+    const token = secao.dataset.csrf;
+
+    const cepRecebido = new URLSearchParams(
+        window.location.search
+    ).get("consultar_cep");
+
+    // Consultar CEP da tabela sem alterar endereço da conta
+    if (botaoSalvar && cepRecebido !== null) {
+        botaoSalvar.hidden = true;
     }
 
-    // Preencher endereço automaticamente
-    function preencherEndereco(dados) {
+    const consultaDashboard = iniciarConsulta({
+        input: porId("strain-cep-input"),
 
-        campoCep.value = dados.cep.replace(
-            /^(\d{5})(\d{3})$/, "$1-$2"
-        );
+        campos: {
+            logradouro: porId("strain-cep-logradouro"),
+            bairro: porId("strain-cep-bairro"),
+            cidade: porId("strain-cep-cidade"),
+            uf: porId("strain-cep-uf")
+        },
 
-        document.getElementById("strain-cep-logradouro").value =
-            dados.logradouro || "";
+        mensagem: porId("strain-cep-mensagem"),
+        botaoConsultar: porId("strain-cep-consultar"),
+        formulario: porId("strain-cep-form"),
+        botaoSalvar
+    });
 
-        document.getElementById("strain-cep-bairro").value =
-            dados.bairro || "";
+    if (!consultaDashboard) return;
 
-        document.getElementById("strain-cep-cidade").value =
-            dados.cidade || "";
-
-        document.getElementById("strain-cep-uf").value =
-            dados.uf || "";
-    }
-
-    // Comunicação com o PHP
-    async function requisitar(url, opcoes = {}) {
-
+    // Comunicação com o PHP, usada somente para salvar ou recuperar
+    async function requisitarPhp(url, opcoes = {}) {
         const controlador = new AbortController();
-
-        const limite = setTimeout(() => {
-            controlador.abort();
-        }, 15000);
+        const limite = setTimeout(() => controlador.abort(), 10000);
 
         try {
-
             const resposta = await fetch(url, {
                 ...opcoes,
                 credentials: "same-origin",
@@ -78,21 +272,22 @@ if (secaoCep) {
 
             if (!resposta.ok || !dados.ok) {
                 throw new Error(
-                    dados.mensagem || "Erro ao consultar o CEP."
+                    dados.mensagem || "Erro ao acessar o servidor."
                 );
             }
 
             return dados;
 
         } catch (erro) {
-
             if (erro.name === "AbortError") {
-                throw new Error("A consulta demorou muito.");
+                throw new Error("Servidor demorou a responder.");
             }
 
-            if (erro instanceof TypeError ||
-                erro instanceof SyntaxError) {
-                throw new Error("Falha na comunicação com o servidor.");
+            if (
+                erro instanceof SyntaxError ||
+                erro instanceof TypeError
+            ) {
+                throw new Error("Falha de comunicação com o PHP.");
             }
 
             throw erro;
@@ -102,143 +297,98 @@ if (secaoCep) {
         }
     }
 
-    // Formatar CEP ao digitar
-    campoCep.addEventListener("input", function() {
+    // SALVAR ENDEREÇO NO DASHBOARD (OPCIONAL)
+    if (botaoSalvar) {
+        botaoSalvar.addEventListener("click", async () => {
+            const cep = consultaDashboard.obterCepValidado();
 
-        let cep = campoCep.value.replace(/\D/g, "").slice(0, 8);
-
-        if (cep.length > 5) {
-            cep = cep.slice(0, 5) + "-" + cep.slice(5);
-        }
-
-        campoCep.value = cep;
-
-        limparEndereco();
-        mostrarMensagem("");
-    });
-
-    // CONSULTAR CEP
-    formCep.addEventListener("submit", async function(evento) {
-
-        evento.preventDefault();
-
-        const cep = campoCep.value.replace(/\D/g, "");
-
-        limparEndereco();
-
-        // Validar formato
-        if (!/^\d{8}$/.test(cep)) {
-            mostrarMensagem(
-                "CEP inválido! Digite 8 números.",
-                "erro"
-            );
-            return;
-        }
-
-        botaoCep.disabled = true;
-        mostrarMensagem("Consultando CEP...");
-
-        try {
-
-            // PHP consulta a API ViaCEP
-            const dados = await requisitar(
-                `${apiCep}?acao=consultar&cep=${cep}`
-            );
-
-            // Evita preencher após o usuário alterar o CEP
-            if (campoCep.value.replace(/\D/g, "") !== cep) {
+            if (!cep || !apiPhp || !token || botaoSalvar.hidden) {
+                consultaDashboard.avisar(
+                    "Não foi possível salvar: consulta ou configuração inválida.",
+                    "erro"
+                );
                 return;
             }
 
-            preencherEndereco(dados.endereco);
+            botaoSalvar.disabled = true;
+            consultaDashboard.avisar("Salvando endereço...");
 
-            cepValidado = cep;
-            botaoSalvar.disabled = false;
+            try {
+                const formulario = new URLSearchParams({ cep });
 
-            mostrarMensagem(
-                "Endereço encontrado! Clique em Salvar endereço.",
-                "sucesso"
-            );
+                const dados = await requisitarPhp(apiPhp, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                        "X-CSRF-Token": token
+                    },
+                    body: formulario
+                });
 
-        } catch (erro) {
+                if (
+                    porId("strain-cep-input").value.replace(/\D/g, "") !== cep
+                ) {
+                    return;
+                }
 
-            mostrarMensagem(erro.message, "erro");
-            console.error(erro);
+                if (dados.endereco) {
+                    consultaDashboard.preencher(dados.endereco);
+                }
 
-        } finally {
-
-            botaoCep.disabled = false;
-        }
-    });
-
-    // SALVAR NO BANCO DE DADOS
-    botaoSalvar.addEventListener("click", async function() {
-
-        if (!cepValidado ||
-            campoCep.value.replace(/\D/g, "") !== cepValidado) {
-            return;
-        }
-
-        botaoSalvar.disabled = true;
-
-        mostrarMensagem("Salvando endereço...");
-
-        try {
-
-            const formulario = new URLSearchParams();
-
-            formulario.append("cep", cepValidado);
-
-            const dados = await requisitar(apiCep, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded",
-                    "X-CSRF-Token": tokenCep
-                },
-                body: formulario
-            });
-
-            preencherEndereco(dados.endereco);
-
-            mostrarMensagem(
-                "Endereço salvo com sucesso!",
-                "sucesso"
-            );
-
-        } catch (erro) {
-
-            mostrarMensagem(erro.message, "erro");
-            botaoSalvar.disabled = false;
-            console.error(erro);
-        }
-    });
-
-    // RECUPERAR ENDEREÇO SALVO DO USUÁRIO
-    async function carregarEndereco() {
-
-        try {
-
-            const dados = await requisitar(
-                `${apiCep}?acao=salvo`
-            );
-
-            if (dados.endereco && !campoCep.value) {
-
-                preencherEndereco(dados.endereco);
-
-                mostrarMensagem(
-                    "Endereço cadastrado na sua conta.",
+                consultaDashboard.avisar(
+                    "Endereço salvo com sucesso!",
                     "sucesso"
                 );
+
+            } catch (erro) {
+                consultaDashboard.avisar(erro.message, "erro");
+                console.error("Salvamento do CEP:", erro);
+
+            } finally {
+                botaoSalvar.disabled =
+                    !consultaDashboard.obterCepValidado() ||
+                    botaoSalvar.hidden;
             }
-
-        } catch (erro) {
-
-            mostrarMensagem(erro.message, "erro");
-            console.error(erro);
-        }
+        });
     }
 
-    // Executa quando a página abre
-    carregarEndereco();
-}
+    // CONSULTAR CEP RECEBIDO DA TABELA DE USUÁRIOS
+    if (cepRecebido !== null) {
+        const campo = porId("strain-cep-input");
+
+        campo.value = formatarCep(cepRecebido);
+
+        if (/^\d{8}$/.test(somenteNumeros(cepRecebido))) {
+            consultaDashboard.consultar();
+        } else {
+            consultaDashboard.avisar(
+                "CEP recebido da tabela é inválido.",
+                "erro"
+            );
+        }
+
+    } else if (apiPhp) {
+
+        // Recuperação opcional do endereço salvo
+        requisitarPhp(`${apiPhp}?acao=salvo`)
+            .then((dados) => {
+                if (
+                    dados.endereco &&
+                    !porId("strain-cep-input").value
+                ) {
+                    consultaDashboard.preencher(dados.endereco);
+
+                    consultaDashboard.avisar(
+                        "Endereço cadastrado na sua conta.",
+                        "sucesso"
+                    );
+                }
+            })
+            .catch((erro) => {
+                console.warn(
+                    "Não foi possível recuperar endereço salvo:",
+                    erro.message
+                );
+            });
+    }
+});
