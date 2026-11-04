@@ -145,8 +145,11 @@ $trens = mysqli_query(
     <header id="header_trens">
         <nav class="navbar">
 
-            <div class="logo-navbar">
-                <img src="../../assets/img/logo_navbar2.png" alt="Logo Strain">
+              <div>
+                <button class="btn" type="button"
+                        onclick="location.href='rotas.php'">
+                    Voltar
+                </button>
             </div>
 
             <div class="logo-navbar">
