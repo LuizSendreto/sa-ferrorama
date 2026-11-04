@@ -263,283 +263,87 @@ if ($enviado !== null) {
 
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Usuário ● Strain</title>
-
-    <link rel="stylesheet"
-          href="../../assets/style/style.css">
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
-          rel="stylesheet">
+    <link rel="stylesheet" href="../../assets/style/style.css?v=editarusuarioscep2">
 </head>
-
 <body class="body_dashboard">
-
-    <!-- NAVBAR -->
     <header id="header_usuarios">
-
         <nav class="navbar">
-
             <div class="marca-strain">
                 <i data-lucide="train-front"></i>
                 <span>STRAIN</span>
             </div>
-
-            <button
-                type="button"
-                class="btn"
-                onclick="location.href='visu_usuarios.php'"
-            >
-                Voltar
-            </button>
-
+            <button type="button" class="btn" onclick="location.href='visu_usuarios.php'">Voltar</button>
         </nav>
-
     </header>
 
-    <!-- ÁREA PRINCIPAL -->
     <main class="area_formulario">
-
         <section class="painel_formulario">
-
-            <!-- TÍTULO -->
-            <h1 class="titulo_formulario">
-                Editar Usuário
-            </h1>
-
+            <h1 class="titulo_formulario">Editar Usuário</h1>
             <p class="subtitulo_formulario">
-                Editando o usuário:
-                <?= htmlspecialchars(
-                    $titulo_nome,
-                    ENT_QUOTES,
-                    'UTF-8'
-                ) ?>
+                Editando o usuário: <?= htmlspecialchars($titulo_nome, ENT_QUOTES, 'UTF-8') ?>
             </p>
 
-            <!-- MENSAGEM DE ERRO -->
-            <?php if ($erro !== "") { ?>
+            <?php if ($erro !== '') { ?>
+                <div class="mensagem_erro_formulario" role="alert">
+                    <?= htmlspecialchars($erro, ENT_QUOTES, 'UTF-8') ?>
+                </div>
+            <?php } ?>
 
-            <input type="hidden"
-                   name="id"
-                   value="<?php echo (int) $id; ?>">
+            <form action="editar_usuarios.php" method="POST" class="formulario_strain">
+                <input type="hidden" name="id" value="<?= (int) $id ?>">
+                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>">
 
-            <input type="hidden"
-                   name="csrf_token"
-                   value="<?php echo htmlspecialchars(
-                       $_SESSION['csrf_token'],
-                       ENT_QUOTES,
-                       'UTF-8'
-                   ); ?>">
-
-            <label for="nome">Nome:</label>
-
-            <input type="text"
-                   id="nome"
-                   name="nome"
-                   maxlength="100"
-                   value="<?php echo htmlspecialchars(
-                       $usuario["nome"],
-                       ENT_QUOTES,
-                       'UTF-8'
-                   ); ?>"
-                   required>
-            <br>
-
-            <label for="email">Email:</label>
-
-            <input type="email"
-                   id="email"
-                   name="email"
-                   maxlength="100"
-                   value="<?php echo htmlspecialchars(
-                       $usuario["email"],
-                       ENT_QUOTES,
-                       'UTF-8'
-                   ); ?>"
-                   required>
-            <br>
-
-            <label for="telefone">Telefone:</label>
-
-            <input type="text"
-                   id="telefone"
-                   name="telefone"
-                   maxlength="20"
-                   value="<?php echo htmlspecialchars(
-                       $usuario["telefone"],
-                       ENT_QUOTES,
-                       'UTF-8'
-                   ); ?>"
-                   required>
-            <br>
-
-            <!-- NOVO: EDITAR SOMENTE O NÚMERO DO CEP -->
-            <label for="cep">CEP:</label>
-
-            <input type="text"
-                   id="cep"
-                   name="cep"
-                   placeholder="00000-000"
-                   maxlength="9"
-                   inputmode="numeric"
-                   value="<?php echo htmlspecialchars(
-                       (string) ($usuario['cep'] ?? ''),
-                       ENT_QUOTES,
-                       'UTF-8'
-                   ); ?>">
-            <br>
-
-            <label for="tipo">Tipo de usuário:</label>
-
-            <select name="tipo" id="tipo" required>
-
-                <option value="cliente"
-                    <?php if ($usuario["tipo"] == "cliente")
-                        echo "selected"; ?>>
-                    Cliente
-                </option>
-
-                <option value="funcionario"
-                    <?php if ($usuario["tipo"] == "funcionario")
-                        echo "selected"; ?>>
-                    Funcionário
-                </option>
-
+                <div class="campo_formulario">
+                    <label for="nome">Nome</label>
+                    <input type="text" id="nome" name="nome" maxlength="100"
+                           value="<?= htmlspecialchars($usuario['nome'], ENT_QUOTES, 'UTF-8') ?>" required>
                 </div>
 
-                <!-- E-MAIL -->
                 <div class="campo_formulario">
-
-                    <label for="email">
-                        E-mail
-                    </label>
-
-                    <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        maxlength="100"
-                        placeholder="Digite o e-mail do usuário"
-                        value="<?= htmlspecialchars(
-                            $usuario['email'],
-                            ENT_QUOTES,
-                            'UTF-8'
-                        ) ?>"
-                        required
-                    >
-
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" name="email" maxlength="100"
+                           value="<?= htmlspecialchars($usuario['email'], ENT_QUOTES, 'UTF-8') ?>" required>
                 </div>
 
-                <!-- TELEFONE -->
                 <div class="campo_formulario">
-
-                    <label for="telefone">
-                        Telefone
-                    </label>
-
-                    <input
-                        type="text"
-                        id="telefone"
-                        name="telefone"
-                        maxlength="20"
-                        placeholder="Digite o telefone"
-                        value="<?= htmlspecialchars(
-                            $usuario['telefone'],
-                            ENT_QUOTES,
-                            'UTF-8'
-                        ) ?>"
-                        required
-                    >
-
+                    <label for="telefone">Telefone</label>
+                    <input type="text" id="telefone" name="telefone" maxlength="20"
+                           value="<?= htmlspecialchars($usuario['telefone'], ENT_QUOTES, 'UTF-8') ?>" required>
                 </div>
 
-                <!-- TIPO DE USUÁRIO -->
                 <div class="campo_formulario">
+                    <label for="cep">CEP (opcional)</label>
+                    <input type="text" id="cep" name="cep" maxlength="9" inputmode="numeric"
+                           pattern="[0-9]{5}-?[0-9]{3}" placeholder="00000-000"
+                           value="<?= htmlspecialchars((string) ($usuario['cep'] ?? ''), ENT_QUOTES, 'UTF-8') ?>">
+                </div>
 
-                    <label for="tipo">
-                        Tipo de usuário
-                    </label>
-
-                    <select
-                        name="tipo"
-                        id="tipo"
-                        required
-                    >
-
-                        <option
-                            value="cliente"
-                            <?= $usuario['tipo'] === 'cliente' ? 'selected' : '' ?>
-                        >
-                            Cliente
-                        </option>
-
-                        <option
-                            value="funcionario"
-                            <?= $usuario['tipo'] === 'funcionario' ? 'selected' : '' ?>
-                        >
-                            Funcionário
-                        </option>
-
+                <div class="campo_formulario">
+                    <label for="tipo">Tipo de usuário</label>
+                    <select name="tipo" id="tipo" required>
+                        <option value="cliente" <?= $usuario['tipo'] === 'cliente' ? 'selected' : '' ?>>Cliente</option>
+                        <option value="funcionario" <?= $usuario['tipo'] === 'funcionario' ? 'selected' : '' ?>>Funcionário</option>
                     </select>
-
                 </div>
 
-                <!-- NÍVEL DE ACESSO -->
                 <div class="campo_formulario">
-
-                    <label for="nivel_acesso">
-                        Nível de acesso
-                    </label>
-
-                    <select
-                        name="nivel_acesso"
-                        id="nivel_acesso"
-                        required
-                    >
-
-                        <option
-                            value="comum"
-                            <?= $usuario['nivel_acesso'] === 'comum' ? 'selected' : '' ?>
-                        >
-                            Comum
-                        </option>
-
-                        <option
-                            value="admin"
-                            <?= $usuario['nivel_acesso'] === 'admin' ? 'selected' : '' ?>
-                        >
-                            Administrador
-                        </option>
-
+                    <label for="nivel_acesso">Nível de acesso</label>
+                    <select name="nivel_acesso" id="nivel_acesso" required>
+                        <option value="comum" <?= $usuario['nivel_acesso'] === 'comum' ? 'selected' : '' ?>>Comum</option>
+                        <option value="admin" <?= $usuario['nivel_acesso'] === 'admin' ? 'selected' : '' ?>>Administrador</option>
                     </select>
-
                 </div>
 
-                <!-- BOTÃO ATUALIZAR -->
-                <button
-                    type="submit"
-                    class="botao_formulario"
-                >
-                    Atualizar Usuário
-                </button>
-
+                <button type="submit" class="botao_formulario">Atualizar Usuário</button>
             </form>
-
         </section>
-
     </main>
 
-    <!-- ÍCONES LUCIDE -->
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
-
-    <script>
-        lucide.createIcons();
-    </script>
-
+    <script>lucide.createIcons();</script>
 </body>
 </html>
