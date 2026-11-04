@@ -914,6 +914,22 @@ a{
     padding: 20px;
 }
 
+.table_alertas{
+     background-color: #850000;
+    color: #ffffff;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    margin-top: 300px;
+    margin-left: 700px;
+    width: 500px;
+   
+}
+
+
 .table_t {
     display: table;
     width: 100%;
