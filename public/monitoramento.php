@@ -1,6 +1,10 @@
 <?php
 require_once '../infra/verificar_acesso.php';
 verificarFuncionario();
+
+$admin = ($_SESSION['nivel_acesso'] ?? '') === 'admin';
+$nome = $_SESSION['usuario_nome'] ?? 'Funcionário';
+
 ?>
   
 <html lang="pt-BR">
@@ -8,7 +12,7 @@ verificarFuncionario();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Monitoramento</title>
+    <title>Monitoramento ● Strain</title>
 
     <link rel="stylesheet" href="../assets/style/style.css">
 </head>
@@ -44,8 +48,8 @@ verificarFuncionario();
                 <li><a href="monitoramento.php" class="active_sidebar">Monitoramento</a></li>
                 <li><a href="alertas.php">Alertas</a></li>
                 <li><a href="relatorios.php">Relatórios</a></li>
-                <li><a href="usuarios/visu_usuarios.php">Visualização de Usuarios</a></li>
-                <li><a href="sensores/visu_sensores.php">Visualização de Sensores</a></li>
+                <li><a href="usuarios/visu_usuarios.php">Usuarios</a></li>
+                <li><a href="sensores/visu_sensores.php">Sensores</a></li>
                 <li><a href="usuarios/logout.php">Logout</a></li>
             </ul>
 

@@ -10,7 +10,8 @@ if (empty($_SESSION['csrf_token'])) {
 include "../../infra/conexao.php";
 
 // Verificar se o usuário é administrador
-$admin = ($_SESSION['nivel_acesso'] ?? '') == 'admin';
+$admin = ($_SESSION['nivel_acesso'] ?? '') === 'admin';
+$nome = $_SESSION['usuario_nome'] ?? 'Funcionário';
 
 // Buscar os trens e os funcionários responsáveis
 $sql = "SELECT
@@ -42,7 +43,7 @@ $lista_trens = mysqli_fetch_all($resultado, MYSQLI_ASSOC);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trens</title>
+    <title>Trens ● Strain</title>
 
     <link rel="stylesheet" href="../../assets/style/style.css">
 </head>
@@ -51,16 +52,17 @@ $lista_trens = mysqli_fetch_all($resultado, MYSQLI_ASSOC);
 
     <header id="header_trens">
         <nav class="navbar">
+        <div class="marca-strain">
+            <i data-lucide="train-front"></i>
+            <span>STRAIN</span>
+        </div>
 
-            <div class="logo-navbar">
-                <img src="../../assets/img/logo_navbar2.png" alt="Logo Strain">
-            </div>
-
-            <div class="logo-navbar">
-                <img src="../../assets/img/icone_da_navbar.png" alt="logo usuario logado">
-            </div>
-
-        </nav>
+        <div class="saudacao-navbar">
+            <p>
+                Olá, <?php echo htmlspecialchars($nome, ENT_QUOTES, 'UTF-8'); ?>!
+            </p>
+        </div>
+    </nav>
     </header>
 
     <main id="main_trens">
@@ -76,8 +78,8 @@ $lista_trens = mysqli_fetch_all($resultado, MYSQLI_ASSOC);
                 <li><a href="../monitoramento.php">Monitoramento</a></li>
                 <li><a href="../alertas.php">Alertas</a></li>
                 <li><a href="../relatorios.php">Relatórios</a></li>
-                <li><a href="../usuarios/visu_usuarios.php">Visualização de Usuarios</a></li>
-                <li><a href="../sensores/visu_sensores.php">Visualização de Sensores</a></li>
+                <li><a href="../usuarios/visu_usuarios.php">Usuarios</a></li>
+                <li><a href="../sensores/visu_sensores.php">Sensores</a></li>
                 <li><a href="../usuarios/logout.php">Logout</a></li>
             </ul>
 

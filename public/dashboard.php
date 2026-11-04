@@ -13,7 +13,7 @@ $nome = $_SESSION['usuario_nome'] ?? 'Funcionário';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <title>Dashboard ● Strain</title>
     <link rel="stylesheet" href="../assets/style/style.css">
     <link rel="stylesheet" href="../assets/style/clima.css">
     <script src="../Scripts/clima.js"></script>
@@ -86,14 +86,14 @@ $nome = $_SESSION['usuario_nome'] ?? 'Funcionário';
             <?php if ($admin) { ?>
                 <li>
                     <a href="usuarios/visu_usuarios.php">
-                        Visualização de Usuários
+                        Usuários
                     </a>
                 </li>
             <?php } ?>
 
             <li>
                 <a href="sensores/visu_sensores.php">
-                    Visualização de Sensores
+                    Sensores
                 </a>
             </li>
 
