@@ -1450,3 +1450,180 @@ a{
         flex-direction: column;
     }
 }
+
+/* ==========================================
+   STRAIN - FORMULARIOS ADMINISTRATIVOS
+   Cadastro de trens, sensores e demais registros
+   ========================================== */
+
+
+/* ÁREA PRINCIPAL DO FORMULÁRIO */
+
+.area_formulario {
+    width: 100%;
+    min-height: calc(100vh - 70px);
+    margin: 70px 0 0;
+    padding: 40px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+/* PAINEL VERMELHO */
+
+.painel_formulario {
+    width: 100%;
+    max-width: 650px;
+    padding: 30px;
+    background-color: #850000;
+    border-radius: 20px;
+    box-sizing: border-box;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+
+.titulo_formulario {
+    margin: 0 0 25px;
+    color: #fff;
+    font: 700 28px Arial, Helvetica, sans-serif;
+    text-align: center;
+}
+
+.subtitulo_formulario {
+    margin: -10px 0 20px;
+    color: #fff;
+    font: 400 15px Arial, Helvetica, sans-serif;
+    text-align: center;
+}
+
+/* Especificidade maior que a regra global 'form'. */
+.painel_formulario .formulario_strain {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 16px;
+    width: 100%;
+    padding: 25px;
+    margin: 0;
+    background: #fff;
+    color: #333;
+    border-radius: 14px;
+    box-sizing: border-box;
+}
+
+.formulario_strain .campo_formulario {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 7px;
+    width: 100%;
+    min-width: 0;
+}
+
+.formulario_strain .campo_formulario label {
+    margin: 0;
+    color: #850000;
+    font: 700 14px Arial, Helvetica, sans-serif;
+}
+
+.formulario_strain .campo_formulario input,
+.formulario_strain .campo_formulario select,
+.formulario_strain .campo_formulario textarea {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    min-height: 44px;
+    padding: 11px 12px;
+    margin: 0;
+    border: 2px solid #850000;
+    border-radius: 8px;
+    box-sizing: border-box;
+    background: #fff;
+    color: #333;
+    font: 400 15px Arial, Helvetica, sans-serif;
+}
+
+.formulario_strain .campo_formulario textarea {
+    resize: vertical;
+}
+
+.formulario_strain .campo_formulario :is(input, select, textarea):focus {
+    outline: 2px solid #bd5e5e;
+    outline-offset: 1px;
+}
+
+.formulario_strain .acoes_formulario {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    width: 100%;
+}
+
+.formulario_strain .botao_formulario {
+    display: block;
+    width: 100%;
+    min-height: 44px;
+    padding: 12px 20px;
+    border: 0;
+    border-radius: 8px;
+    box-sizing: border-box;
+    background: #850000;
+    color: #fff;
+    font: 700 15px Arial, Helvetica, sans-serif;
+    cursor: pointer;
+    transition: background-color .2s ease;
+}
+
+.formulario_strain .botao_formulario:hover {
+    background: #650000;
+}
+
+.formulario_strain .botao_formulario:focus-visible {
+    outline: 3px solid #bd5e5e;
+    outline-offset: 2px;
+}
+
+/* Usado somente quando o PHP mantém um link Voltar no formulário.
+   O botão .btn da navbar permanece inalterado. */
+.formulario_strain .botao_voltar_formulario {
+    display: block;
+    width: 100%;
+    padding: 12px 20px;
+    border: 2px solid #850000;
+    border-radius: 8px;
+    box-sizing: border-box;
+    background: #fff;
+    color: #850000;
+    font: 700 15px Arial, Helvetica, sans-serif;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color .2s ease;
+}
+
+.formulario_strain .botao_voltar_formulario:hover {
+    background: #f1e6e6;
+    color: #850000;
+}
+
+.painel_formulario .mensagem_erro_formulario {
+    width: 100%;
+    margin: 0 0 20px;
+    padding: 14px 18px;
+    border: 1px solid #f5c2c7;
+    border-radius: 8px;
+    box-sizing: border-box;
+    background: #f8d7da;
+    color: #842029;
+    font: 700 14px Arial, Helvetica, sans-serif;
+    text-align: center;
+}
+
+@media (max-width: 700px) {
+    .area_formulario { padding: 20px 12px 35px; }
+    .painel_formulario { padding: 20px 15px; }
+    .titulo_formulario { font-size: 24px; }
+    .painel_formulario .formulario_strain { padding: 20px 15px; }
+}
