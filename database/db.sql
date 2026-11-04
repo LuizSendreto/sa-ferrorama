@@ -18,6 +18,28 @@ CREATE TABLE IF NOT EXISTS usuarios (
 );
 
 -- ==========================================
+-- TABELA ENDERECOS_USUARIOS
+-- ==========================================
+
+CREATE TABLE IF NOT EXISTS enderecos_usuarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT NOT NULL UNIQUE,
+    cep CHAR(8) NOT NULL,
+    logradouro VARCHAR(255) NOT NULL DEFAULT '',
+    bairro VARCHAR(120) NOT NULL DEFAULT '',
+    cidade VARCHAR(120) NOT NULL,
+    uf CHAR(2) NOT NULL,
+    atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        ON UPDATE CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_endereco_usuario
+        FOREIGN KEY (usuario_id)
+        REFERENCES usuarios(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ==========================================
 -- TABELA SENSORES
 -- ==========================================
 

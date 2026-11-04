@@ -1,7 +1,15 @@
 
-/* CONSULTA DE CEP - DASHBOARD */
+/* ==========================================
+   API ViaCEP - DASHBOARD STRAIN
+   ========================================== */
 
-.secao_cep_dashboard {
+/* SEÇÃO PRINCIPAL */
+
+.secao_cep_dashboard,
+.strain-cep {
+    display: flex;
+    flex-direction: column;
+
     width: calc(100% - 40px);
     max-width: 850px;
     margin: 30px auto;
@@ -11,95 +19,231 @@
     border-radius: 20px;
     box-sizing: border-box;
 
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    color: #262026;
+    font-family: Arial, sans-serif;
+
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-.secao_cep_dashboard h2 {
+.secao_cep_dashboard *,
+.strain-cep * {
+    box-sizing: border-box;
+}
+
+/* TÍTULO */
+
+.secao_cep_dashboard h2,
+.strain-cep h2 {
     color: #850000;
     font-size: 26px;
-    margin-bottom: 10px;
+    font-weight: bold;
+    margin: 0 0 10px;
 }
 
-.secao_cep_dashboard p {
+/* DESCRIÇÃO */
+
+.secao_cep_dashboard p,
+.strain-cep p {
     margin-bottom: 15px;
+    font-size: 15px;
 }
 
-.secao_cep_dashboard .busca_cep {
+/* FORMULÁRIO */
+
+.secao_cep_dashboard form,
+.strain-cep form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* PESQUISA DE CEP */
+
+.secao_cep_dashboard .busca_cep,
+.strain-cep .strain-cep-busca {
     display: flex;
     gap: 10px;
     margin-bottom: 15px;
+    width: 100%;
 }
 
-.secao_cep_dashboard input {
+/* CAMPOS DE TEXTO */
+
+.secao_cep_dashboard input,
+.strain-cep input {
     width: 100%;
     min-width: 0;
     padding: 12px;
 
     border: 2px solid #850000;
     border-radius: 10px;
-    box-sizing: border-box;
 
     font-size: 16px;
+    color: #262026;
     background-color: white;
+
+    box-sizing: border-box;
 }
 
-.secao_cep_dashboard .busca_cep input {
+.secao_cep_dashboard input:focus,
+.strain-cep input:focus {
+    outline: 2px solid #bd5e5e;
+    outline-offset: 1px;
+}
+
+/* CAMPOS PREENCHIDOS PELA API */
+
+.strain-cep input[readonly],
+.secao_cep_dashboard input[readonly] {
+    background-color: #f0eeee;
+    color: #333333;
+}
+
+/* INPUT DO CEP */
+
+.secao_cep_dashboard .busca_cep input,
+.strain-cep .strain-cep-busca input {
     flex: 1;
+    min-width: 0;
 }
 
-.secao_cep_dashboard button {
+/* BOTÕES */
+
+.secao_cep_dashboard button,
+.strain-cep button {
     padding: 12px 20px;
 
     background-color: #850000;
     color: white;
+
     border: none;
     border-radius: 10px;
 
     cursor: pointer;
     font-weight: bold;
+    font-size: 15px;
+
+    transition: background-color 0.3s;
 }
 
-.secao_cep_dashboard button:hover {
+.secao_cep_dashboard button:hover,
+.strain-cep button:hover {
     background-color: #650000;
 }
 
-.secao_cep_dashboard button:disabled {
+.secao_cep_dashboard button:disabled,
+.strain-cep button:disabled {
     opacity: 0.6;
-    cursor: wait;
+    cursor: not-allowed;
 }
 
-.secao_cep_dashboard .campos_endereco {
+/* CAMPOS DO ENDEREÇO */
+
+.secao_cep_dashboard .campos_endereco,
+.strain-cep .strain-cep-campos {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 15px;
+    width: 100%;
 }
 
-.secao_cep_dashboard label {
+.secao_cep_dashboard .campos_endereco div,
+.strain-cep .strain-cep-campos div {
+    min-width: 0;
+}
+
+/* LABELS */
+
+.secao_cep_dashboard label,
+.strain-cep label {
     display: block;
     color: #850000;
     font-weight: bold;
     margin-bottom: 8px;
 }
 
-#mensagem_cep {
-    min-height: 20px;
-    font-size: 14px;
+/* BOTÃO SALVAR ENDEREÇO */
+
+#strain-cep-salvar {
+    align-self: flex-start;
+    margin-top: 15px;
 }
 
-/* RESPONSIVIDADE */
+/* MENSAGENS */
+
+#mensagem_cep,
+#strain-cep-mensagem {
+    min-height: 20px;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+/* MENSAGEM DE ERRO */
+
+#strain-cep-mensagem[data-tipo="erro"] {
+    color: #a40000;
+}
+
+/* MENSAGEM DE SUCESSO */
+
+#strain-cep-mensagem[data-tipo="sucesso"] {
+    color: #16723a;
+}
+
+/* ==========================================
+   RESPONSIVIDADE - TABLETS
+   ========================================== */
+
+@media (max-width: 1024px) {
+
+    .secao_cep_dashboard,
+    .strain-cep {
+        width: calc(100% - 30px);
+        max-width: 100%;
+        padding: 25px;
+    }
+}
+
+/* ==========================================
+   RESPONSIVIDADE - CELULARES
+   ========================================== */
 
 @media (max-width: 600px) {
 
-    .secao_cep_dashboard {
+    .secao_cep_dashboard,
+    .strain-cep {
         width: calc(100% - 20px);
         padding: 20px 15px;
+        margin: 20px auto;
     }
 
-    .secao_cep_dashboard .busca_cep {
+    .secao_cep_dashboard h2,
+    .strain-cep h2 {
+        font-size: 24px;
+    }
+
+    /* Pesquisa em coluna */
+
+    .secao_cep_dashboard .busca_cep,
+    .strain-cep .strain-cep-busca {
         flex-direction: column;
     }
 
-    .secao_cep_dashboard .campos_endereco {
+    /* Campos em uma coluna */
+
+    .secao_cep_dashboard .campos_endereco,
+    .strain-cep .strain-cep-campos {
         grid-template-columns: 1fr;
+    }
+
+    /* Botões adaptativos */
+
+    .secao_cep_dashboard button,
+    .strain-cep button {
+        width: 100%;
+    }
+
+    #strain-cep-salvar {
+        width: 100%;
     }
 }
