@@ -1,18 +1,128 @@
-
 <?php
+
 require_once '../infra/verificar_acesso.php';
 verificarFuncionario();
+
+require_once '../infra/conexao.php';
 
 $admin = ($_SESSION['nivel_acesso'] ?? '') === 'admin';
 $nome = $_SESSION['usuario_nome'] ?? 'Funcionário';
 
-if (session_status() !== PHP_SESSION_ACTIVE) {
-    session_start();
-}
-
 if (empty($_SESSION['csrf_cep'])) {
     $_SESSION['csrf_cep'] = bin2hex(random_bytes(32));
 }
+
+// Consultar trens cadastrados
+$sqlTrens = "
+    SELECT
+        t.id,
+        t.nome_linha,
+        t.numero_serie,
+        t.velocidade,
+        t.estado,
+        u.nome AS funcionario_responsavel
+    FROM trens AS t
+    LEFT JOIN usuarios AS u
+        ON t.funcionario_id = u.id
+    ORDER BY t.id DESC
+";
+
+$trens = [];
+$erroTrens = "";
+
+try {
+    $resultadoTrens = mysqli_query($conn, $sqlTrens);
+
+    while ($registro = mysqli_fetch_assoc($resultadoTrens)) {
+        $trens[] = $registro;
+    }
+
+    mysqli_free_result($resultadoTrens);
+
+} catch (Throwable $e) {
+    error_log($e->getMessage());
+    $erroTrens = "Não foi possível carregar os trens.";
+}
+
+// Contadores do sistema
+$totalTrens = count($trens);
+$trensAtivos = 0;
+$trensInativos = 0;
+$trensManutencao = 0;
+
+foreach ($trens as $trem) {
+    switch ($trem['estado']) {
+        case 'Ativo':
+            $trensAtivos++;
+            break;
+
+        case 'Inativo':
+            $trensInativos++;
+            break;
+
+        case 'Manutencao':
+            $trensManutencao++;
+            break;
+    }
+}
+
+// Escapar textos para exibição segura
+function escaparDashboard($valor) {
+    return htmlspecialchars(
+        (string) ($valor ?? ''),
+        ENT_QUOTES,
+        'UTF-8'
+    );
+}
+
+// Definir aparência conforme a linha cadastrada
+function classeLinhaDashboard($linha) {
+    $linha = mb_strtolower((string) $linha, 'UTF-8');
+
+    if (str_contains($linha, 'azul')) {
+        return 'linha-azul';
+    }
+
+    if (str_contains($linha, 'verde')) {
+        return 'linha-verde';
+    }
+
+    if (str_contains($linha, 'amarela')) {
+        return 'linha-amarela';
+    }
+
+    if (str_contains($linha, 'vermelha')) {
+        return 'linha-vermelha';
+    }
+
+    return 'linha-padrao';
+}
+
+// Definir status visual
+function classeEstadoDashboard($estado) {
+    switch ($estado) {
+        case 'Ativo':
+            return 'estado-ativo';
+
+        case 'Inativo':
+            return 'estado-inativo';
+
+        case 'Manutencao':
+            return 'estado-manutencao';
+
+        default:
+            return 'estado-desconhecido';
+    }
+}
+
+function textoEstadoDashboard($estado) {
+    if ($estado === 'Manutencao') {
+        return 'Manutenção';
+    }
+
+    return $estado ?: 'Não informado';
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -20,19 +130,42 @@ if (empty($_SESSION['csrf_cep'])) {
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
     <title>Dashboard ● Strain</title>
-    <link rel="stylesheet" href="../assets/style/style.css">
-    <link rel="stylesheet" href="../assets/style/clima.css">
-    <script src="../Scripts/clima.js"></script>
-    <link rel="stylesheet" href="../assets/style/cep.css">
-    <script src="../Scripts/cep.js"></script>
-    
+
+    <!-- CSS ORIGINAL -->
+    <link
+        rel="stylesheet"
+        href="../assets/style/style.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../assets/style/clima.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="../assets/style/cep.css"
+    >
+    <!-- Estilos do Dashboard integrados ao style.css -->
+
+    <!-- JAVASCRIPT DAS APIS -->
+    <script src="../Scripts/clima.js" defer></script>
+    <script src="../Scripts/cep.js" defer></script>
+
 </head>
 
 <body class="body_dashboard">
 
+    <!-- NAVBAR -->
     <header id="header_dashboard">
+
         <nav class="navbar">
 
             <div class="marca-strain">
@@ -42,22 +175,28 @@ if (empty($_SESSION['csrf_cep'])) {
 
             <div class="saudacao-navbar">
                 <p>
-                    Olá, <?php echo htmlspecialchars($nome, ENT_QUOTES, 'UTF-8'); ?>!
+                    Olá, <?= escaparDashboard($nome) ?>!
                 </p>
             </div>
 
         </nav>
+
     </header>
 
-    <!-- SIDEBAR PADRONIZADA -->
+    <!-- SIDEBAR -->
     <aside id="sidebar_dashboard">
 
-        <h2 id="titulo_sidebar">Dashboard</h2>
+        <h2 id="titulo_sidebar">
+            Dashboard
+        </h2>
 
         <ul class="menu_sidebar">
 
             <li>
-                <a href="dashboard.php" class="active_sidebar">
+                <a
+                    href="dashboard.php"
+                    class="active_sidebar"
+                >
                     Dashboard
                 </a>
             </li>
@@ -115,105 +254,282 @@ if (empty($_SESSION['csrf_cep'])) {
         </ul>
 
     </aside>
- 
-    <!-- CONTEÚDO DO DASHBOARD -->
-    <main id="main_dashboard">
 
-        <div class="fotos_dashboard">
-            <img
-                id="fotos_dashboard"
-                src="../assets/img/dashboard_certo.png"
-                alt="Dashboard Strain"
-            >
-        </div>
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main id="main_dashboard" class="main_dashboard_dinamico">
 
-        <!-- API DE CLIMA  NA TELA INDEX  -->
-<div class="apis_dashboard">
-        <section class="secao_clima">
+        <!-- PAINEL VERMELHO COM CARDS DOS TRENS -->
+        <section class="secao_trens_dashboard">
 
-            <h2>Clima em Joinville</h2>
+            <div class="cabecalho_dashboard">
+                <div>
+                    <h1>Painel de Monitoramento</h1>
+                    <p>Trens Cadastrados</p>
+                </div>
 
-            <div class="card_clima">
+                <a
+                    href="Trens/visualizar_trens.php"
+                    class="link_trens_dashboard"
+                >
+                    Visualizar Trens
+                </a>
+            </div>
 
-                <h3 id="local_clima">📍 Joinville - SC</h3>
+            <?php if ($erroTrens !== "") { ?>
 
-                <p id="temperatura_clima">Carregando...</p>
+                <p class="mensagem_dashboard">
+                    <?= escaparDashboard($erroTrens) ?>
+                </p>
 
-                <p id="condicao_clima">Consultando clima...</p>
+            <?php } elseif (empty($trens)) { ?>
 
-                <p id="data_clima">Aguardando atualização...</p>
+                <p class="mensagem_dashboard">
+                    Nenhum trem cadastrado no sistema.
+                </p>
+
+            <?php } else { ?>
+
+                <div class="cards_trens_dashboard">
+
+                    <?php foreach ($trens as $trem) { ?>
+
+                        <?php
+                        $classeLinha = classeLinhaDashboard(
+                            $trem['nome_linha']
+                        );
+
+                        $classeEstado = classeEstadoDashboard(
+                            $trem['estado']
+                        );
+                        ?>
+
+                        <article class="card_trem_dashboard <?= $classeLinha ?>">
+
+                            <!-- CABEÇALHO -->
+                            <div class="cabecalho_card_trem">
+
+                                <div>
+                                    <h3>
+                                        Trem
+                                        <?= escaparDashboard($trem['numero_serie']) ?>
+                                    </h3>
+
+                                    <p class="nome_linha_card">
+                                        <?= escaparDashboard($trem['nome_linha']) ?>
+                                    </p>
+                                </div>
+
+                                <span
+                                    class="indicador_estado <?= $classeEstado ?>"
+                                    aria-label="Estado: <?= escaparDashboard(textoEstadoDashboard($trem['estado'])) ?>"
+                                ></span>
+
+                            </div>
+
+                            <!-- INFORMAÇÕES -->
+                            <div class="conteudo_card_trem">
+
+                                <div class="icone_card_trem">
+                                    <i data-lucide="train-front"></i>
+                                </div>
+
+                                <div class="dados_card_trem">
+
+                                    <span class="rotulo_card">
+                                        Velocidade cadastrada
+                                    </span>
+
+                                    <strong class="velocidade_card">
+                                        <?= escaparDashboard($trem['velocidade']) ?>
+                                        <small>km/h</small>
+                                    </strong>
+
+                                    <span class="rotulo_card">
+                                        Estado
+                                    </span>
+
+                                    <span class="status_card <?= $classeEstado ?>">
+                                        <?= escaparDashboard(
+                                            textoEstadoDashboard($trem['estado'])
+                                        ) ?>
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                            <!-- RODAPÉ -->
+                            <div class="rodape_card_trem">
+
+                                <p>
+                                    <strong>Responsável:</strong>
+                                    <?= escaparDashboard(
+                                        $trem['funcionario_responsavel']
+                                        ?? 'Não informado'
+                                    ) ?>
+                                </p>
+
+                                <a href="Trens/visualizar_trens.php">
+                                    Ver detalhes
+                                    <i data-lucide="arrow-right"></i>
+                                </a>
+
+                            </div>
+
+                        </article>
+
+                    <?php } ?>
+
+                </div>
+
+            <?php } ?>
+
+        </section>
+
+        <!-- RESUMO DO SISTEMA -->
+        <?php if ($erroTrens === "") { ?>
+        <section class="secao_resumo_dashboard">
+
+            <h2>Resumo do Sistema</h2>
+
+            <div class="cards_resumo_dashboard">
+
+                <div class="card_resumo_dashboard">
+                    <i data-lucide="train-front"></i>
+                    <div>
+                        <strong><?= $totalTrens ?></strong>
+                        <span>Total de trens</span>
+                    </div>
+                </div>
+
+                <div class="card_resumo_dashboard">
+                    <i data-lucide="check-circle"></i>
+                    <div>
+                        <strong><?= $trensAtivos ?></strong>
+                        <span>Ativos</span>
+                    </div>
+                </div>
+
+                <div class="card_resumo_dashboard">
+                    <i data-lucide="pause-circle"></i>
+                    <div>
+                        <strong><?= $trensInativos ?></strong>
+                        <span>Inativos</span>
+                    </div>
+                </div>
+
+                <div class="card_resumo_dashboard">
+                    <i data-lucide="wrench"></i>
+                    <div>
+                        <strong><?= $trensManutencao ?></strong>
+                        <span>Em manutenção</span>
+                    </div>
+                </div>
 
             </div>
 
         </section>
+        <?php } ?>
 
-        
-    <!-- FIM Clima -->
-        
- 
+        <!-- APIS DO DASHBOARD -->
+        <div class="apis_dashboard">
 
-    <!-- CONSULTA DE CEP - STRAIN -->
+            <!-- API DE CLIMA -->
+            <section class="secao_clima">
 
-    <div class="consulta_cep">
+                <h2>Clima em Joinville</h2>
 
-        <h3>Consultar Endereço</h3>
+                <div class="card_clima">
 
-        <div class="conjunto">
-            <label for="cep">CEP:</label>
+                    <h3 id="local_clima">
+                        📍 Joinville - SC
+                    </h3>
 
-            <div class="linha_cep">
-                <input
-                    type="text"
-                    id="cep"
-                    name="cep"
-                    placeholder="00000-000"
-                    maxlength="9"
-                    inputmode="numeric"
-                    required
-                >
+                    <p id="temperatura_clima">
+                        Carregando...
+                    </p>
 
-                <button type="button" id="consultar_cep">
-                    Consultar
-                </button>
+                    <p id="condicao_clima">
+                        Consultando clima...
+                    </p>
+
+                    <p id="data_clima">
+                        Aguardando atualização...
+                    </p>
+
+                </div>
+
+            </section>
+
+            <!-- CONSULTA DE CEP -->
+            <div class="consulta_cep">
+
+                <h3>Consultar Endereço</h3>
+
+                <div class="conjunto">
+
+                    <label for="cep">CEP:</label>
+
+                    <div class="linha_cep">
+
+                        <input
+                            type="text"
+                            id="cep"
+                            name="cep"
+                            placeholder="00000-000"
+                            maxlength="9"
+                            inputmode="numeric"
+                        >
+
+                        <button
+                            type="button"
+                            id="consultar_cep"
+                        >
+                            Consultar
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <div class="conjunto">
+                    <label for="logradouro">Logradouro:</label>
+                    <input type="text" id="logradouro" readonly>
+                </div>
+
+                <div class="conjunto">
+                    <label for="bairro">Bairro:</label>
+                    <input type="text" id="bairro" readonly>
+                </div>
+
+                <div class="conjunto">
+                    <label for="cidade">Cidade:</label>
+                    <input type="text" id="cidade" readonly>
+                </div>
+
+                <div class="conjunto">
+                    <label for="uf">Estado (UF):</label>
+                    <input type="text" id="uf" readonly>
+                </div>
+
+                <p
+                    id="mensagem_cep"
+                    role="status"
+                    aria-live="polite"
+                ></p>
+
             </div>
+
         </div>
-
-        <div class="conjunto">
-            <label for="logradouro">Logradouro:</label>
-            <input type="text" id="logradouro" readonly>
-        </div>
-
-        <div class="conjunto">
-            <label for="bairro">Bairro:</label>
-            <input type="text" id="bairro" readonly>
-        </div>
-
-        <div class="conjunto">
-            <label for="cidade">Cidade:</label>
-            <input type="text" id="cidade" readonly>
-        </div>
-
-        <div class="conjunto">
-            <label for="uf">Estado (UF):</label>
-            <input type="text" id="uf" readonly>
-        </div>
-
-        <p id="mensagem_cep" role="status" aria-live="polite"></p>
-
-    </div>
-    <!-- FIM CONSULTA DE CEP -->
-
-</div>
-
 
     </main>
 
-    
-</body>
-
+    <!-- ÍCONES -->
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
-<script>
-    lucide.createIcons();
-</script>
+
+    <script>
+        lucide.createIcons();
+    </script>
+
 </body>
 </html>
