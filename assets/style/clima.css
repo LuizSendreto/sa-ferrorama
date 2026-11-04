@@ -1,5 +1,10 @@
 
-/* ESTILIZAÇÃO DA API DE CLIMA */
+/* ==========================================
+   STRAIN - API DE CLIMA
+   PADRÃO VISUAL IGUAL AO CEP
+   ========================================== */
+
+/* PAINEL EXTERNO VERMELHO */
 
 .secao_clima {
     display: flex;
@@ -8,24 +13,31 @@
     justify-content: center;
 
     width: 100%;
-    max-width: 100%;
-    padding: 40px 20px;
+    max-width: 850px;
+    padding: 30px;
     margin: 0 auto;
 
     box-sizing: border-box;
-    clear: both;
-    position: relative;
+    border-radius: 20px;
 
-    background-color: #ebdcc7;
+    background-color: #850000;
+
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
+/* TÍTULO DO PAINEL */
+
 .secao_clima h2 {
-    color: #850000;
+    color: #ffffff;
+    font-family: Arial, Helvetica, sans-serif;
     font-size: 28px;
     font-weight: bold;
     text-align: center;
+
     margin: 0 0 25px;
 }
+
+/* CARTÃO INTERNO BRANCO */
 
 .card_clima {
     display: flex;
@@ -35,50 +47,63 @@
     gap: 15px;
 
     width: 100%;
-    max-width: 380px;
+    max-width: 100%;
     padding: 35px 25px;
     margin: 0 auto;
 
     box-sizing: border-box;
-    border-radius: 20px;
+    border-radius: 14px;
 
-    background-color: #850000;
-    color: #ffffff;
+    background-color: #ffffff;
+    color: #850000;
 
     text-align: center;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.10);
 }
 
+/* LOCALIZAÇÃO */
+
 .card_clima h3 {
+    color: #850000;
     font-size: 20px;
-    color: white;
+    font-weight: bold;
     margin: 0;
 }
+
+/* TEMPERATURA */
 
 #temperatura_clima {
     font-size: 48px;
     font-weight: bold;
-    color: white;
+    color: #850000;
     margin: 0;
 }
+
+/* CONDIÇÃO DO TEMPO */
 
 #condicao_clima {
     font-size: 20px;
-    color: white;
+    color: #850000;
     margin: 0;
 }
+
+/* DATA DA ATUALIZAÇÃO */
 
 #data_clima {
     font-size: 14px;
-    color: #eeeeee;
+    color: #555555;
     margin: 0;
 }
 
-/* RESPONSIVIDADE */
+/* ==========================================
+   RESPONSIVIDADE
+   ========================================== */
 
 @media (max-width: 600px) {
+
     .secao_clima {
-        padding: 30px 15px;
+        padding: 20px 15px;
     }
 
     .secao_clima h2 {
@@ -92,4 +117,22 @@
     #temperatura_clima {
         font-size: 38px;
     }
+}
+
+/* Padronização com o CEP */
+
+.secao_clima,
+.secao_clima h2,
+.card_clima,
+.card_clima h3,
+.card_clima p {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.secao_clima {
+    justify-content: flex-start;
+}
+
+.card_clima {
+    flex: 1;
 }

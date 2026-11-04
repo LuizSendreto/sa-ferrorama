@@ -115,7 +115,7 @@ if (empty($_SESSION['csrf_cep'])) {
         </ul>
 
     </aside>
-
+ 
     <!-- CONTEÚDO DO DASHBOARD -->
     <main id="main_dashboard">
 
@@ -128,7 +128,7 @@ if (empty($_SESSION['csrf_cep'])) {
         </div>
 
         <!-- API DE CLIMA  NA TELA INDEX  -->
-
+<div class="apis_dashboard">
         <section class="secao_clima">
 
             <h2>Clima em Joinville</h2>
@@ -251,7 +251,7 @@ if (empty($_SESSION['csrf_cep'])) {
     </section>
 
 <!-- FIM CONSULTA DE CEP -->
-
+</div>
 
 
     </main>

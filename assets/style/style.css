@@ -1430,3 +1430,23 @@ a{
 }
 
 
+.apis_dashboard {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: 30px;
+    margin: 30px;
+}
+
+.apis_dashboard > .secao_clima,
+.apis_dashboard > .secao_cep_dashboard {
+    flex: 1;
+    min-width: 0;
+    margin: 0;
+}
+
+@media (max-width: 900px) {
+    .apis_dashboard {
+        flex-direction: column;
+    }
+}

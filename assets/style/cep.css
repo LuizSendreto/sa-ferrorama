@@ -1,28 +1,22 @@
-
 /* ==========================================
-   API ViaCEP - DASHBOARD STRAIN
+   STRAIN - API ViaCEP / Dashboard
+   Compativel com cep.js e com o CSS global
    ========================================== */
-
-/* SEÇÃO PRINCIPAL */
 
 .secao_cep_dashboard,
 .strain-cep {
     display: flex;
     flex-direction: column;
-
     width: calc(100% - 40px);
     max-width: 850px;
     margin: 30px auto;
     padding: 30px;
-
-    background-color: #faf9f6;
+    background-color: #850000;
     border-radius: 20px;
     box-sizing: border-box;
-
-    color: #262026;
-    font-family: Arial, sans-serif;
-
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    color: #ffffff;
+    font-family: Arial, Helvetica, sans-serif;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
 .secao_cep_dashboard *,
@@ -30,76 +24,82 @@
     box-sizing: border-box;
 }
 
-/* TÍTULO */
-
 .secao_cep_dashboard h2,
 .strain-cep h2 {
-    color: #850000;
-    font-size: 26px;
-    font-weight: bold;
+    color: #ffffff;
+    font-size: 28px;
+    font-weight: 700;
+    text-align: center;
     margin: 0 0 10px;
 }
 
-/* DESCRIÇÃO */
-
-.secao_cep_dashboard p,
-.strain-cep p {
-    margin-bottom: 15px;
+.secao_cep_dashboard > p,
+.strain-cep > p {
+    color: #ffffff;
     font-size: 15px;
+    text-align: center;
+    margin: 0 0 20px;
 }
 
-/* FORMULÁRIO */
-
+/* Sobrepoe a regra global 'form' de style.css apenas nesta secao. */
 .secao_cep_dashboard form,
 .strain-cep form {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    align-items: stretch;
+    justify-content: flex-start;
+    width: 100%;
+    margin: 0;
+    padding: 25px;
+    gap: 15px;
+    border-radius: 14px;
+    background-color: #ffffff;
+    color: #262026;
 }
-
-/* PESQUISA DE CEP */
 
 .secao_cep_dashboard .busca_cep,
 .strain-cep .strain-cep-busca {
     display: flex;
-    gap: 10px;
-    margin-bottom: 15px;
+    align-items: stretch;
+    gap: 12px;
     width: 100%;
+    margin: 0;
 }
 
-/* CAMPOS DE TEXTO */
+.secao_cep_dashboard label,
+.strain-cep label {
+    display: block;
+    color: #850000;
+    font-size: 14px;
+    font-weight: 700;
+    margin: 0 0 7px;
+}
 
 .secao_cep_dashboard input,
 .strain-cep input {
     width: 100%;
     min-width: 0;
-    padding: 12px;
-
+    min-height: 44px;
+    padding: 11px 12px;
     border: 2px solid #850000;
-    border-radius: 10px;
-
+    border-radius: 8px;
     font-size: 16px;
     color: #262026;
-    background-color: white;
-
-    box-sizing: border-box;
+    background-color: #ffffff;
 }
 
 .secao_cep_dashboard input:focus,
 .strain-cep input:focus {
+    border-color: #850000;
     outline: 2px solid #bd5e5e;
     outline-offset: 1px;
 }
 
-/* CAMPOS PREENCHIDOS PELA API */
-
-.strain-cep input[readonly],
-.secao_cep_dashboard input[readonly] {
+.secao_cep_dashboard input[readonly],
+.strain-cep input[readonly] {
     background-color: #f0eeee;
     color: #333333;
 }
-
-/* INPUT DO CEP */
 
 .secao_cep_dashboard .busca_cep input,
 .strain-cep .strain-cep-busca input {
@@ -107,28 +107,28 @@
     min-width: 0;
 }
 
-/* BOTÕES */
-
 .secao_cep_dashboard button,
 .strain-cep button {
     padding: 12px 20px;
-
+    border: 0;
+    border-radius: 8px;
     background-color: #850000;
-    color: white;
-
-    border: none;
-    border-radius: 10px;
-
-    cursor: pointer;
-    font-weight: bold;
+    color: #ffffff;
     font-size: 15px;
-
-    transition: background-color 0.3s;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
 }
 
-.secao_cep_dashboard button:hover,
-.strain-cep button:hover {
+.secao_cep_dashboard button:hover:not(:disabled),
+.strain-cep button:hover:not(:disabled) {
     background-color: #650000;
+}
+
+.secao_cep_dashboard button:focus-visible,
+.strain-cep button:focus-visible {
+    outline: 3px solid #bd5e5e;
+    outline-offset: 2px;
 }
 
 .secao_cep_dashboard button:disabled,
@@ -136,8 +136,6 @@
     opacity: 0.6;
     cursor: not-allowed;
 }
-
-/* CAMPOS DO ENDEREÇO */
 
 .secao_cep_dashboard .campos_endereco,
 .strain-cep .strain-cep-campos {
@@ -147,74 +145,55 @@
     width: 100%;
 }
 
-.secao_cep_dashboard .campos_endereco div,
-.strain-cep .strain-cep-campos div {
+.secao_cep_dashboard .campos_endereco > div,
+.strain-cep .strain-cep-campos > div {
     min-width: 0;
 }
 
-/* LABELS */
-
-.secao_cep_dashboard label,
-.strain-cep label {
-    display: block;
-    color: #850000;
-    font-weight: bold;
-    margin-bottom: 8px;
-}
-
-/* BOTÃO SALVAR ENDEREÇO */
-
 #strain-cep-salvar {
     align-self: flex-start;
-    margin-top: 15px;
+    margin-top: 5px;
 }
-
-/* MENSAGENS */
 
 #mensagem_cep,
 #strain-cep-mensagem {
     min-height: 20px;
+    margin: 0;
+    padding: 0;
     font-size: 14px;
-    margin-top: 5px;
+    line-height: 1.4;
+    color: #333333;
 }
-
-/* MENSAGEM DE ERRO */
 
 #strain-cep-mensagem[data-tipo="erro"] {
     color: #a40000;
 }
 
-/* MENSAGEM DE SUCESSO */
-
 #strain-cep-mensagem[data-tipo="sucesso"] {
     color: #16723a;
 }
 
-/* ==========================================
-   RESPONSIVIDADE - TABLETS
-   ========================================== */
+/* Dashboard: evita margens duplas e mantém a largura do painel. */
+#main_dashboard #strain-cep {
+    width: 100%;
+    max-width: 850px;
+    margin: 0 auto;
+}
 
 @media (max-width: 1024px) {
-
     .secao_cep_dashboard,
     .strain-cep {
-        width: calc(100% - 30px);
         max-width: 100%;
         padding: 25px;
     }
 }
 
-/* ==========================================
-   RESPONSIVIDADE - CELULARES
-   ========================================== */
-
 @media (max-width: 600px) {
-
     .secao_cep_dashboard,
     .strain-cep {
-        width: calc(100% - 20px);
+        width: 100%;
+        margin: 0 auto;
         padding: 20px 15px;
-        margin: 20px auto;
     }
 
     .secao_cep_dashboard h2,
@@ -222,27 +201,23 @@
         font-size: 24px;
     }
 
-    /* Pesquisa em coluna */
+    .secao_cep_dashboard form,
+    .strain-cep form {
+        padding: 18px 12px;
+    }
 
     .secao_cep_dashboard .busca_cep,
     .strain-cep .strain-cep-busca {
         flex-direction: column;
     }
 
-    /* Campos em uma coluna */
-
     .secao_cep_dashboard .campos_endereco,
     .strain-cep .strain-cep-campos {
         grid-template-columns: 1fr;
     }
 
-    /* Botões adaptativos */
-
     .secao_cep_dashboard button,
-    .strain-cep button {
-        width: 100%;
-    }
-
+    .strain-cep button,
     #strain-cep-salvar {
         width: 100%;
     }
