@@ -3660,3 +3660,992 @@ textarea {
 }
 
 
+
+/* ==========================================
+   STRAIN - LANDING PAGE
+   ESTILO E RESPONSIVIDADE DO INDEX
+========================================== */
+
+/* CONFIGURAÇÕES GERAIS */
+
+body.body_index {
+    margin: 0;
+    width: 100%;
+    min-height: 100vh;
+    background-color: #ebdcc7;
+    font-family: Arial, Helvetica, sans-serif;
+    overflow-x: clip;
+}
+
+.body_index *,
+.body_index *::before,
+.body_index *::after {
+    box-sizing: border-box;
+}
+
+/* NAVBAR */
+
+.body_index .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 70px;
+
+    padding: 0 30px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    background-color: #850000;
+    z-index: 1000;
+}
+
+.body_index .logo-navbar img {
+    display: block;
+    width: auto;
+    max-width: 200px;
+    height: 50px;
+    object-fit: contain;
+}
+
+.body_index .navbar .btn {
+    background-color: white;
+    color: #850000;
+
+    padding: 10px 25px;
+    border: none;
+    border-radius: 8px;
+
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* BANNER */
+
+.body_index .banner {
+    width: 100%;
+    min-height: 550px;
+    height: auto;
+
+    padding: 100px 30px 40px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 35px;
+
+    background-size: cover;
+    background-position: center;
+}
+
+/* LOGO PRINCIPAL */
+
+.body_index .banner .Strain {
+    display: block;
+    width: min(450px, 100%);
+    height: auto;
+    max-height: 500px;
+
+    margin: 0;
+    border-radius: 30px;
+    object-fit: contain;
+}
+
+/* FRASE DE BOAS-VINDAS */
+
+.body_index .banner #frase1 {
+    width: min(600px, 100%);
+    height: auto;
+
+    margin: 0;
+    padding: 35px;
+
+    display: block;
+
+    background-color: #850000;
+    color: #ffffff;
+
+    border-radius: 30px;
+
+    font-family: "Times New Roman", Times, serif;
+    font-size: clamp(24px, 3vw, 40px);
+    font-weight: bold;
+    line-height: 1.4;
+    text-align: center;
+}
+
+/* LINHA DIVISÓRIA */
+
+.body_index .linha {
+    display: block;
+    width: 100%;
+    height: 10px;
+
+    margin: 0;
+    border: none;
+
+    background-color: #850000;
+}
+
+/* CONTEÚDO PRINCIPAL */
+
+.body_index #landing-main {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+
+    padding: 45px 25px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+
+    background-color: #ebdcc7;
+}
+
+/* ==========================================
+   APRESENTAÇÃO DO STRAIN
+========================================== */
+
+.body_index #landing-main .Introducao1 {
+    width: 100%;
+    max-width: 1100px;
+    height: auto;
+
+    margin: 0 auto;
+    padding: 40px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 20px;
+
+    background-color: #850000;
+    border-radius: 30px;
+}
+
+/* TÍTULO */
+
+.body_index #landing-main .titulo_landing {
+    margin: 0;
+
+    color: white;
+    font-size: clamp(25px, 3vw, 34px);
+    font-weight: bold;
+    text-align: center;
+}
+
+/* TEXTO */
+
+.body_index #landing-main .texto_landing {
+    margin: 0;
+
+    color: white;
+    font-size: 17px;
+    font-weight: 400;
+    line-height: 1.8;
+    text-align: justify;
+    overflow-wrap: anywhere;
+}
+
+/* ==========================================
+   SEÇÕES DA LANDING PAGE
+========================================== */
+
+.body_index #landing-main .secao_landing {
+    width: 100%;
+    max-width: 1100px;
+    min-width: 0;
+
+    margin: 0 auto;
+}
+
+/* TÍTULOS DAS SEÇÕES */
+
+.body_index #landing-main .titulo_secao_landing {
+    color: #850000;
+
+    font-size: clamp(24px, 3vw, 32px);
+    font-weight: bold;
+    text-align: center;
+
+    margin: 0 0 25px;
+}
+
+/* ==========================================
+   PROBLEMA QUE O SISTEMA RESOLVE
+========================================== */
+
+.body_index #landing-main .caixa_landing {
+    width: 100%;
+    padding: 35px;
+
+    background-color: #850000;
+    border-radius: 25px;
+}
+
+.body_index #landing-main .caixa_landing h3 {
+    margin: 0 0 20px;
+
+    color: white;
+    font-size: 23px;
+    font-weight: bold;
+}
+
+.body_index #landing-main .caixa_landing p {
+    color: white;
+    font-size: 16px;
+    line-height: 1.7;
+
+    margin: 0 0 15px;
+}
+
+.body_index #landing-main .caixa_landing p:last-child {
+    margin-bottom: 0;
+}
+
+/* ==========================================
+   FUNCIONALIDADES
+========================================== */
+
+/* ORGANIZAÇÃO DOS CARTÕES */
+
+.body_index #landing-main .grid_funcionalidades {
+    width: 100%;
+
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
+}
+
+/* CARTÃO INDIVIDUAL */
+
+.body_index #landing-main .card_funcionalidade {
+    min-width: 0;
+    min-height: 240px;
+
+    padding: 25px 18px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 15px;
+
+    background-color: #850000;
+    border-radius: 20px;
+
+    text-align: center;
+}
+
+/* ÍCONES */
+
+.body_index #landing-main .icone_funcionalidade {
+    font-size: 34px;
+    line-height: 1.3;
+}
+
+/* TÍTULO DO CARTÃO */
+
+.body_index #landing-main .card_funcionalidade h3 {
+    margin: 0;
+
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 1.4;
+}
+
+/* DESCRIÇÃO */
+
+.body_index #landing-main .card_funcionalidade p {
+    margin: 0;
+
+    color: white;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.6;
+}
+
+/* ==========================================
+   BENEFÍCIOS
+========================================== */
+
+.body_index #landing-main .grid_beneficios {
+    width: 100%;
+
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+}
+
+/* CARTÕES */
+
+.body_index #landing-main .card_beneficio {
+    min-width: 0;
+    min-height: 180px;
+
+    padding: 30px 20px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+
+    background-color: #850000;
+    border-radius: 20px;
+
+    text-align: center;
+}
+
+/* TÍTULOS */
+
+.body_index #landing-main .card_beneficio h3 {
+    color: white;
+    font-size: 22px;
+    margin: 0;
+}
+
+/* TEXTOS */
+
+.body_index #landing-main .card_beneficio p {
+    color: white;
+    font-size: 15px;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* ==========================================
+   LINHA DIVISÓRIA
+========================================== */
+
+.body_index #landing-main .linha1 {
+    display: block;
+
+    width: 100%;
+    height: 10px;
+
+    margin: 10px 0;
+
+    border: none;
+    background-color: #850000;
+}
+
+/* ==========================================
+   LINHAS DISPONÍVEIS E MAPA
+========================================== */
+
+/* CONTAINER PRINCIPAL */
+
+.body_index #landing-main .landing_linhas_layout {
+    width: 100%;
+    max-width: 1250px;
+    min-width: 0;
+
+    margin: 0 auto;
+    padding: 20px 0;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+/* CAIXA VERMELHA */
+
+.body_index #landing-main .landing_linhas_layout .flex2 {
+    flex: 0 1 460px;
+
+    width: 100%;
+    max-width: 460px;
+    min-width: 0;
+
+    height: auto;
+    min-height: 470px;
+
+    margin: 0;
+    padding: 30px 20px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 25px;
+
+    background-color: #850000;
+    border-radius: 35px;
+}
+
+/* TÍTULO DAS LINHAS */
+
+.body_index #landing-main .landing_linhas_layout h3 {
+    margin: 0;
+    width: 100%;
+}
+
+.body_index #landing-main .titulo_linhas {
+    display: block;
+    width: 100%;
+
+    margin: 0;
+
+    color: white;
+    font-size: 21px;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* ÁREA DOS ÍCONES E BOTÕES */
+
+.body_index #landing-main .landing_linhas_conteudo {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    gap: 12px;
+
+    width: 100%;
+    min-width: 0;
+}
+
+/* COLUNA DOS ÍCONES */
+
+.body_index #landing-main .landing_icone_linhas {
+    flex: 0 0 40px;
+    width: 40px;
+}
+
+/* IMAGEM DAS LINHAS */
+
+.body_index #landing-main .foto_linhas {
+    display: block;
+
+    width: 40px;
+    height: 250px;
+
+    max-width: 100%;
+    object-fit: contain;
+}
+
+/* COLUNA DOS BOTÕES */
+
+.body_index #landing-main .landing_linhas_conteudo .linhas {
+    flex: 1;
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    gap: 12px;
+    margin: 0;
+}
+
+/* BOTÕES */
+
+.body_index #landing-main .landing_linhas_conteudo .btn.btn-outline2 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    min-width: 0;
+
+    height: auto;
+    min-height: 48px;
+
+    margin: 0;
+    padding: 10px;
+
+    background-color: #850000;
+    color: white;
+
+    border: none;
+    border-radius: 8px;
+
+    font-size: 15px;
+    font-weight: 600;
+    text-align: center;
+
+    cursor: pointer;
+}
+
+.body_index #landing-main .landing_linhas_conteudo .btn.btn-outline2:hover {
+    background-color: #a52a2a;
+}
+
+/* MAPA */
+
+.body_index #landing-main .landing_mapa {
+    flex: 1 1 450px;
+
+    width: 100%;
+    min-width: 0;
+    max-width: 750px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.body_index #landing-main .landing_mapa .Mapa {
+    display: block;
+
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+
+    margin: 0;
+    padding: 0;
+
+    object-fit: contain;
+}
+
+/* ==========================================
+   CHAMADA PARA AÇÃO
+========================================== */
+
+.body_index #landing-main .chamada_landing {
+    width: 100%;
+    max-width: 1100px;
+
+    margin: 0 auto;
+    padding: 40px 25px;
+
+    background-color: #850000;
+    border-radius: 30px;
+
+    text-align: center;
+}
+
+.body_index #landing-main .chamada_landing h2 {
+    color: white;
+    font-size: 30px;
+    margin: 0 0 20px;
+}
+
+.body_index #landing-main .chamada_landing p {
+    max-width: 700px;
+
+    margin: 0 auto 25px;
+
+    color: white;
+    font-size: 16px;
+    line-height: 1.7;
+}
+
+/* BOTÃO DE ACESSO */
+
+.body_index #landing-main .botao_landing {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+
+    min-height: 45px;
+    padding: 12px 30px;
+
+    background-color: white;
+    color: #850000;
+
+    border-radius: 10px;
+
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none;
+
+    transition: background-color 0.2s;
+}
+
+.body_index #landing-main .botao_landing:hover {
+    background-color: #ebdcc7;
+    color: #850000;
+}
+
+/* ==========================================
+   POPUP DOS HORÁRIOS
+========================================== */
+
+.body_index .popup {
+    position: fixed;
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    padding: 20px;
+    z-index: 2000;
+
+    align-items: center;
+    justify-content: center;
+
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.body_index .popup-conteudo {
+    width: 100%;
+    max-width: 600px;
+    max-height: 85vh;
+
+    padding: 30px;
+
+    overflow-y: auto;
+
+    background-color: #850000;
+    color: white;
+    border-radius: 20px;
+}
+
+.body_index .popup .fechar {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+
+    background: transparent;
+    border: none;
+
+    color: white;
+    font-size: 28px;
+    cursor: pointer;
+}
+
+/* ==========================================
+   RODAPÉ
+========================================== */
+
+.body_index .footer {
+    width: 100%;
+    max-width: 100%;
+
+    margin: 0;
+    padding: 35px 25px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
+
+    gap: 30px;
+
+    background-color: #850000;
+}
+
+.body_index .footer .footer1,
+.body_index .footer .footer3 {
+    flex: 1 1 280px;
+
+    width: auto;
+    max-width: 550px;
+    min-width: 0;
+
+    height: auto;
+
+    margin: 0;
+    padding: 15px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    background: transparent;
+    color: white;
+}
+
+.body_index .footer h3 {
+    color: white;
+    font-size: 20px;
+    margin: 0 0 10px;
+}
+
+.body_index .footer p {
+    color: white;
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* ==========================================
+   RESPONSIVIDADE - NOTEBOOKS
+========================================== */
+
+@media (max-width: 1100px) {
+
+    .body_index #landing-main {
+        padding: 35px 20px;
+        gap: 30px;
+    }
+
+    .body_index #landing-main .grid_funcionalidades {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .body_index #landing-main .landing_linhas_layout {
+        gap: 25px;
+    }
+}
+
+/* ==========================================
+   RESPONSIVIDADE - TABLETS
+========================================== */
+
+@media (max-width: 850px) {
+
+    .body_index .banner {
+        flex-direction: column;
+        padding: 90px 20px 30px;
+    }
+
+    .body_index .banner .Strain {
+        width: min(380px, 100%);
+    }
+
+    .body_index .banner #frase1 {
+        width: 100%;
+        max-width: 600px;
+    }
+
+    .body_index #landing-main .landing_linhas_layout {
+        flex-direction: column;
+    }
+
+    .body_index #landing-main .landing_linhas_layout .flex2,
+    .body_index #landing-main .landing_mapa {
+        flex: none;
+        width: 100%;
+        max-width: 650px;
+    }
+
+    .body_index #landing-main .grid_beneficios {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* ==========================================
+   RESPONSIVIDADE - CELULARES
+========================================== */
+
+@media (max-width: 600px) {
+
+    .body_index .navbar {
+        padding: 0 15px;
+    }
+
+    .body_index .banner {
+        min-height: 350px;
+        padding: 85px 15px 25px;
+    }
+
+    .body_index .banner #frase1 {
+        padding: 22px;
+        font-size: 23px;
+    }
+
+    .body_index #landing-main {
+        padding: 25px 12px;
+        gap: 25px;
+    }
+
+    /* APRESENTAÇÃO */
+
+    .body_index #landing-main .Introducao1 {
+        padding: 25px 18px;
+        border-radius: 22px;
+    }
+
+    .body_index #landing-main .texto_landing {
+        font-size: 15px;
+        line-height: 1.7;
+        text-align: left;
+    }
+
+    /* PROBLEMA */
+
+    .body_index #landing-main .caixa_landing {
+        padding: 25px 18px;
+        border-radius: 22px;
+    }
+
+    /* FUNCIONALIDADES */
+
+    .body_index #landing-main .grid_funcionalidades {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .body_index #landing-main .card_funcionalidade {
+        min-height: 0;
+    }
+
+    /* BENEFÍCIOS */
+
+    .body_index #landing-main .grid_beneficios {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    /* LINHAS */
+
+    .body_index #landing-main .landing_linhas_layout .flex2 {
+        min-height: 0;
+        padding: 25px 15px;
+        border-radius: 25px;
+    }
+
+    .body_index #landing-main .landing_linhas_conteudo {
+        gap: 8px;
+    }
+
+    .body_index #landing-main .landing_icone_linhas {
+        flex-basis: 35px;
+        width: 35px;
+    }
+
+    .body_index #landing-main .foto_linhas {
+        width: 35px;
+    }
+
+    .body_index #landing-main .landing_linhas_conteudo .btn.btn-outline2 {
+        font-size: 13px;
+        padding: 10px 6px;
+    }
+
+    /* CHAMADA PARA AÇÃO */
+
+    .body_index #landing-main .chamada_landing {
+        padding: 30px 20px;
+        border-radius: 22px;
+    }
+
+    .body_index #landing-main .chamada_landing h2 {
+        font-size: 25px;
+    }
+
+    /* RODAPÉ */
+
+    .body_index .footer {
+        padding: 25px 15px;
+    }
+
+    .body_index .footer .footer1,
+    .body_index .footer .footer3 {
+        flex: 1 1 100%;
+        padding: 10px 0;
+    }
+}
+
+
+/* BANNER COM CAIXA VERMELHA À ESQUERDA */
+
+.body_index .banner #frase1 {
+    width: min(700px, 100%);
+    max-width: 100%;
+    min-height: 300px;
+
+    margin: 0;
+    margin-right: auto;
+    padding: 40px;
+
+    background-color: #850000;
+    color: white;
+
+    border-radius: 0 150px 150px 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+    font-size: clamp(25px, 3vw, 40px);
+
+    box-sizing: border-box;
+}
+
+
+/* BANNER VERMELHO COLADO À DIREITA */
+
+.body_index .banner {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    width: 100%;
+    padding-left: 30px;
+    padding-right: 0;
+    gap: 20px;
+}
+
+/* LOGO À ESQUERDA */
+
+.body_index .banner .Strain {
+    width: 500px;
+    max-width: 45%;
+    height: auto;
+    margin: 0;
+    object-fit: contain;
+}
+
+/* CAIXA VERMELHA À DIREITA */
+
+.body_index .banner #frase1 {
+    width: 700px;
+    max-width: 55%;
+    min-height: 300px;
+
+    margin: 0;
+    margin-left: auto;
+    padding: 40px;
+
+    background-color: #850000;
+    color: white;
+
+    /* ARREDONDADO APENAS À ESQUERDA */
+    border-radius: 150px 0 0 150px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+    font-size: clamp(25px, 3vw, 40px);
+
+    box-sizing: border-box;
+}
+
+/* RESPONSIVIDADE */
+
+@media (max-width: 600px) {
+
+    .body_index .banner {
+        flex-direction: column;
+        padding-left: 15px;
+        padding-right: 0;
+    }
+
+    .body_index .banner .Strain {
+        width: 100%;
+        max-width: 320px;
+    }
+
+    .body_index .banner #frase1 {
+        width: 100%;
+        max-width: 10%;
+        min-height: 220px;
+
+        margin-left: auto;
+        padding: 25px;
+
+        border-radius: 80px 0 0 80px;
+        font-size: 23px;
+    }
+}
