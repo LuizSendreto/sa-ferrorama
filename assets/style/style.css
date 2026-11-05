@@ -2319,9 +2319,6 @@ a.botao_cadastrar:visited:hover {
 }
 
 
-
-
-
 /* ==================================
    PÁGINA DE ALERTAS - STRAIN
 ================================== */
@@ -3246,7 +3243,7 @@ textarea {
 .caixa_alertas,
 .caixa_monitoramento,
 .caixa_grafico {
-    max-width: 100%;
+    /* Mantem os limites de largura definidos nas regras originais. */
     min-width: 0;
     box-sizing: border-box;
 }
@@ -3317,10 +3314,17 @@ textarea {
 
 /* FORMULÁRIOS */
 
-.painel_formulario,
 .formulario_strain,
 .campo_formulario {
     max-width: 100%;
+}
+
+/* Nao permitir que a responsividade estique os paineis administrativos. */
+.area_formulario > .painel_formulario {
+    width: 100%;
+    max-width: 650px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .formulario_strain input,
