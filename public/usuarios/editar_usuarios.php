@@ -303,17 +303,33 @@ if ($enviado !== null) {
                            value="<?= htmlspecialchars($usuario['nome'], ENT_QUOTES, 'UTF-8') ?>" required>
                 </div>
 
+                
                 <div class="campo_formulario">
-                    <label for="email">E-mail</label>
-                    <input type="email" id="email" name="email" maxlength="100"
-                           value="<?= htmlspecialchars($usuario['email'], ENT_QUOTES, 'UTF-8') ?>" required>
+                    <label for="email_edicao">E-mail</label>
+
+                    <input
+                        type="email"
+                        id="email_edicao"
+                        name="email"
+                        maxlength="100"
+                        value="<?= htmlspecialchars($usuario['email'], ENT_QUOTES, 'UTF-8') ?>"
+                        required
+                        >
                 </div>
 
+
                 <div class="campo_formulario">
-                    <label for="telefone">Telefone</label>
-                    <input type="text" id="telefone" name="telefone" maxlength="20"
-                           value="<?= htmlspecialchars($usuario['telefone'], ENT_QUOTES, 'UTF-8') ?>" required>
-                </div>
+                    <label for="telefone_edicao">Telefone</label>
+
+                    <input
+                        type="text"
+                        id="telefone_edicao"
+                        name="telefone"
+                        maxlength="20"
+                        value="<?= htmlspecialchars($usuario['telefone'], ENT_QUOTES, 'UTF-8') ?>"
+                        required
+                        >
+</div>
 
                 <div class="campo_formulario">
                     <label for="cep">CEP (opcional)</label>
