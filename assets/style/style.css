@@ -735,8 +735,8 @@ a{
     display: flex;
 }
 
-.blue\.index{
-    background-color: #ebdcc7;
+.blue_index{
+    background-color: #ffffff;
     display: flex;
     flex-direction: column;
 }

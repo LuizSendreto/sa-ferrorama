@@ -30,7 +30,7 @@
 
     </section>
     <hr class="linha">
-    <main class="blue.index">
+    <main class="blue_index">
         <div class="Introducao1">
 
             <h2><b class="Introducao">Oi, Bem-vindo ao Strain, o sistema de transporte público de Joinville!</b></h2>
