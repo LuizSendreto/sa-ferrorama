@@ -776,7 +776,7 @@ a{
 }
 
 .blue\.index{
-    background-color: #ebdcc7;
+    background-color: #ffffff;
     display: flex;
     flex-direction: column;
 }
@@ -978,10 +978,6 @@ a{
      height: auto;
     min-height: 100vh;
      overflow-y: auto;
-}
-
-.conjunto{
-    background-color: #ebdcc7;
 }
 
 
@@ -4544,8 +4540,6 @@ body.body_index {
     .body_index .footer .footer3 {
         flex: 1 1 100%;
         padding: 10px 0;
-        flex-direction: row;
-        flex-wrap: nowwrap;
        
     }
 }
