@@ -8,6 +8,7 @@ require_once '../../infra/conexao.php';
 
 // Verificar se o usuário é administrador
 $admin = ($_SESSION['nivel_acesso'] ?? '') === 'admin';
+$nome = $_SESSION['usuario_nome'] ?? 'Funcionário';
 
 // Criar token de segurança para exclusões
 if (empty($_SESSION['csrf_token'])) {
@@ -34,7 +35,7 @@ if (!$resultado) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Visualização de Sensores • Strain</title>
+    <title>Sensores • Strain</title>
 
     <!-- Bootstrap -->
     <link
@@ -54,15 +55,17 @@ if (!$resultado) {
     <!-- NAVBAR -->
     <header>
         <nav class="navbar">
+        <div class="marca-strain">
+            <i data-lucide="train-front"></i>
+            <span>STRAIN</span>
+        </div>
 
-            <div class="logo-navbar">
-                <img
-                    src="../../assets/img/logo_navbar2.png"
-                    alt="Logo Strain"
-                >
-            </div>
-
-        </nav>
+        <div class="saudacao-navbar">
+            <p>
+                Olá, <?php echo htmlspecialchars($nome, ENT_QUOTES, 'UTF-8'); ?>!
+            </p>
+        </div>
+    </nav>
     </header>
 
     <!-- ÁREA PRINCIPAL PADRONIZADA -->
@@ -115,7 +118,7 @@ if (!$resultado) {
 
                     <li>
                         <a href="../usuarios/visu_usuarios.php">
-                            Visualização de Usuários
+                            Usuários
                         </a>
                     </li>
 
@@ -126,7 +129,7 @@ if (!$resultado) {
                         href="visu_sensores.php"
                         class="active_sidebar"
                     >
-                        Visualização de Sensores
+                        Sensores
                     </a>
                 </li>
 
@@ -141,160 +144,173 @@ if (!$resultado) {
         </aside>
 
         <!-- PAINEL VERMELHO PADRONIZADO -->
-        <section class="painel_registros">
+        
+<section class="painel_registros">
 
-            <!-- TÍTULOS -->
-            <h1 class="titulo_registros">
-                Visualização de Sensores
-            </h1>
+    <!-- TÍTULOS -->
+    <h1 class="titulo_registros">
+        Visualização de Sensores
+    </h1>
 
-            <h2 class="subtitulo_registros">
-                Sensores Cadastrados
-            </h2>
+    <h2 class="subtitulo_registros">
+        Sensores Cadastrados
+    </h2>
 
-            <!-- CONTAINER DA TABELA -->
-            <div class="container_tabela">
+    <!-- CONTAINER DA TABELA -->
+    <div class="container_tabela">
 
-                <table class="tabela_registros">
+        <table class="tabela_registros">
 
-                    <thead>
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Tipo</th>
+                    <th scope="col">Localização</th>
+                    <th scope="col">Posição</th>
+
+                    <?php if ($admin) { ?>
+                        <th scope="col">Ações</th>
+                    <?php } ?>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <?php if (mysqli_num_rows($resultado) > 0) { ?>
+
+                    <?php while ($sensor = mysqli_fetch_assoc($resultado)) { ?>
+
                         <tr>
-                            <th scope="col">ID</th>
-                            <th scope="col">Tipo</th>
-                            <th scope="col">Localização</th>
-                            <th scope="col">Posição</th>
 
+                            <!-- ID -->
+                            <td>
+                                <?= (int) $sensor['id'] ?>
+                            </td>
+
+                            <!-- TIPO -->
+                            <td>
+                                <?= htmlspecialchars(
+                                    (string) $sensor['tipo'],
+                                    ENT_QUOTES,
+                                    'UTF-8'
+                                ) ?>
+                            </td>
+
+                            <!-- LOCALIZAÇÃO -->
+                            <td>
+                                <?= htmlspecialchars(
+                                    (string) $sensor['localizacao'],
+                                    ENT_QUOTES,
+                                    'UTF-8'
+                                ) ?>
+                            </td>
+
+                            <!-- POSIÇÃO -->
+                            <td>
+                                <?= htmlspecialchars(
+                                    (string) $sensor['posicao'],
+                                    ENT_QUOTES,
+                                    'UTF-8'
+                                ) ?>
+                            </td>
+
+                            <!-- AÇÕES: SOMENTE ADMIN -->
                             <?php if ($admin) { ?>
-                                <th scope="col">Ações</th>
-                            <?php } ?>
-                        </tr>
-                    </thead>
 
-                    <tbody>
+                                <td>
 
-                        <?php if (mysqli_num_rows($resultado) > 0) { ?>
+                                    <div class="acoes_registros">
 
-                            <?php while ($sensor = mysqli_fetch_assoc($resultado)) { ?>
+                                        <!-- EDITAR SENSOR -->
+                                        <a
+                                            href="editar_sensores.php?id=<?= (int) $sensor['id'] ?>"
+                                            class="botao_editar"
+                                        >
+                                            Editar
+                                        </a>
 
-                                <tr>
+                                        <!-- EXCLUIR SENSOR -->
+                                        <form
+                                            action="excluir_sensor.php"
+                                            method="POST"
+                                            onsubmit="return confirm('Tem certeza que deseja excluir este sensor?');"
+                                        >
 
-                                    <td>
-                                        <?php echo (int) $sensor['id']; ?>
-                                    </td>
+                                            <input
+                                                type="hidden"
+                                                name="id"
+                                                value="<?= (int) $sensor['id'] ?>"
+                                            >
 
-                                    <td>
-                                        <?php
-                                        echo htmlspecialchars(
-                                            (string) $sensor['tipo'],
-                                            ENT_QUOTES,
-                                            'UTF-8'
-                                        );
-                                        ?>
-                                    </td>
+                                            <input
+                                                type="hidden"
+                                                name="csrf_token"
+                                                value="<?= htmlspecialchars(
+                                                    $_SESSION['csrf_token'],
+                                                    ENT_QUOTES,
+                                                    'UTF-8'
+                                                ) ?>"
+                                            >
 
-                                    <td>
-                                        <?php
-                                        echo htmlspecialchars(
-                                            (string) $sensor['localizacao'],
-                                            ENT_QUOTES,
-                                            'UTF-8'
-                                        );
-                                        ?>
-                                    </td>
+                                            <button
+                                                type="submit"
+                                                class="botao_excluir"
+                                            >
+                                                Excluir
+                                            </button>
 
-                                    <td>
-                                        <?php
-                                        echo htmlspecialchars(
-                                            (string) $sensor['posicao'],
-                                            ENT_QUOTES,
-                                            'UTF-8'
-                                        );
-                                        ?>
-                                    </td>
+                                        </form>
 
-                                    <!-- AÇÕES: SOMENTE ADMIN -->
-                                    <?php if ($admin) { ?>
+                                    </div>
 
-                                        <td>
-
-                                            <div class="acoes_registros">
-
-                                                <form
-                                                    action="excluir_sensor.php"
-                                                    method="POST"
-                                                    onsubmit="return confirm('Tem certeza que deseja excluir este sensor?');"
-                                                >
-
-                                                    <input
-                                                        type="hidden"
-                                                        name="id"
-                                                        value="<?php echo (int) $sensor['id']; ?>"
-                                                    >
-
-                                                    <input
-                                                        type="hidden"
-                                                        name="csrf_token"
-                                                        value="<?php
-                                                        echo htmlspecialchars(
-                                                            $_SESSION['csrf_token'],
-                                                            ENT_QUOTES,
-                                                            'UTF-8'
-                                                        );
-                                                        ?>"
-                                                    >
-
-                                                    <button
-                                                        type="submit"
-                                                        class="botao_excluir"
-                                                    >
-                                                        Excluir
-                                                    </button>
-
-                                                </form>
-
-                                            </div>
-
-                                        </td>
-
-                                    <?php } ?>
-
-                                </tr>
-
-                            <?php } ?>
-
-                        <?php } else { ?>
-
-                            <tr>
-                                <td colspan="<?php echo $admin ? 5 : 4; ?>">
-                                    Nenhum sensor cadastrado.
                                 </td>
-                            </tr>
 
-                        <?php } ?>
+                            <?php } ?>
 
-                    </tbody>
+                        </tr>
 
-                </table>
+                    <?php } ?>
 
-            </div>
+                <?php } else { ?>
 
-            <!-- CADASTRO: SOMENTE ADMIN -->
-            <?php if ($admin) { ?>
+                    <tr>
+                        <td colspan="<?= $admin ? 5 : 4 ?>">
+                            Nenhum sensor cadastrado.
+                        </td>
+                    </tr>
 
-                <button
-                    type="button"
-                    class="botao_cadastrar"
-                    onclick="location.href='cadastro_sensor.php'"
-                >
-                    Cadastrar Sensor
-                </button>
+                <?php } ?>
 
-            <?php } ?>
+            </tbody>
 
-        </section>
+        </table>
+
+    </div>
+
+    <!-- CADASTRAR SENSOR: SOMENTE ADMIN -->
+    <?php if ($admin) { ?>
+
+        <div class="div_button">
+
+            <a
+                href="cadastro_sensor.php"
+                class="botao_cadastrar"
+            >
+                Cadastrar Sensor
+            </a>
+
+        </div>
+
+    <?php } ?>
+
+</section>
+
 
     </main>
-
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>
+    lucide.createIcons();
+</script>
 </body>
 
 </html>

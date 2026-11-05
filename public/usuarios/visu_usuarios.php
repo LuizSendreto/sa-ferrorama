@@ -12,15 +12,27 @@ if (empty($_SESSION['csrf_token'])) {
 }
 
 // Consultar usuários
-$sql = "SELECT id, nome, email, telefone, tipo, nivel_acesso
-        FROM usuarios
-        ORDER BY nome ASC, id ASC";
+$sql = "SELECT
+            u.id,
+            u.nome,
+            u.email,
+            u.telefone,
+            u.tipo,
+            u.nivel_acesso,
+            e.cep
+        FROM usuarios AS u
+        LEFT JOIN enderecos_usuarios AS e
+            ON e.usuario_id = u.id
+        ORDER BY u.nome ASC, u.id ASC";
 
 $usuarios = mysqli_query($conn, $sql);
 
 if (!$usuarios) {
     die("Erro ao consultar usuários.");
 }
+
+$admin = ($_SESSION['nivel_acesso'] ?? '') === 'admin';
+$nome = $_SESSION['usuario_nome'] ?? 'Funcionário';
 
 ?>
 
@@ -31,7 +43,7 @@ if (!$usuarios) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Visualização de Usuários • Strain</title>
+    <title>Usuários ● Strain</title>
 
     <!-- Bootstrap -->
     <link
@@ -51,22 +63,17 @@ if (!$usuarios) {
     <!-- NAVBAR -->
     <header>
         <nav class="navbar">
+        <div class="marca-strain">
+            <i data-lucide="train-front"></i>
+            <span>STRAIN</span>
+        </div>
 
-            <div class="logo-navbar">
-                <img
-                    src="../../assets/img/logo_navbar2.png"
-                    alt="Logo Strain"
-                >
-            </div>
-
-            <div class="logo-navbar">
-                <img
-                    src="../../assets/img/icone_da_navbar.png"
-                    alt="Usuário logado"
-                >
-            </div>
-
-        </nav>
+        <div class="saudacao-navbar">
+            <p>
+                Olá, <?php echo htmlspecialchars($nome, ENT_QUOTES, 'UTF-8'); ?>!
+            </p>
+        </div>
+    </nav>
     </header>
 
     <!-- ÁREA PRINCIPAL PADRONIZADA -->
@@ -108,13 +115,13 @@ if (!$usuarios) {
                         href="visu_usuarios.php"
                         class="active_sidebar"
                     >
-                        Visualização de Usuários
+                        Usuários
                     </a>
                 </li>
 
                 <li>
                     <a href="../sensores/visu_sensores.php">
-                        Visualização de Sensores
+                        Sensores
                     </a>
                 </li>
 
@@ -150,6 +157,7 @@ if (!$usuarios) {
                             <th scope="col">Telefone</th>
                             <th scope="col">Tipo</th>
                             <th scope="col">Nível de acesso</th>
+                            <th scope="col">CEP</th>
                             <th scope="col">Ações</th>
                         </tr>
                     </thead>
@@ -211,6 +219,43 @@ if (!$usuarios) {
                                             : 'Comum';
                                         ?>
                                     </td>
+
+                                    
+                                    <!-- CEP DO USUÁRIO -->
+                                    <td>
+                                        <?php
+
+                                            if (!empty($usuario['cep'])) {
+
+                                            $cep = preg_replace(
+                                            '/\D/',
+                                            '',
+                                            $usuario['cep']
+                                            );
+
+                                            if (strlen($cep) === 8) {
+
+                                            $cepFormatado = substr($cep, 0, 5)
+                                            . "-"
+                                            . substr($cep, 5);
+
+                                            echo htmlspecialchars(
+                                            $cepFormatado,
+                                            ENT_QUOTES,
+                                            'UTF-8'
+                                            );
+
+                                            } else {
+                                                echo "CEP inválido";
+                                            }
+
+                                            } else {
+                                                echo "Não cadastrado";
+                                            }
+
+                                        ?>
+                                    </td>
+
 
                                     <!-- AÇÕES -->
                                     <td>
@@ -297,7 +342,10 @@ if (!$usuarios) {
         </section>
 
     </main>
-
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>
+    lucide.createIcons();
+</script>
 </body>
 
 </html>

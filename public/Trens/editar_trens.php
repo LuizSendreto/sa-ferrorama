@@ -1,3 +1,4 @@
+
 <?php
 
 require_once '../../infra/verificar_acesso.php';
@@ -8,40 +9,58 @@ include "../../infra/conexao.php";
 $erro = "";
 $enviado = null;
 
-// Criar token de segurança para o formulário
+// Criar token de segurança
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
 
-// Receber o ID do trem
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+// Linhas disponíveis
+$linhas_validas = [
+    "Linha Azul (Sul)",
+    "Linha Verde (Centro)",
+    "Linha Amarela (Itaum)",
+    "Linha Vermelha (Villa Nova)"
+];
+
+// Receber ID do trem
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $id = (int) ($_POST["id"] ?? 0);
 } else {
     $id = (int) ($_GET["id"] ?? 0);
 }
 
+// Verificar ID
 if ($id <= 0) {
     header("Location: visualizar_trens.php");
     exit;
 }
 
 // Buscar o trem no banco
-$stmt = mysqli_prepare($conn, "SELECT * FROM trens WHERE id = ?");
+$stmt = mysqli_prepare(
+    $conn,
+    "SELECT * FROM trens WHERE id = ?"
+);
+
 mysqli_stmt_bind_param($stmt, "i", $id);
 mysqli_stmt_execute($stmt);
-$trem = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
+
+$trem = mysqli_fetch_assoc(
+    mysqli_stmt_get_result($stmt)
+);
+
 mysqli_stmt_close($stmt);
 
 if (!$trem) {
-    die("Trem não encontrado.");
+    http_response_code(404);
+    exit("Trem não encontrado.");
 }
 
 $titulo_trem = $trem["nome_linha"];
 
-// Processar a edição
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+// Processar edição
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-    // Verificar o token de segurança
+    // Verificar token CSRF
     if (
         !isset($_POST['csrf_token']) ||
         !is_string($_POST['csrf_token']) ||
@@ -57,6 +76,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $estado = $_POST["estado"] ?? "";
     $funcionario_id = $_POST["funcionario_id"] ?? "";
 
+    // Manter dados enviados caso ocorra erro
     $enviado = [
         "nome_linha" => $nome_linha,
         "numero_serie" => $numero_serie,
@@ -65,10 +85,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         "funcionario_id" => $funcionario_id
     ];
 
-    $estados_validos = ["Ativo", "Inativo", "Manutencao"];
+    $estados_validos = [
+        "Ativo",
+        "Inativo",
+        "Manutencao"
+    ];
 
-    if ($nome_linha === "" || $numero_serie === "" || $velocidade === "") {
+    // Validação
+    if (
+        $nome_linha === "" ||
+        $numero_serie === "" ||
+        $velocidade === ""
+    ) {
         $erro = "Preencha todos os campos.";
+
+    } elseif (!in_array($nome_linha, $linhas_validas, true)) {
+        $erro = "Selecione uma linha válida.";
 
     } elseif (!ctype_digit($velocidade)) {
         $erro = "A velocidade deve ser um número inteiro maior ou igual a zero.";
@@ -76,7 +108,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } elseif (!in_array($estado, $estados_validos, true)) {
         $erro = "Status inválido.";
 
-    } elseif (!ctype_digit((string) $funcionario_id) || (int) $funcionario_id <= 0) {
+    } elseif (
+        !ctype_digit((string) $funcionario_id) ||
+        (int) $funcionario_id <= 0
+    ) {
         $erro = "Selecione um funcionário.";
 
     } else {
@@ -86,13 +121,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         try {
 
-            // Conferir se o responsável é um funcionário
+            // Verificar funcionário responsável
             $stmt = mysqli_prepare(
                 $conn,
-                "SELECT id FROM usuarios WHERE id = ? AND tipo = 'funcionario'"
+                "SELECT id FROM usuarios
+                 WHERE id = ? AND tipo = 'funcionario'"
             );
 
-            mysqli_stmt_bind_param($stmt, "i", $funcionario_int);
+            mysqli_stmt_bind_param(
+                $stmt,
+                "i",
+                $funcionario_int
+            );
+
             mysqli_stmt_execute($stmt);
 
             $funcionario_existe = mysqli_num_rows(
@@ -102,6 +143,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             mysqli_stmt_close($stmt);
 
             if (!$funcionario_existe) {
+
                 $erro = "O funcionário selecionado é inválido.";
 
             } else {
@@ -109,10 +151,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 // Verificar número de série duplicado
                 $stmt = mysqli_prepare(
                     $conn,
-                    "SELECT id FROM trens WHERE numero_serie = ? AND id <> ?"
+                    "SELECT id FROM trens
+                     WHERE numero_serie = ? AND id <> ?"
                 );
 
-                mysqli_stmt_bind_param($stmt, "si", $numero_serie, $id);
+                mysqli_stmt_bind_param(
+                    $stmt,
+                    "si",
+                    $numero_serie,
+                    $id
+                );
+
                 mysqli_stmt_execute($stmt);
 
                 $ja_existe = mysqli_num_rows(
@@ -122,11 +171,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 mysqli_stmt_close($stmt);
 
                 if ($ja_existe) {
+
                     $erro = "Já existe outro trem cadastrado com esse número de série.";
 
                 } else {
 
-                    // Atualizar o trem
+                    // Atualizar trem
                     $sql = "UPDATE trens
                             SET nome_linha = ?,
                                 numero_serie = ?,
@@ -157,18 +207,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
 
         } catch (Throwable $e) {
+
             error_log($e->getMessage());
             $erro = "Erro ao atualizar o trem.";
+
         }
     }
 }
 
-// Se houver erro, manter os dados digitados
+// Manter os dados digitados se houver erro
 if ($enviado !== null) {
     $trem = array_merge($trem, $enviado);
 }
 
-// Buscar somente funcionários da nova tabela
+// Buscar funcionários
 $funcionarios = mysqli_query(
     $conn,
     "SELECT id, nome
@@ -184,76 +236,295 @@ $funcionarios = mysqli_query(
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Trem</title>
-    <link rel="stylesheet" href="../../assets/style/style.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Editar Trem ● Strain</title>
+
+    <link
+        rel="stylesheet"
+        href="../../assets/style/style.css?v=editartrens1"
+    >
 </head>
 
-<body>
+<body class="body_dashboard">
 
-    <header>
-        <h1>Editar Trem</h1>
+    <!-- NAVBAR -->
+    <header id="header_trens">
+
+        <nav class="navbar">
+
+            <!-- LOGO -->
+            <div class="marca-strain">
+
+                <i data-lucide="train-front"></i>
+                <span>STRAIN</span>
+
+            </div>
+
+            <!-- BOTÃO VOLTAR -->
+            <button
+                type="button"
+                class="btn"
+                onclick="location.href='visualizar_trens.php'"
+            >
+                Voltar
+            </button>
+
+        </nav>
+
     </header>
 
-    <main>
-        <h2>Editando o trem <?php echo htmlspecialchars($titulo_trem); ?>!</h2>
+    <!-- ÁREA PRINCIPAL -->
+    <main class="area_formulario">
 
-        <?php if ($erro != "") { ?>
-            <p style="color:red;"><?php echo htmlspecialchars($erro); ?></p>
-        <?php } ?>
+        <section class="painel_formulario">
 
-        <form action="editar_trens.php" method="POST">
+            <!-- TÍTULO -->
+            <h1 class="titulo_formulario">
+                Editar Trem
+            </h1>
 
-            <input type="hidden" name="id"
-                   value="<?php echo (int) $id; ?>">
+            <p class="subtitulo_formulario">
+                Editando o trem:
+                <?= htmlspecialchars(
+                    $titulo_trem,
+                    ENT_QUOTES,
+                    'UTF-8'
+                ) ?>
+            </p>
 
-            <input type="hidden" name="csrf_token"
-                   value="<?php echo htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8'); ?>">
+            <!-- MENSAGEM DE ERRO -->
+            <?php if ($erro !== "") { ?>
 
-            <label for="nome_linha">Nome da linha:</label>
-            <input type="text" id="nome_linha" name="nome_linha"
-                   value="<?php echo htmlspecialchars($trem["nome_linha"]); ?>" required>
-            <br>
+                <div
+                    class="mensagem_erro_formulario"
+                    role="alert"
+                >
+                    <?= htmlspecialchars(
+                        $erro,
+                        ENT_QUOTES,
+                        'UTF-8'
+                    ) ?>
+                </div>
 
-            <label for="numero_serie">Número de Série:</label>
-            <input type="text" id="numero_serie" name="numero_serie"
-                   value="<?php echo htmlspecialchars($trem["numero_serie"]); ?>" required>
-            <br>
+            <?php } ?>
 
-            <label for="velocidade">Velocidade:</label>
-            <input type="number" id="velocidade" name="velocidade" min="0" step="1"
-                   value="<?php echo htmlspecialchars((string) $trem["velocidade"]); ?>" required>
-            <br>
+            <!-- FORMULÁRIO -->
+            <form
+                action="editar_trens.php"
+                method="POST"
+                class="formulario_strain"
+            >
 
-            <label for="estado">Status:</label>
-            <select name="estado" id="estado" required>
-                <option value="">Selecione o status:</option>
-                <option value="Ativo" <?php if ($trem["estado"] == "Ativo") echo "selected"; ?>>Ativo</option>
-                <option value="Inativo" <?php if ($trem["estado"] == "Inativo") echo "selected"; ?>>Inativo</option>
-                <option value="Manutencao" <?php if ($trem["estado"] == "Manutencao") echo "selected"; ?>>Manutenção</option>
-            </select>
-            <br>
+                <!-- ID -->
+                <input
+                    type="hidden"
+                    name="id"
+                    value="<?= (int) $id ?>"
+                >
 
-            <label for="funcionario_id">Funcionário responsável:</label>
-            <select name="funcionario_id" id="funcionario_id" required>
-                <option value="">Selecione o funcionário:</option>
+                <!-- TOKEN CSRF -->
+                <input
+                    type="hidden"
+                    name="csrf_token"
+                    value="<?= htmlspecialchars(
+                        $_SESSION['csrf_token'],
+                        ENT_QUOTES,
+                        'UTF-8'
+                    ) ?>"
+                >
 
-                <?php while ($f = mysqli_fetch_assoc($funcionarios)) { ?>
-                    <option value="<?php echo (int) $f["id"]; ?>"
-                        <?php if ((string) $f["id"] === (string) $trem["funcionario_id"]) echo "selected"; ?>>
-                        <?php echo htmlspecialchars($f["nome"]); ?>
-                    </option>
-                <?php } ?>
+                <!-- NOME DA LINHA -->
+                <div class="campo_formulario">
 
-            </select>
-            <br>
+                    <label for="nome_linha">
+                        Nome da linha
+                    </label>
 
-            <button type="submit">Atualizar</button>
-            <a href="visualizar_trens.php">Cancelar</a>
+                    <select
+                        id="nome_linha"
+                        name="nome_linha"
+                        required
+                    >
 
-        </form>
+                        <option value="">
+                            Selecione a linha do trem
+                        </option>
+
+                        <?php foreach ($linhas_validas as $linha) { ?>
+
+                            <option
+                                value="<?= htmlspecialchars($linha, ENT_QUOTES, 'UTF-8') ?>"
+                                <?= $trem['nome_linha'] === $linha ? 'selected' : '' ?>
+                            >
+                                <?= htmlspecialchars($linha, ENT_QUOTES, 'UTF-8') ?>
+                            </option>
+
+                        <?php } ?>
+
+                    </select>
+
+                </div>
+
+                <!-- NÚMERO DE SÉRIE -->
+                <div class="campo_formulario">
+
+                    <label for="numero_serie">
+                        Número de série
+                    </label>
+
+                    <input
+                        type="text"
+                        id="numero_serie"
+                        name="numero_serie"
+                        placeholder="Digite o número de série"
+                        value="<?= htmlspecialchars(
+                            $trem['numero_serie'],
+                            ENT_QUOTES,
+                            'UTF-8'
+                        ) ?>"
+                        required
+                    >
+
+                </div>
+
+                <!-- VELOCIDADE -->
+                <div class="campo_formulario">
+
+                    <label for="velocidade">
+                        Velocidade (km/h)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="velocidade"
+                        name="velocidade"
+                        min="0"
+                        step="1"
+                        placeholder="Digite a velocidade do trem"
+                        value="<?= htmlspecialchars(
+                            (string) $trem['velocidade'],
+                            ENT_QUOTES,
+                            'UTF-8'
+                        ) ?>"
+                        required
+                    >
+
+                </div>
+
+                <!-- STATUS -->
+                <div class="campo_formulario">
+
+                    <label for="estado">
+                        Status
+                    </label>
+
+                    <select
+                        name="estado"
+                        id="estado"
+                        required
+                    >
+
+                        <option value="">
+                            Selecione o status
+                        </option>
+
+                        <option
+                            value="Ativo"
+                            <?= $trem['estado'] === 'Ativo' ? 'selected' : '' ?>
+                        >
+                            Ativo
+                        </option>
+
+                        <option
+                            value="Inativo"
+                            <?= $trem['estado'] === 'Inativo' ? 'selected' : '' ?>
+                        >
+                            Inativo
+                        </option>
+
+                        <option
+                            value="Manutencao"
+                            <?= $trem['estado'] === 'Manutencao' ? 'selected' : '' ?>
+                        >
+                            Manutenção
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <!-- FUNCIONÁRIO RESPONSÁVEL -->
+                <div class="campo_formulario">
+
+                    <label for="funcionario_id">
+                        Funcionário responsável
+                    </label>
+
+                    <select
+                        name="funcionario_id"
+                        id="funcionario_id"
+                        required
+                    >
+
+                        <option value="">
+                            Selecione o funcionário
+                        </option>
+
+                        <?php
+                        if ($funcionarios) {
+                            while ($f = mysqli_fetch_assoc($funcionarios)) {
+                        ?>
+
+                            <option
+                                value="<?= (int) $f['id'] ?>"
+                                <?= (string) $f['id'] ===
+                                    (string) $trem['funcionario_id']
+                                    ? 'selected'
+                                    : '' ?>
+                            >
+
+                                <?= htmlspecialchars(
+                                    $f['nome'],
+                                    ENT_QUOTES,
+                                    'UTF-8'
+                                ) ?>
+
+                            </option>
+
+                        <?php
+                            }
+                        }
+                        ?>
+
+                    </select>
+
+                </div>
+
+                <!-- BOTÃO ATUALIZAR -->
+                <button
+                    type="submit"
+                    class="botao_formulario"
+                >
+                    Atualizar Trem
+                </button>
+
+            </form>
+
+        </section>
+
     </main>
+
+    <!-- ÍCONES LUCIDE -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+    <script>
+        lucide.createIcons();
+    </script>
 
 </body>
 

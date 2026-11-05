@@ -1,9 +1,12 @@
+
 <?php
 
 require_once '../../infra/verificar_acesso.php';
 verificarAdmin();
 
 include "../../infra/conexao.php";
+
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 $erro = "";
 $enviado = null;
@@ -25,17 +28,30 @@ if ($id <= 0) {
     exit;
 }
 
-// Buscar o usuário na nova tabela
+// NOVO: buscar o usuário e seu CEP
 $stmt = mysqli_prepare(
     $conn,
-    "SELECT id, nome, email, telefone, tipo, nivel_acesso
-     FROM usuarios WHERE id = ?"
+    "SELECT
+        u.id,
+        u.nome,
+        u.email,
+        u.telefone,
+        u.tipo,
+        u.nivel_acesso,
+        e.cep
+     FROM usuarios AS u
+     LEFT JOIN enderecos_usuarios AS e
+        ON e.usuario_id = u.id
+     WHERE u.id = ?"
 );
 
 mysqli_stmt_bind_param($stmt, "i", $id);
 mysqli_stmt_execute($stmt);
 
-$usuario = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
+$usuario = mysqli_fetch_assoc(
+    mysqli_stmt_get_result($stmt)
+);
+
 mysqli_stmt_close($stmt);
 
 if (!$usuario) {
@@ -51,7 +67,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (
         !isset($_POST['csrf_token']) ||
         !is_string($_POST['csrf_token']) ||
-        !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])
+        !hash_equals(
+            $_SESSION['csrf_token'],
+            $_POST['csrf_token']
+        )
     ) {
         http_response_code(403);
         exit("Solicitação inválida.");
@@ -63,12 +82,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $tipo = $_POST["tipo"] ?? "";
     $nivel_acesso = $_POST["nivel_acesso"] ?? "";
 
+    // NOVO: receber o número do CEP
+    $cep = trim($_POST["cep"] ?? "");
+
     $enviado = [
         "nome" => $nome,
         "email" => $email,
         "telefone" => $telefone,
         "tipo" => $tipo,
-        "nivel_acesso" => $nivel_acesso
+        "nivel_acesso" => $nivel_acesso,
+        "cep" => $cep
     ];
 
     if ($nome === "" || $email === "" || $telefone === "") {
@@ -98,14 +121,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     ) {
         $erro = "Você não pode remover sua própria permissão administrativa.";
 
+    // NOVO: validar apenas o formato do CEP
+    } elseif (
+        $cep !== "" &&
+        !preg_match('/^\d{5}-?\d{3}$/D', $cep)
+    ) {
+        $erro = "CEP inválido. Digite 8 números.";
+
     } else {
+
+        $transacaoIniciada = false;
 
         try {
 
             // Verificar se o usuário é responsável por algum trem
             $stmt = mysqli_prepare(
                 $conn,
-                "SELECT id FROM trens WHERE funcionario_id = ? LIMIT 1"
+                "SELECT id
+                 FROM trens
+                 WHERE funcionario_id = ?
+                 LIMIT 1"
             );
 
             mysqli_stmt_bind_param($stmt, "i", $id);
@@ -118,9 +153,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             mysqli_stmt_close($stmt);
 
             if ($possui_trem && $tipo != "funcionario") {
+
                 $erro = "Este usuário é responsável por um trem e não pode ser alterado para cliente.";
 
             } else {
+
+                // NOVO: preparar CEP para atualização
+                $cepNumerico = str_replace("-", "", $cep);
+
+                $cepAnterior = preg_replace(
+                    '/\D/',
+                    '',
+                    (string) ($usuario['cep'] ?? '')
+                );
+
+                // Iniciar transação
+                $conn->begin_transaction();
+                $transacaoIniciada = true;
 
                 // Atualizar dados na tabela usuarios
                 $sql = "UPDATE usuarios
@@ -147,6 +196,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 mysqli_stmt_execute($stmt);
                 mysqli_stmt_close($stmt);
 
+                // NOVO: cadastrar ou editar somente o CEP
+                if (
+                    $cepNumerico !== "" &&
+                    $cepNumerico !== $cepAnterior
+                ) {
+
+                    $sqlCep = "INSERT INTO enderecos_usuarios
+                        (usuario_id, cep, logradouro, bairro, cidade, uf)
+                        VALUES (?, ?, '', '', '', '')
+
+                        ON DUPLICATE KEY UPDATE
+                            cep = ?";
+
+                    $stmtCep = mysqli_prepare($conn, $sqlCep);
+
+                    mysqli_stmt_bind_param(
+                        $stmtCep,
+                        "iss",
+                        $id,
+                        $cepNumerico,
+                        $cepNumerico
+                    );
+
+                    mysqli_stmt_execute($stmtCep);
+                    mysqli_stmt_close($stmtCep);
+                }
+
+                // Confirmar alterações
+                $conn->commit();
+                $transacaoIniciada = false;
+
                 // Atualizar sessão se editar a própria conta
                 if ($id == (int) $_SESSION['usuario_id']) {
                     $_SESSION['usuario_nome'] = $nome;
@@ -158,6 +238,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
 
         } catch (mysqli_sql_exception $e) {
+
+            if ($transacaoIniciada) {
+                $conn->rollback();
+            }
 
             if ($e->getCode() == 1062) {
                 $erro = "Já existe um usuário com esse e-mail.";
@@ -176,107 +260,90 @@ if ($enviado !== null) {
 
 ?>
 
+
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Usuário</title>
-
-    <link rel="stylesheet" href="../../assets/style/style.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Editar Usuário ● Strain</title>
+    <link rel="stylesheet" href="../../assets/style/style.css?v=editarusuarioscep2">
 </head>
-
-<body>
-
-    <header>
-        <h1>Editar Usuário</h1>
+<body class="body_dashboard">
+    <header id="header_usuarios">
+        <nav class="navbar">
+            <div class="marca-strain">
+                <i data-lucide="train-front"></i>
+                <span>STRAIN</span>
+            </div>
+            <button type="button" class="btn" onclick="location.href='visu_usuarios.php'">Voltar</button>
+        </nav>
     </header>
 
-    <main>
-        <h2>
-            Editando o usuário
-            <?php echo htmlspecialchars($titulo_nome); ?>!
-        </h2>
-
-        <?php if ($erro != "") { ?>
-            <p style="color:red;">
-                <?php echo htmlspecialchars($erro); ?>
+    <main class="area_formulario">
+        <section class="painel_formulario">
+            <h1 class="titulo_formulario">Editar Usuário</h1>
+            <p class="subtitulo_formulario">
+                Editando o usuário: <?= htmlspecialchars($titulo_nome, ENT_QUOTES, 'UTF-8') ?>
             </p>
-        <?php } ?>
 
-        <form action="editar_usuarios.php" method="POST">
+            <?php if ($erro !== '') { ?>
+                <div class="mensagem_erro_formulario" role="alert">
+                    <?= htmlspecialchars($erro, ENT_QUOTES, 'UTF-8') ?>
+                </div>
+            <?php } ?>
 
-            <input type="hidden" name="id"
-                   value="<?php echo (int) $id; ?>">
+            <form action="editar_usuarios.php" method="POST" class="formulario_strain">
+                <input type="hidden" name="id" value="<?= (int) $id ?>">
+                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>">
 
-            <input type="hidden" name="csrf_token"
-                   value="<?php echo htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8'); ?>">
+                <div class="campo_formulario">
+                    <label for="nome">Nome</label>
+                    <input type="text" id="nome" name="nome" maxlength="100"
+                           value="<?= htmlspecialchars($usuario['nome'], ENT_QUOTES, 'UTF-8') ?>" required>
+                </div>
 
-            <label for="nome">Nome:</label>
-            <input type="text" id="nome" name="nome"
-                   maxlength="100"
-                   value="<?php echo htmlspecialchars($usuario["nome"], ENT_QUOTES, 'UTF-8'); ?>"
-                   required>
-            <br>
+                <div class="campo_formulario">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" name="email" maxlength="100"
+                           value="<?= htmlspecialchars($usuario['email'], ENT_QUOTES, 'UTF-8') ?>" required>
+                </div>
 
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email"
-                   maxlength="100"
-                   value="<?php echo htmlspecialchars($usuario["email"], ENT_QUOTES, 'UTF-8'); ?>"
-                   required>
-            <br>
+                <div class="campo_formulario">
+                    <label for="telefone">Telefone</label>
+                    <input type="text" id="telefone" name="telefone" maxlength="20"
+                           value="<?= htmlspecialchars($usuario['telefone'], ENT_QUOTES, 'UTF-8') ?>" required>
+                </div>
 
-            <label for="telefone">Telefone:</label>
-            <input type="text" id="telefone" name="telefone"
-                   maxlength="20"
-                   value="<?php echo htmlspecialchars($usuario["telefone"], ENT_QUOTES, 'UTF-8'); ?>"
-                   required>
-            <br>
+                <div class="campo_formulario">
+                    <label for="cep">CEP (opcional)</label>
+                    <input type="text" id="cep" name="cep" maxlength="9" inputmode="numeric"
+                           pattern="[0-9]{5}-?[0-9]{3}" placeholder="00000-000"
+                           value="<?= htmlspecialchars((string) ($usuario['cep'] ?? ''), ENT_QUOTES, 'UTF-8') ?>">
+                </div>
 
-            <label for="tipo">Tipo de usuário:</label>
-            <select name="tipo" id="tipo" required>
+                <div class="campo_formulario">
+                    <label for="tipo">Tipo de usuário</label>
+                    <select name="tipo" id="tipo" required>
+                        <option value="cliente" <?= $usuario['tipo'] === 'cliente' ? 'selected' : '' ?>>Cliente</option>
+                        <option value="funcionario" <?= $usuario['tipo'] === 'funcionario' ? 'selected' : '' ?>>Funcionário</option>
+                    </select>
+                </div>
 
-                <option value="cliente"
-                    <?php if ($usuario["tipo"] == "cliente") echo "selected"; ?>>
-                    Cliente
-                </option>
+                <div class="campo_formulario">
+                    <label for="nivel_acesso">Nível de acesso</label>
+                    <select name="nivel_acesso" id="nivel_acesso" required>
+                        <option value="comum" <?= $usuario['nivel_acesso'] === 'comum' ? 'selected' : '' ?>>Comum</option>
+                        <option value="admin" <?= $usuario['nivel_acesso'] === 'admin' ? 'selected' : '' ?>>Administrador</option>
+                    </select>
+                </div>
 
-                <option value="funcionario"
-                    <?php if ($usuario["tipo"] == "funcionario") echo "selected"; ?>>
-                    Funcionário
-                </option>
-
-            </select>
-            <br>
-
-            <label for="nivel_acesso">Nível de acesso:</label>
-            <select name="nivel_acesso" id="nivel_acesso" required>
-
-                <option value="comum"
-                    <?php if ($usuario["nivel_acesso"] == "comum") echo "selected"; ?>>
-                    Comum
-                </option>
-
-                <option value="admin"
-                    <?php if ($usuario["nivel_acesso"] == "admin") echo "selected"; ?>>
-                    Administrador
-                </option>
-
-            </select>
-            <br>
-
-            <button type="submit">Atualizar</button>
-
-            <a href="visu_usuarios.php">Cancelar</a>
-
-        </form>
-
+                <button type="submit" class="botao_formulario">Atualizar Usuário</button>
+            </form>
+        </section>
     </main>
 
-    <footer></footer>
-
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script>lucide.createIcons();</script>
 </body>
-
 </html>

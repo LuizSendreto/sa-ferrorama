@@ -12,13 +12,43 @@ if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+// Opções permitidas
+$tipos_validos = [
+    "Temperatura" => "Temperatura",
+    "Vibracao" => "Vibração",
+    "Pressao" => "Pressão",
+    "Umidade" => "Umidade"
+];
 
-    // Verificar o token CSRF
+$localizacoes_validas = [
+    "Locomotiva" => "Locomotiva",
+    "Vagao 1" => "Vagão 1",
+    "Vagao 2" => "Vagão 2",
+    "Vagao 3" => "Vagão 3"
+];
+
+$posicoes_validas = [
+    "Ativo" => "Ativo",
+    "Inativo" => "Inativo",
+    "Manutencao" => "Manutenção"
+];
+
+// Manter valores após erro
+$tipo_sensor = "";
+$localizacao = "";
+$posicao = "";
+
+// Processar cadastro
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+
+    // Verificar CSRF
     if (
         !isset($_POST['csrf_token']) ||
         !is_string($_POST['csrf_token']) ||
-        !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])
+        !hash_equals(
+            $_SESSION['csrf_token'],
+            $_POST['csrf_token']
+        )
     ) {
         http_response_code(403);
         exit("Solicitação inválida.");
@@ -28,25 +58,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $localizacao = trim($_POST["localizacao"] ?? "");
     $posicao = trim($_POST["posicao"] ?? "");
 
-    // Valores permitidos
-    $tipos_validos = ["Temperatura", "Vibracao", "Pressao", "Umidade"];
-    $localizacoes_validas = ["Locomotiva", "Vagao 1", "Vagao 2", "Vagao 3"];
-    $posicoes_validas = ["Ativo", "Inativo", "Manutencao"];
-
-    // Validar os campos
+    // Validar campos
     if (
-        !in_array($tipo_sensor, $tipos_validos, true) ||
-        !in_array($localizacao, $localizacoes_validas, true) ||
-        !in_array($posicao, $posicoes_validas, true)
+        !array_key_exists($tipo_sensor, $tipos_validos) ||
+        !array_key_exists($localizacao, $localizacoes_validas) ||
+        !array_key_exists($posicao, $posicoes_validas)
     ) {
         $erro = "Selecione opções válidas para todos os campos.";
 
     } else {
 
-        $sql = "INSERT INTO sensores (tipo, localizacao, posicao)
-                VALUES (?, ?, ?)";
-
         try {
+
+            // Cadastrar sensor
+            $sql = "INSERT INTO sensores
+                    (tipo, localizacao, posicao)
+                    VALUES (?, ?, ?)";
+
             $stmt = mysqli_prepare($conn, $sql);
 
             mysqli_stmt_bind_param(
@@ -64,111 +92,253 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit;
 
         } catch (Throwable $e) {
+
             error_log($e->getMessage());
             $erro = "Erro ao cadastrar o sensor.";
+
         }
     }
 }
 
 ?>
 
+<!DOCTYPE html>
 <html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastrar Sensor</title>
 
-    <link rel="stylesheet" href="../../assets/style/style.css">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Cadastrar Sensor ● Strain</title>
+
+    <link
+        rel="stylesheet"
+        href="../../assets/style/style.css?v=cadastrosensor2"
+    >
 
 </head>
 
 <body class="body_dashboard">
+
+    <!-- NAVBAR -->
     <header id="header_cadastro_sensor">
+
         <nav class="navbar">
-            <div class="logo-navbar">
-                <img src="../../assets/img/logo_navbar2.png" alt="Logo Strain">
+
+            <!-- LOGO -->
+            <div class="marca-strain">
+
+                <i data-lucide="train-front"></i>
+
+                <span>STRAIN</span>
+
             </div>
+
+            <!-- VOLTAR -->
+            <button
+                type="button"
+                class="btn"
+                onclick="location.href='visu_sensores.php'"
+            >
+                Voltar
+            </button>
+
         </nav>
+
     </header>
 
-    <main id="main_cadastro_sensor">
-        <aside id="sidebar_dashboard">
+    <!-- ÁREA PRINCIPAL -->
+    <main class="area_formulario">
 
-            <h2 id="titulo_sidebar">Dashboard</h2>
+        <section class="painel_formulario">
 
-            <ul class="menu_sidebar">
-                <li><a href="../../index.php">Início</a></li>
-                <li><a href="../dashboard.php">Dashboard</a></li>
-                <li><a href="../Trens/visualizar_trens.php">Trens</a></li>
-                <li><a href="../rotas/rotas.php">Rotas</a></li>
-                <li><a href="../monitoramento.php">Monitoramento</a></li>
-                <li><a href="../alertas.php">Alertas</a></li>
-                <li><a href="../relatorios.php">Relatórios</a></li>
-                <li><a href="../usuarios/visu_usuarios.php">Visualização de Usuarios</a></li>
-                <li><a href="../sensores/visu_sensores.php" class="active_sidebar">Visualização de Sensores</a></li>
-                <li><a href="../usuarios/logout.php">Logout</a></li>
-            </ul>
-        </aside>
+            <!-- TÍTULO -->
+            <h1 class="titulo_formulario">
+                Cadastro de Sensor
+            </h1>
 
-        <div>
-            <h2>Adicione um novo sensor!</h2>
-            <div id="conteudo_cadastro_sensor">
+            <p class="subtitulo_formulario">
+                Adicione um novo sensor ao sistema Strain
+            </p>
 
-                <h1>Cadastro de Sensor</h1>
+            <!-- MENSAGEM DE ERRO -->
+            <?php if ($erro !== "") { ?>
 
-                <?php if ($erro != "") { ?>
-                    <p style="color:red;">
-                        <?php echo htmlspecialchars($erro); ?>
-                    </p>
-                <?php } ?>
+                <div
+                    class="mensagem_erro_formulario"
+                    role="alert"
+                >
+                    <?= htmlspecialchars(
+                        $erro,
+                        ENT_QUOTES,
+                        'UTF-8'
+                    ) ?>
+                </div>
 
-                <form id="form_cadastro_sensor" action="cadastro_sensor.php" method="POST">
+            <?php } ?>
 
-                    <input type="hidden" name="csrf_token"
-                           value="<?php echo htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8'); ?>">
+            <!-- FORMULÁRIO -->
+            <form
+                action="cadastro_sensor.php"
+                method="POST"
+                class="formulario_strain"
+            >
 
-                    <label for="tipo_sensor">Tipo de Sensor:</label>
+                <!-- TOKEN CSRF -->
+                <input
+                    type="hidden"
+                    name="csrf_token"
+                    value="<?= htmlspecialchars(
+                        $_SESSION['csrf_token'],
+                        ENT_QUOTES,
+                        'UTF-8'
+                    ) ?>"
+                >
 
-                    <select name="tipo_sensor" id="tipo_sensor" required>
-                        <option value="">Selecione o tipo</option>
-                        <option value="Temperatura">Temperatura</option>
-                        <option value="Vibracao">Vibração</option>
-                        <option value="Pressao">Pressão</option>
-                        <option value="Umidade">Umidade</option>
+                <!-- TIPO DE SENSOR -->
+                <div class="campo_formulario">
+
+                    <label for="tipo_sensor">
+                        Tipo de Sensor
+                    </label>
+
+                    <select
+                        name="tipo_sensor"
+                        id="tipo_sensor"
+                        required
+                    >
+
+                        <option value="">
+                            Selecione o tipo
+                        </option>
+
+                        <?php foreach ($tipos_validos as $valor => $texto) { ?>
+
+                            <option
+                                value="<?= htmlspecialchars(
+                                    $valor,
+                                    ENT_QUOTES,
+                                    'UTF-8'
+                                ) ?>"
+                                <?= $tipo_sensor === $valor ? 'selected' : '' ?>
+                            >
+                                <?= htmlspecialchars(
+                                    $texto,
+                                    ENT_QUOTES,
+                                    'UTF-8'
+                                ) ?>
+                            </option>
+
+                        <?php } ?>
+
                     </select>
 
-                    <label for="localizacao">Localização:</label>
+                </div>
 
-                    <select name="localizacao" id="localizacao" required>
-                        <option value="">Selecione a localização</option>
-                        <option value="Locomotiva">Locomotiva</option>
-                        <option value="Vagao 1">Vagão 1</option>
-                        <option value="Vagao 2">Vagão 2</option>
-                        <option value="Vagao 3">Vagão 3</option>
+                <!-- LOCALIZAÇÃO -->
+                <div class="campo_formulario">
+
+                    <label for="localizacao">
+                        Localização
+                    </label>
+
+                    <select
+                        name="localizacao"
+                        id="localizacao"
+                        required
+                    >
+
+                        <option value="">
+                            Selecione a localização
+                        </option>
+
+                        <?php foreach ($localizacoes_validas as $valor => $texto) { ?>
+
+                            <option
+                                value="<?= htmlspecialchars(
+                                    $valor,
+                                    ENT_QUOTES,
+                                    'UTF-8'
+                                ) ?>"
+                                <?= $localizacao === $valor ? 'selected' : '' ?>
+                            >
+                                <?= htmlspecialchars(
+                                    $texto,
+                                    ENT_QUOTES,
+                                    'UTF-8'
+                                ) ?>
+                            </option>
+
+                        <?php } ?>
+
                     </select>
 
-                    <label for="posicao">Status:</label>
+                </div>
 
-                    <select name="posicao" id="posicao" required>
-                        <option value="">Selecione o status</option>
-                        <option value="Ativo">Ativo</option>
-                        <option value="Inativo">Inativo</option>
-                        <option value="Manutencao">Manutenção</option>
+                <!-- STATUS -->
+                <div class="campo_formulario">
+
+                    <label for="posicao">
+                        Status
+                    </label>
+
+                    <select
+                        name="posicao"
+                        id="posicao"
+                        required
+                    >
+
+                        <option value="">
+                            Selecione o status
+                        </option>
+
+                        <?php foreach ($posicoes_validas as $valor => $texto) { ?>
+
+                            <option
+                                value="<?= htmlspecialchars(
+                                    $valor,
+                                    ENT_QUOTES,
+                                    'UTF-8'
+                                ) ?>"
+                                <?= $posicao === $valor ? 'selected' : '' ?>
+                            >
+                                <?= htmlspecialchars(
+                                    $texto,
+                                    ENT_QUOTES,
+                                    'UTF-8'
+                                ) ?>
+                            </option>
+
+                        <?php } ?>
+
                     </select>
 
-                    <button type="submit">
-                        Cadastrar Sensor
-                    </button>
+                </div>
 
-                </form>
+                <!-- BOTÃO CADASTRAR -->
+                <button
+                    type="submit"
+                    class="botao_formulario"
+                >
+                    Cadastrar Sensor
+                </button>
 
-            </div>
-        </div>
+            </form>
+
+        </section>
 
     </main>
 
-    <footer></footer>
+    <!-- ÍCONES LUCIDE -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+    <script>
+        lucide.createIcons();
+    </script>
 
 </body>
 

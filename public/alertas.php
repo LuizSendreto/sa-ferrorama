@@ -1,57 +1,177 @@
+
 <?php
+
 require_once '../infra/verificar_acesso.php';
 verificarFuncionario();
+
+// Informações do usuário logado
+$nome = $_SESSION['usuario_nome'] ?? 'Usuário';
+$admin = ($_SESSION['nivel_acesso'] ?? '') === 'admin';
+
 ?>
-  
-<html lang="en">
+
+<!DOCTYPE html>
+<html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alertas</title>
 
-    <link rel="stylesheet" href="../assets/style/style.css">
+    <title>Alertas ● Strain</title>
+
+    <link rel="stylesheet" href="../assets/style/style.css?v=sidebar7">
 </head>
 
-    <body class="body_dashboard">
+<body class="body_dashboard">
+
+    <!-- NAVBAR -->
+    <header id="header_alertas">
 
         <nav class="navbar">
 
-            <div class="logo-navbar">
-                <img src="../assets/img/logo_navbar2.png" alt="Logo Strain">
+            <div class="marca-strain">
+                <i data-lucide="train-front"></i>
+                <span>STRAIN</span>
+            </div>
+
+            <div class="saudacao-navbar">
+                <p>
+                    Olá, <?php echo htmlspecialchars($nome, ENT_QUOTES, 'UTF-8'); ?>!
+                </p>
             </div>
 
         </nav>
 
-        <header id="header_alertas">
+    </header>
 
+    <!-- SIDEBAR -->
+    <aside id="sidebar_dashboard">
 
-            <main id="main_alertas">
-                <aside id="sidebar_dashboard">
+        <h2 id="titulo_sidebar">Dashboard</h2>
 
-                    <h2 id="titulo_sidebar">Dashboard</h2>
+        <ul class="menu_sidebar">
 
-            <ul class="menu_sidebar">
-                
-                <li><a href="../public/dashboard.php" >Dashboard</a></li>
-                <li><a href="../public/Trens/visualizar_trens.php">Trens</a></li>
-                <li><a href="rotas/rotas.php">Rotas</a></li>
-                <li><a href="../public/monitoramento.php">Monitoramento</a></li>
-                <li><a href="../public/alertas.php" class="active_sidebar">Alertas</a></li>
-                <li><a href="../public/relatorios.php" >Relatórios</a></li>
-                <li><a href="../public/usuarios/visu_usuarios.php">Visualização de Usuarios</a></li>
-                <li><a href="../public/sensores/visu_sensores.php">Visualização de Sensores</a></li>
-                <li><a href="../public/usuarios/logout.php">Logout</a></li>
-            </ul>
+            <li>
+                <a href="dashboard.php">Dashboard</a>
+            </li>
 
-                </aside>
+            <li>
+                <a href="Trens/visualizar_trens.php">Trens</a>
+            </li>
 
-                <div class="fotos">
-                    <img src="../assets/img/alertas.png" alt="Trens">
+            <li>
+                <a href="rotas/rotas.php">Rotas</a>
+            </li>
+
+            <li>
+                <a href="monitoramento.php">Monitoramento</a>
+            </li>
+
+            <li>
+                <a href="alertas.php" class="active_sidebar">Alertas</a>
+            </li>
+
+            <li>
+                <a href="relatorios.php">Relatórios</a>
+            </li>
+
+            <?php if ($admin) { ?>
+                <li>
+                    <a href="usuarios/visu_usuarios.php">
+                        Usuários
+                    </a>
+                </li>
+            <?php } ?>
+
+            <li>
+                <a href="sensores/visu_sensores.php">
+                    Sensores
+                </a>
+            </li>
+
+            <li>
+                <a href="usuarios/logout.php">Logout</a>
+            </li>
+
+        </ul>
+
+    </aside>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main id="main_alertas">
+
+        <section class="container_alertas">
+
+            <h1>Alertas recentes</h1>
+
+            <div class="caixa_alertas">
+
+                <!-- ALERTA DE ERRO -->
+                <div class="alerta alerta_erro">
+
+                    <span class="icone_alerta">🚨</span>
+
+                    <div class="texto_alerta">
+                        <strong>
+                            Falha no sensor de temperatura - Trem 6521
+                        </strong>
+
+                        <p>Sensor localizado no vagão 3</p>
+                    </div>
+
+                    <span class="hora_alerta">10:21</span>
+
                 </div>
 
-            </main>
+                <!-- ALERTA DE AVISO -->
+                <div class="alerta alerta_aviso">
 
-    </body>
+                    <span class="icone_alerta">⚠️</span>
 
+                    <div class="texto_alerta">
+                        <strong>
+                            Velocidade abaixo do esperado - Trem 1534
+                        </strong>
+
+                        <p>
+                            Velocidade média abaixo do limite estabelecido
+                        </p>
+                    </div>
+
+                    <span class="hora_alerta">10:18</span>
+
+                </div>
+
+                <!-- ALERTA DE INFORMAÇÃO -->
+                <div class="alerta alerta_info">
+
+                    <span class="icone_alerta">ℹ️</span>
+
+                    <div class="texto_alerta">
+                        <strong>
+                            Manutenção programada - Trem 9287
+                        </strong>
+
+                        <p>
+                            Manutenção preventiva agendada para hoje às 14:00
+                        </p>
+                    </div>
+
+                    <span class="hora_alerta">09:52</span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+    <script>
+        lucide.createIcons();
+    </script>
+
+</body>
 </html>

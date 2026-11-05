@@ -1,0 +1,566 @@
+
+/* =========================================
+   STRAIN - CONSULTA DE CEP
+   MESMO ESTILO DO CARD DE CLIMA
+   ========================================= */
+
+/* CARD PRINCIPAL */
+
+.consulta_cep {
+    position: relative;
+    display: grid;
+
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+
+    width: 100%;
+    max-width: 760px;
+    min-width: 0;
+
+    margin: 0 auto;
+    padding: 28px;
+
+    background-color: #850000;
+
+    /* Borda vinho cria o card externo */
+    border: 28px solid #850000;
+    border-top-width: 85px;
+    border-radius: 28px;
+
+    box-sizing: border-box;
+
+    font-family: Arial, sans-serif;
+    color: #850000;
+}
+
+/* CAIXA BRANCA INTERNA
+   Sem precisar adicionar outra div no HTML */
+
+.consulta_cep::before {
+    content: "";
+    position: absolute;
+
+    inset: 0;
+
+    background-color: #ffffff;
+    border-radius: 18px;
+
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* MANTER OS CAMPOS NA FRENTE DO FUNDO */
+
+.consulta_cep > .conjunto,
+.consulta_cep > #mensagem_cep {
+    position: relative;
+    z-index: 1;
+}
+
+/* TÍTULO BRANCO NO FUNDO VINHO */
+
+.consulta_cep > h3 {
+    position: absolute;
+    top: -65px;
+    left: 0;
+    right: 0;
+
+    z-index: 1;
+
+    margin: 0;
+
+    color: white;
+    font-size: 28px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 1.3;
+}
+
+/* ORGANIZAÇÃO DOS CAMPOS */
+
+.consulta_cep > .conjunto {
+    width: 100%;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+}
+
+/* CEP OCUPA A LINHA INTEIRA */
+
+.consulta_cep > .conjunto:first-of-type {
+    grid-column: 1 / -1;
+}
+
+/* LABELS */
+
+.consulta_cep .conjunto label {
+    display: block;
+
+    margin: 0 0 8px;
+
+    color: #850000;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+/* INPUTS */
+
+.consulta_cep .conjunto input {
+    display: block;
+
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    height: 48px;
+
+    padding: 12px 14px;
+
+    background: #ffffff;
+    color: #333333;
+
+    border: 2px solid #850000;
+    border-radius: 10px;
+
+    font-family: Arial, sans-serif;
+    font-size: 15px;
+
+    box-sizing: border-box;
+}
+
+/* CAMPO SELECIONADO */
+
+.consulta_cep input:focus {
+    outline: none;
+
+    border-color: #ac2626;
+    box-shadow: 0 0 0 3px rgba(133, 0, 0, 0.12);
+}
+
+/* CAMPOS PREENCHIDOS PELA API */
+
+.consulta_cep input[readonly] {
+    background-color: #f5f5f5;
+    color: #444444;
+}
+
+/* CEP + BOTÃO */
+
+.consulta_cep .linha_cep {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    width: 100%;
+    min-width: 0;
+}
+
+.consulta_cep .linha_cep input {
+    flex: 1 1 auto;
+    width: 0;
+    min-width: 0;
+}
+
+/* BOTÃO CONSULTAR */
+
+.consulta_cep #consultar_cep {
+    flex: 0 0 auto;
+
+    height: 48px;
+    padding: 0 22px;
+
+    background-color: #850000;
+    color: white;
+
+    border: none;
+    border-radius: 10px;
+
+    font-size: 15px;
+    font-weight: bold;
+
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.consulta_cep #consultar_cep:hover {
+    background-color: #650000;
+}
+
+.consulta_cep #consultar_cep:disabled {
+    opacity: 0.6;
+    cursor: wait;
+}
+
+/* MENSAGEM DA API */
+
+.consulta_cep #mensagem_cep {
+    grid-column: 1 / -1;
+
+    min-height: 20px;
+    margin: 0;
+
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.consulta_cep #mensagem_cep[data-tipo="sucesso"] {
+    color: #237744;
+}
+
+.consulta_cep #mensagem_cep[data-tipo="erro"] {
+    color: #c62828;
+}
+
+/* RESPONSIVIDADE */
+
+@media (max-width: 650px) {
+
+    .consulta_cep {
+        grid-template-columns: 1fr;
+
+        padding: 20px 15px;
+
+        border-width: 15px;
+        border-top-width: 80px;
+        border-radius: 20px;
+    }
+
+    .consulta_cep > h3 {
+        top: -60px;
+        font-size: 23px;
+    }
+
+    .consulta_cep > .conjunto:first-of-type,
+    .consulta_cep #mensagem_cep {
+        grid-column: 1;
+    }
+
+    .consulta_cep .linha_cep {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .consulta_cep .linha_cep input {
+        width: 100%;
+        flex: none;
+    }
+
+    .consulta_cep #consultar_cep {
+        width: 100%;
+    }
+}
+
+
+/* ==========================================
+   STRAIN - CORREÇÃO DO CARD DE CEP
+   COMPACTO E SEM BORDAS AMARELAS
+   ========================================== */
+
+/* CARD EXTERNO */
+
+.consulta_cep {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 15px;
+
+    width: 100%;
+    max-width: 520px;
+    min-width: 0;
+    flex: 1 1 420px;
+
+    height: auto;
+    margin: 0 auto;
+
+    padding: 22px;
+
+    background: #850000;
+
+    border: 20px solid #850000;
+    border-top-width: 70px;
+    border-radius: 25px;
+
+    box-sizing: border-box;
+    overflow: hidden;
+
+    font-family: Arial, sans-serif;
+}
+
+/* FUNDO BRANCO INTERNO */
+
+.consulta_cep::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    background: #ffffff;
+    border-radius: 14px;
+
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* TÍTULO */
+
+.consulta_cep > h3 {
+    position: absolute;
+    top: -54px;
+    left: 0;
+    right: 0;
+
+    z-index: 1;
+
+    margin: 0;
+    padding: 0;
+
+    color: white;
+    background: transparent;
+
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* REMOVER FUNDOS E BORDAS BEGE DOS GRUPOS */
+
+.consulta_cep > .conjunto {
+    position: relative;
+    z-index: 1;
+
+    width: 100%;
+    min-width: 0;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    background: transparent !important;
+    background-image: none !important;
+
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* REMOVER FUNDO DOS LABELS */
+
+.consulta_cep .conjunto label {
+    display: block;
+
+    width: auto;
+    margin: 0 0 6px;
+    padding: 0 !important;
+
+    background: transparent !important;
+    background-image: none !important;
+
+    border: none !important;
+    box-shadow: none !important;
+
+    color: #850000;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* CAMPOS */
+
+.consulta_cep .conjunto input {
+    display: block;
+
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    height: 42px;
+
+    margin: 0;
+    padding: 10px 12px;
+
+    background: white;
+    color: #333;
+
+    border: 1.5px solid #850000;
+    border-radius: 9px;
+
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+/* CAMPOS RETORNADOS PELA API */
+
+.consulta_cep input[readonly] {
+    background-color: #f7f7f7;
+}
+
+/* EFEITO AO CLICAR */
+
+.consulta_cep input:focus {
+    outline: none;
+    border-color: #a50000;
+    box-shadow: 0 0 0 3px rgba(133, 0, 0, 0.1);
+}
+
+/* CEP OCUPA A PRIMEIRA LINHA */
+
+.consulta_cep > .conjunto:first-of-type {
+    grid-column: 1 / -1;
+}
+
+/* CEP E BOTÃO */
+
+.consulta_cep .linha_cep {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    width: 100%;
+    min-width: 0;
+
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.consulta_cep .linha_cep input {
+    flex: 1 1 auto;
+    width: 0;
+    min-width: 0;
+}
+
+/* BOTÃO CONSULTAR */
+
+.consulta_cep #consultar_cep {
+    flex: 0 0 auto;
+
+    height: 42px;
+    padding: 0 16px;
+
+    background: #850000;
+    color: #fff;
+
+    border: none;
+    border-radius: 9px;
+
+    font-size: 14px;
+    font-weight: bold;
+
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.consulta_cep #consultar_cep:hover {
+    background: #650000;
+}
+
+.consulta_cep #consultar_cep:disabled {
+    opacity: 0.6;
+    cursor: wait;
+}
+
+/* MENSAGENS DA API */
+
+.consulta_cep #mensagem_cep {
+    position: relative;
+    z-index: 1;
+
+    grid-column: 1 / -1;
+
+    margin: 0;
+    padding: 0;
+
+    background: transparent !important;
+
+    font-size: 13px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.consulta_cep #mensagem_cep:empty {
+    display: none;
+}
+
+.consulta_cep #mensagem_cep[data-tipo="sucesso"] {
+    color: #237744;
+}
+
+.consulta_cep #mensagem_cep[data-tipo="erro"] {
+    color: #c62828;
+}
+
+/* RESPONSIVIDADE */
+
+@media (max-width: 650px) {
+
+    .consulta_cep {
+        grid-template-columns: 1fr;
+
+        max-width: 100%;
+        flex-basis: 100%;
+
+        padding: 17px;
+
+        border-width: 15px;
+        border-top-width: 65px;
+        border-radius: 20px;
+    }
+
+    .consulta_cep > h3 {
+        top: -49px;
+        font-size: 21px;
+    }
+
+    .consulta_cep > .conjunto:first-of-type,
+    .consulta_cep #mensagem_cep {
+        grid-column: 1;
+    }
+
+    .consulta_cep .linha_cep {
+        flex-wrap: wrap;
+    }
+
+    .consulta_cep .linha_cep input {
+        flex: 1 1 150px;
+    }
+}
+
+
+
+/* CORRIGIR TÍTULO DA CONSULTA DE CEP */
+
+.consulta_cep {
+    position: relative;
+    overflow: visible !important;
+}
+
+/* TÍTULO BRANCO NA PARTE VINHO */
+
+.consulta_cep > h3 {
+    display: block !important;
+    visibility: visible !important;
+
+    position: absolute !important;
+    top: -55px !important;
+    left: 0;
+    right: 0;
+
+    z-index: 10;
+
+    margin: 0;
+    padding: 0;
+
+    background: transparent !important;
+    color: #ffffff !important;
+
+    font-family: Arial, sans-serif;
+    font-size: 26px;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* AJUSTE PARA CELULARES */
+
+@media (max-width: 650px) {
+    .consulta_cep > h3 {
+        top: -48px !important;
+        font-size: 22px;
+    }
+}

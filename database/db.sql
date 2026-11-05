@@ -18,6 +18,28 @@ CREATE TABLE IF NOT EXISTS usuarios (
 );
 
 -- ==========================================
+-- TABELA ENDERECOS_USUARIOS
+-- ==========================================
+
+CREATE TABLE IF NOT EXISTS enderecos_usuarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT NOT NULL UNIQUE,
+    cep CHAR(8) NOT NULL,
+    logradouro VARCHAR(255) NOT NULL DEFAULT '',
+    bairro VARCHAR(120) NOT NULL DEFAULT '',
+    cidade VARCHAR(120) NOT NULL,
+    uf CHAR(2) NOT NULL,
+    atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        ON UPDATE CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_endereco_usuario
+        FOREIGN KEY (usuario_id)
+        REFERENCES usuarios(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ==========================================
 -- TABELA SENSORES
 -- ==========================================
 
@@ -147,3 +169,69 @@ VALUES
 (49, 'Rodrigo Correia', 'rodrigo.correia@email.com', '920678123', '$2y$10$CVhdyRa9CakX4VB6M3ldY.9v9NxquyFbCDzNQMhUAPuGQj6ITtgM.', 'funcionario', 'comum'),
 (50, 'Claudia Vieira', 'claudia.vieira@email.com', '921781234', '$2y$10$KWoUvZ0KHxRUx4GDnsI1VepZCJM/skXii1fqnV1LUSrD5ShsB4H/y', 'funcionario', 'comum'),
 (51, 'Eduardo Batista', 'eduardo.batista@email.com', '922812345', '$2y$10$yFbAWs8bIvEjdeez6ftsZOLl6X0RrfqCUvnZOtK7FXzJTY1dXFoNu', 'funcionario', 'comum');
+
+
+-- ADICIONAR CEPS AOS USUÁRIOS EXISTENTES
+-- NÃO ALTERA A TABELA usuarios
+-- CEPs DE EXEMPLO PARA TESTES
+
+INSERT IGNORE INTO enderecos_usuarios
+(usuario_id, cep, logradouro, bairro, cidade, uf)
+VALUES
+
+-- ADMINISTRADOR
+(1, '89237170', '', '', 'Joinville', 'SC'),
+
+-- CLIENTES
+(2, '01001000', '', '', 'São Paulo', 'SP'),
+(3, '20040002', '', '', 'Rio de Janeiro', 'RJ'),
+(4, '80010000', '', '', 'Curitiba', 'PR'),
+(5, '89201000', '', '', 'Joinville', 'SC'),
+(6, '01001000', '', '', 'São Paulo', 'SP'),
+(7, '20040002', '', '', 'Rio de Janeiro', 'RJ'),
+(8, '80010000', '', '', 'Curitiba', 'PR'),
+(9, '89201000', '', '', 'Joinville', 'SC'),
+(10, '01001000', '', '', 'São Paulo', 'SP'),
+(11, '20040002', '', '', 'Rio de Janeiro', 'RJ'),
+(12, '80010000', '', '', 'Curitiba', 'PR'),
+(13, '89201000', '', '', 'Joinville', 'SC'),
+(14, '01001000', '', '', 'São Paulo', 'SP'),
+(15, '20040002', '', '', 'Rio de Janeiro', 'RJ'),
+(16, '80010000', '', '', 'Curitiba', 'PR'),
+(17, '89201000', '', '', 'Joinville', 'SC'),
+(18, '01001000', '', '', 'São Paulo', 'SP'),
+(19, '20040002', '', '', 'Rio de Janeiro', 'RJ'),
+(20, '80010000', '', '', 'Curitiba', 'PR'),
+(21, '89201000', '', '', 'Joinville', 'SC'),
+
+-- FUNCIONÁRIOS
+(22, '01001000', '', '', 'São Paulo', 'SP'),
+(23, '20040002', '', '', 'Rio de Janeiro', 'RJ'),
+(24, '80010000', '', '', 'Curitiba', 'PR'),
+(25, '89201000', '', '', 'Joinville', 'SC'),
+(26, '01001000', '', '', 'São Paulo', 'SP'),
+(27, '20040002', '', '', 'Rio de Janeiro', 'RJ'),
+(28, '80010000', '', '', 'Curitiba', 'PR'),
+(29, '89201000', '', '', 'Joinville', 'SC'),
+(30, '01001000', '', '', 'São Paulo', 'SP'),
+(31, '20040002', '', '', 'Rio de Janeiro', 'RJ'),
+(32, '80010000', '', '', 'Curitiba', 'PR'),
+(33, '89201000', '', '', 'Joinville', 'SC'),
+(34, '01001000', '', '', 'São Paulo', 'SP'),
+(35, '20040002', '', '', 'Rio de Janeiro', 'RJ'),
+(36, '80010000', '', '', 'Curitiba', 'PR'),
+(37, '89201000', '', '', 'Joinville', 'SC'),
+(38, '01001000', '', '', 'São Paulo', 'SP'),
+(39, '20040002', '', '', 'Rio de Janeiro', 'RJ'),
+(40, '80010000', '', '', 'Curitiba', 'PR'),
+(41, '89201000', '', '', 'Joinville', 'SC'),
+(42, '01001000', '', '', 'São Paulo', 'SP'),
+(43, '20040002', '', '', 'Rio de Janeiro', 'RJ'),
+(44, '80010000', '', '', 'Curitiba', 'PR'),
+(45, '89201000', '', '', 'Joinville', 'SC'),
+(46, '01001000', '', '', 'São Paulo', 'SP'),
+(47, '20040002', '', '', 'Rio de Janeiro', 'RJ'),
+(48, '80010000', '', '', 'Curitiba', 'PR'),
+(49, '89201000', '', '', 'Joinville', 'SC'),
+(50, '01001000', '', '', 'São Paulo', 'SP'),
+(51, '20040002', '', '', 'Rio de Janeiro', 'RJ');

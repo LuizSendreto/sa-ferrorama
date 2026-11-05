@@ -259,3 +259,49 @@ sa-ferrorama/
 │
 ├── index.php
 └── README.md
+
+## APIs utilizadas - Atividade 10
+
+Durante a Atividade 10, integramos duas APIs ao Strain para adicionar novas funcionalidades ao sistema.
+
+### 1. API ViaCEP
+
+**Site:** https://viacep.com.br/
+
+A API ViaCEP foi utilizada para consultar endereços a partir do CEP informado pelo usuário.
+
+Com essa integração, conseguimos:
+
+- Consultar o CEP durante o cadastro de usuários e funcionários.
+- Preencher automaticamente os dados do endereço.
+- Salvar o CEP no banco de dados.
+- Mostrar os CEPs na tabela de usuários.
+- Permitir a edição do número do CEP.
+
+A edição do CEP foi simplificada para permitir alterar apenas o número, sem realizar uma nova consulta de endereço.
+
+**Arquivos relacionados:**
+- `Scripts/cep.js`
+- `public/usuarios/cadastro_usuarios.php`
+- `public/usuarios/editar_usuarios.php`
+- `public/usuarios/visu_usuarios.php`
+- `public/funcionarios/cadastro_funcionarios.php`
+
+### 2. API Open-Meteo
+
+**Site:** https://open-meteo.com/
+
+A API Open-Meteo foi utilizada para mostrar informações sobre o clima de Joinville no dashboard do Strain.
+
+Com ela, o sistema pode apresentar a temperatura atual e as condições meteorológicas da cidade.
+
+**Arquivos relacionados:**
+- `Scripts/clima.js`
+- `assets/style/clima.css`
+- `public/dashboard.php`
+
+### Objetivo das integrações
+
+O objetivo da atividade foi aprender a utilizar APIs externas e integrar as informações recebidas às funcionalidades do nosso sistema.
+
+Durante o desenvolvimento, também realizamos ajustes nos códigos, na organização das páginas e no banco de dados para adaptar as APIs ao Strain.

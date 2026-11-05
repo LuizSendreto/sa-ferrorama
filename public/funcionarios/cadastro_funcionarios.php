@@ -1,9 +1,12 @@
+
 <?php
 
 require_once '../../infra/verificar_acesso.php';
 verificarAdmin();
 
 include '../../infra/conexao.php';
+
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 $erro = "";
 
@@ -16,6 +19,67 @@ if (empty($_SESSION['csrf_token'])) {
 $nome = "";
 $email = "";
 $telefone = "";
+$cep = "";
+
+// NOVO: consultar o endereço na API ViaCEP
+function consultarViaCep($cep) {
+
+    if (!function_exists('curl_init')) {
+        throw new RuntimeException(
+            "A extensão cURL não está habilitada no PHP."
+        );
+    }
+
+    $url = "https://viacep.com.br/ws/" . $cep . "/json/";
+
+    $curl = curl_init($url);
+
+    curl_setopt_array($curl, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_CONNECTTIMEOUT => 5,
+        CURLOPT_TIMEOUT => 10,
+        CURLOPT_SSL_VERIFYPEER => true
+    ]);
+
+    $resposta = curl_exec($curl);
+    $status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+
+    curl_close($curl);
+
+    if ($resposta === false || $status !== 200) {
+        throw new RuntimeException(
+            "Não foi possível consultar o CEP."
+        );
+    }
+
+    $dados = json_decode($resposta, true);
+
+    if (!is_array($dados)) {
+        throw new RuntimeException(
+            "Resposta inválida da API."
+        );
+    }
+
+    if (!empty($dados['erro'])) {
+        throw new RuntimeException(
+            "CEP não encontrado."
+        );
+    }
+
+    if (empty($dados['localidade']) || empty($dados['uf'])) {
+        throw new RuntimeException(
+            "Endereço incompleto."
+        );
+    }
+
+    return [
+        "cep" => $cep,
+        "logradouro" => $dados['logradouro'] ?? '',
+        "bairro" => $dados['bairro'] ?? '',
+        "cidade" => $dados['localidade'],
+        "uf" => $dados['uf']
+    ];
+}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -35,6 +99,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $senha = $_POST['senha'] ?? '';
     $confirmarSenha = $_POST['confirmarSenha'] ?? '';
 
+    // NOVO: receber CEP do formulário
+    $cep = trim($_POST['cep'] ?? '');
+
     if ($nome === "" || $email === "" || $telefone === "" || $senha === "") {
         $erro = "Preencha todos os campos.";
 
@@ -53,6 +120,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } elseif ($senha !== $confirmarSenha) {
         $erro = "As senhas não são iguais.";
 
+    // NOVO: validar CEP
+    } elseif (!preg_match('/^\d{5}-?\d{3}$/', $cep)) {
+        $erro = "CEP inválido! Digite 8 números.";
+
     } else {
 
         // Criptografar a senha
@@ -62,8 +133,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $tipo = "funcionario";
         $nivel_acesso = "comum";
 
+        $transacaoIniciada = false;
+
         try {
 
+            // NOVO: consultar o CEP antes de cadastrar
+            $cepNumerico = str_replace("-", "", $cep);
+
+            $endereco = consultarViaCep($cepNumerico);
+
+            // NOVO: iniciar transação
+            $conn->begin_transaction();
+            $transacaoIniciada = true;
+
+            // CADASTRO ORIGINAL NA TABELA USUARIOS
             $sql = "INSERT INTO usuarios
                     (nome, email, telefone, senha, tipo, nivel_acesso)
                     VALUES (?, ?, ?, ?, ?, ?)";
@@ -81,16 +164,61 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             );
 
             $stmt->execute();
+
+            // NOVO: recuperar ID do funcionário
+            $usuario_id = $conn->insert_id;
+
             $stmt->close();
+
+            // NOVO: salvar endereço com Foreign Key
+            $sqlEndereco = "INSERT INTO enderecos_usuarios
+                (usuario_id, cep, logradouro, bairro, cidade, uf)
+                VALUES (?, ?, ?, ?, ?, ?)";
+
+            $stmtEndereco = $conn->prepare($sqlEndereco);
+
+            $logradouro = $endereco['logradouro'];
+            $bairro = $endereco['bairro'];
+            $cidade = $endereco['cidade'];
+            $uf = $endereco['uf'];
+
+            $stmtEndereco->bind_param(
+                "isssss",
+                $usuario_id,
+                $cepNumerico,
+                $logradouro,
+                $bairro,
+                $cidade,
+                $uf
+            );
+
+            $stmtEndereco->execute();
+            $stmtEndereco->close();
+
+            // NOVO: confirmar os dois cadastros
+            $conn->commit();
+            $transacaoIniciada = false;
 
             // Retornar para a listagem
             header("Location: ../usuarios/visu_usuarios.php");
             exit;
 
-        } catch (mysqli_sql_exception $e) {
+        } catch (Throwable $e) {
 
-            if ($e->getCode() == 1062) {
+            // NOVO: desfazer cadastro se houver erro
+            if ($transacaoIniciada) {
+                $conn->rollback();
+            }
+
+            if (
+                $e instanceof mysqli_sql_exception &&
+                $e->getCode() == 1062
+            ) {
                 $erro = "Já existe um usuário com esse e-mail.";
+
+            } elseif ($e instanceof RuntimeException) {
+                $erro = $e->getMessage();
+
             } else {
                 error_log($e->getMessage());
                 $erro = "Erro ao cadastrar funcionário.";
@@ -99,93 +227,256 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
-
 <!DOCTYPE html>
-<html class="login" lang="pt-br">
-
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastrar Funcionário</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../../assets/style/style.css">
+    <title>Cadastrar Funcionário ● Strain</title>
+    <link rel="stylesheet" href="../../assets/style/style.css?v=cadastrofuncionarios2">
 </head>
+<body class="body_dashboard">
 
-<body class="body_telalogin">
     <header>
-        <nav></nav>
+        <nav class="navbar">
+            <div class="marca-strain">
+                <i data-lucide="train-front"></i>
+                <span>STRAIN</span>
+            </div>
+            <a href="../usuarios/visu_usuarios.php" class="btn">Voltar</a>
+        </nav>
     </header>
 
-    <div class="Strain">
-        <img class="Strain" src="../../assets/img/Tela de login atualizada.png" alt="Strain">
-    </div>
+    <main class="area_formulario">
+        <section class="painel_formulario">
+            <h1 class="titulo_formulario">Cadastrar Funcionário</h1>
 
-    <div class="flex">
+            <?php if ($erro !== "") { ?>
+                <div class="mensagem_erro_formulario" role="alert">
+                    <?= htmlspecialchars($erro, ENT_QUOTES, 'UTF-8') ?>
+                </div>
+            <?php } ?>
 
-        <main class="blue">
+            <form id="form_cadastro" class="formulario_strain" action="cadastro_funcionarios.php" method="POST">
+                <input type="hidden" name="csrf_token"
+                       value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>">
 
-            <div class="container_login">
+                <div class="campo_formulario">
+                    <label for="nomeUsuario">Nome do funcionário</label>
+                    <input type="text" id="nomeUsuario" name="nomeUsuario" maxlength="100"
+                           placeholder="Digite o nome completo"
+                           value="<?= htmlspecialchars($nome, ENT_QUOTES, 'UTF-8') ?>" required>
+                </div>
 
-                <h2 id="titulo_cadastro">Cadastrar Funcionário</h2>
+                <div class="campo_formulario">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" name="email" maxlength="100"
+                           placeholder="Digite o e-mail"
+                           value="<?= htmlspecialchars($email, ENT_QUOTES, 'UTF-8') ?>" required>
+                </div>
 
-                <?php if ($erro != "") { ?>
-                    <div class="alert alert-danger">
-                        <?php echo htmlspecialchars($erro); ?>
-                    </div>
-                <?php } ?>
+                <div class="campo_formulario">
+                    <label for="telefone">Telefone</label>
+                    <input type="tel" id="telefone" name="telefone" maxlength="20"
+                           placeholder="Digite o telefone"
+                           value="<?= htmlspecialchars($telefone, ENT_QUOTES, 'UTF-8') ?>" required>
+                </div>
 
-                <form id="form_cadastro" method="POST" action="">
+                <div class="campo_formulario">
+                    <label for="senha">Senha</label>
+                    <input type="password" id="senha" name="senha" minlength="8"
+                           autocomplete="new-password" placeholder="Mínimo de 8 caracteres" required>
+                </div>
 
-                    <input type="hidden" name="csrf_token"
-                           value="<?php echo htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8'); ?>">
+                <div class="campo_formulario">
+                    <label for="confirmarSenha">Confirmar senha</label>
+                    <input type="password" id="confirmarSenha" name="confirmarSenha" minlength="8"
+                           autocomplete="new-password" placeholder="Digite novamente a senha" required>
+                </div>
 
-                    <div class="conjunto">
-                        <input type="email" id="email" name="email"
-                               placeholder="Digite seu email"
-                               maxlength="100"
-                               value="<?php echo htmlspecialchars($email, ENT_QUOTES, 'UTF-8'); ?>"
-                               required>
-                    </div>
+                <h2 class="titulo_endereco_formulario">Endereço do funcionário</h2>
+                <p class="descricao_endereco_formulario">Digite o CEP para preencher o endereço automaticamente.</p>
 
-                    <div class="conjunto">
-                        <input type="text" id="nomeUsuario" name="nomeUsuario"
-                               placeholder="Digite o nome do funcionário"
-                               maxlength="100"
-                               value="<?php echo htmlspecialchars($nome, ENT_QUOTES, 'UTF-8'); ?>"
-                               required>
-                    </div>
+                <div class="campo_formulario">
+                    <label for="cep">CEP</label>
+                    <input type="text" id="cep" name="cep" maxlength="9" inputmode="numeric"
+                           autocomplete="postal-code" placeholder="00000-000"
+                           value="<?= htmlspecialchars($cep, ENT_QUOTES, 'UTF-8') ?>" required>
+                </div>
 
-                    <div class="conjunto">
-                        <input type="password" id="senha" name="senha"
-                               placeholder="Digite sua senha"
-                               minlength="8"
-                               required>
-                    </div>
+                <div class="campo_formulario">
+                    <label for="logradouro">Logradouro</label>
+                    <input type="text" id="logradouro" placeholder="Preenchido pelo CEP" readonly>
+                </div>
 
-                    <div class="conjunto">
-                        <input type="password" id="confirmarSenha" name="confirmarSenha"
-                               placeholder="Confirme sua senha"
-                               minlength="8"
-                               required>
-                    </div>
+                <div class="campo_formulario">
+                    <label for="bairro">Bairro</label>
+                    <input type="text" id="bairro" placeholder="Preenchido pelo CEP" readonly>
+                </div>
 
-                    <div class="conjunto">
-                        <input type="text" id="telefone" name="telefone"
-                               placeholder="Digite seu telefone"
-                               maxlength="20"
-                               value="<?php echo htmlspecialchars($telefone, ENT_QUOTES, 'UTF-8'); ?>"
-                               required>
-                    </div>
-                    <button id="botao_cadastro" type="submit" class="btn btn-outline-danger">
-                        Cadastrar Funcionário
-                    </button>
-                </form>
-            </div>
-        </main>
-    </div>
+                <div class="campo_formulario">
+                    <label for="cidade">Cidade</label>
+                    <input type="text" id="cidade" placeholder="Preenchido pelo CEP" readonly>
+                </div>
 
-    <footer></footer>
+                <div class="campo_formulario">
+                    <label for="uf">Estado (UF)</label>
+                    <input type="text" id="uf" placeholder="Preenchido pelo CEP" readonly>
+                </div>
 
+                <p id="mensagem_cep_cadastro" role="status" aria-live="polite"></p>
+
+                <button type="submit" class="botao_formulario">Cadastrar Funcionário</button>
+            </form>
+        </section>
+    </main>
+
+    <!-- O cep.js já consulta e preenche os campos no cadastro. -->
+     <script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const campoCep = document.getElementById("cep");
+        const logradouro = document.getElementById("logradouro");
+        const bairro = document.getElementById("bairro");
+        const cidade = document.getElementById("cidade");
+        const uf = document.getElementById("uf");
+        const mensagem = document.getElementById("mensagem_cep_cadastro");
+
+        let temporizador;
+        let controlador;
+        let consultaAtual = 0;
+
+        function limparEndereco() {
+            logradouro.value = "";
+            bairro.value = "";
+            cidade.value = "";
+            uf.value = "";
+        }
+
+        function mostrarMensagem(texto, tipo = "") {
+            mensagem.textContent = texto;
+            mensagem.dataset.tipo = tipo;
+        }
+
+        async function consultarCep(cep) {
+
+            const numeroConsulta = ++consultaAtual;
+
+            controlador = new AbortController();
+
+            const controle = controlador;
+
+            const limite = setTimeout(() => {
+                controle.abort();
+            }, 10000);
+
+            mostrarMensagem("Consultando CEP...");
+
+            try {
+
+                const resposta = await fetch(
+                    `https://viacep.com.br/ws/${cep}/json/`,
+                    { signal: controle.signal }
+                );
+
+                if (!resposta.ok) {
+                    throw new Error("Erro na consulta.");
+                }
+
+                const dados = await resposta.json();
+
+                // Ignorar respostas antigas
+                if (
+                    numeroConsulta !== consultaAtual ||
+                    campoCep.value.replace(/\D/g, "") !== cep
+                ) {
+                    return;
+                }
+
+                if (dados.erro) {
+                    limparEndereco();
+                    mostrarMensagem("CEP não encontrado.", "erro");
+                    return;
+                }
+
+                campoCep.value = dados.cep || campoCep.value;
+                logradouro.value = dados.logradouro || "";
+                bairro.value = dados.bairro || "";
+                cidade.value = dados.localidade || "";
+                uf.value = dados.uf || "";
+
+                mostrarMensagem(
+                    "Endereço encontrado com sucesso!",
+                    "sucesso"
+                );
+
+            } catch (erro) {
+
+                if (numeroConsulta !== consultaAtual) {
+                    return;
+                }
+
+                limparEndereco();
+
+                if (erro.name === "AbortError") {
+                    mostrarMensagem(
+                        "A consulta demorou muito. Tente novamente.",
+                        "erro"
+                    );
+                } else {
+                    mostrarMensagem(
+                        "Falha ao consultar o CEP.",
+                        "erro"
+                    );
+                }
+
+            } finally {
+                clearTimeout(limite);
+            }
+        }
+
+        campoCep.addEventListener("input", function () {
+
+            clearTimeout(temporizador);
+            consultaAtual++;
+
+            if (controlador) {
+                controlador.abort();
+            }
+
+            let cep = campoCep.value.replace(/\D/g, "").slice(0, 8);
+
+            if (cep.length > 5) {
+                campoCep.value =
+                    cep.slice(0, 5) + "-" + cep.slice(5);
+            } else {
+                campoCep.value = cep;
+            }
+
+            limparEndereco();
+            mostrarMensagem("");
+
+            // Consultar automaticamente ao digitar 8 números
+            if (cep.length === 8) {
+                temporizador = setTimeout(function () {
+                    consultarCep(cep);
+                }, 400);
+
+            } else if (cep.length > 0) {
+                mostrarMensagem("Digite os 8 números do CEP.");
+            }
+        });
+
+        // Reconsultar após erro no cadastro
+        const cepInicial = campoCep.value.replace(/\D/g, "");
+
+        if (cepInicial.length === 8) {
+            consultarCep(cepInicial);
+        }
+
+    });
+    </script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script>lucide.createIcons();</script>
 </body>
-
 </html>
