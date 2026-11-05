@@ -775,8 +775,8 @@ a{
     display: flex;
 }
 
-.blue_index{
-    background-color: #ffffff;
+.blue\.index{
+    background-color: #ebdcc7;
     display: flex;
     flex-direction: column;
 }
@@ -4544,6 +4544,9 @@ body.body_index {
     .body_index .footer .footer3 {
         flex: 1 1 100%;
         padding: 10px 0;
+        flex-direction: row;
+        flex-wrap: nowwrap;
+       
     }
 }
 
