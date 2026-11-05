@@ -1917,3 +1917,1346 @@ a.botao_cadastrar:visited:hover {
 
     box-sizing: border-box;
 }
+
+
+
+
+
+/* ==================================
+   PÁGINA DE ALERTAS - STRAIN
+================================== */
+
+/* ÁREA PRINCIPAL */
+
+#main_alertas {
+    width: 100%;
+    min-height: calc(100vh - 100px);
+    padding: 40px 25px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    box-sizing: border-box;
+}
+
+/* CONTAINER VERMELHO */
+
+#main_alertas .container_alertas {
+    width: 100%;
+    max-width: 850px;
+    margin: 0 auto;
+    padding: 35px;
+
+    background-color: #8B0000;
+    border-radius: 25px;
+
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* TÍTULO */
+
+#main_alertas .container_alertas h1 {
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+    font-size: clamp(24px, 3vw, 34px);
+    font-weight: 700;
+    text-align: center;
+
+    margin: 0 0 30px;
+}
+
+/* CAIXA BRANCA */
+
+#main_alertas .caixa_alertas {
+    width: 100%;
+    padding: 25px;
+
+    background-color: #ffffff;
+    border-radius: 18px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    box-sizing: border-box;
+}
+
+/* CADA ALERTA */
+
+#main_alertas .alerta {
+    width: 100%;
+    min-height: 85px;
+    padding: 18px 20px;
+
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
+    border-radius: 12px;
+    box-sizing: border-box;
+}
+
+/* ALERTA VERMELHO */
+
+#main_alertas .alerta_erro {
+    background-color: #fff0f0;
+    border-left: 5px solid #dc3545;
+}
+
+/* ALERTA AMARELO */
+
+#main_alertas .alerta_aviso {
+    background-color: #fff8e5;
+    border-left: 5px solid #f5a623;
+}
+
+/* ALERTA AZUL */
+
+#main_alertas .alerta_info {
+    background-color: #eef5ff;
+    border-left: 5px solid #2878e3;
+}
+
+/* ÍCONES */
+
+#main_alertas .icone_alerta {
+    font-size: 28px;
+    flex-shrink: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 35px;
+}
+
+/* CONTEÚDO DOS ALERTAS */
+
+#main_alertas .texto_alerta {
+    flex: 1;
+    min-width: 0;
+}
+
+#main_alertas .texto_alerta strong {
+    display: block;
+
+    color: #8B0000;
+    font-family: Arial, sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.4;
+
+    margin-bottom: 5px;
+}
+
+#main_alertas .texto_alerta p {
+    color: #555555;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.5;
+
+    margin: 0;
+}
+
+/* HORÁRIOS */
+
+#main_alertas .hora_alerta {
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+
+    margin-left: auto;
+    white-space: nowrap;
+}
+
+/* CORES DOS HORÁRIOS */
+
+#main_alertas .alerta_erro .hora_alerta {
+    color: #dc3545;
+}
+
+#main_alertas .alerta_aviso .hora_alerta {
+    color: #d99000;
+}
+
+#main_alertas .alerta_info .hora_alerta {
+    color: #2878e3;
+}
+
+/* RESPONSIVIDADE */
+
+@media (max-width: 768px) {
+
+    #main_alertas {
+        padding: 20px 15px;
+    }
+
+    #main_alertas .container_alertas {
+        padding: 20px;
+        border-radius: 20px;
+    }
+
+    #main_alertas .caixa_alertas {
+        padding: 15px;
+    }
+
+    #main_alertas .alerta {
+        padding: 15px;
+        gap: 10px;
+    }
+
+    #main_alertas .texto_alerta strong {
+        font-size: 14px;
+    }
+
+    #main_alertas .texto_alerta p {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    #main_alertas .alerta {
+        flex-wrap: wrap;
+    }
+
+    #main_alertas .hora_alerta {
+        width: 100%;
+        text-align: right;
+    }
+}
+
+
+/* AJUSTES FINAIS DOS ALERTAS */
+
+#main_alertas {
+    padding: 50px 30px;
+    align-items: center;
+}
+
+#main_alertas .container_alertas {
+    max-width: 800px;
+    padding: 30px;
+    margin: 20px auto;
+}
+
+#main_alertas .container_alertas h1 {
+    font-size: 30px;
+    margin-bottom: 25px;
+}
+
+#main_alertas .caixa_alertas {
+    padding: 22px;
+    gap: 12px;
+}
+
+#main_alertas .alerta {
+    min-height: 75px;
+    padding: 15px 18px;
+}
+
+/* CELULARES */
+
+@media (max-width: 768px) {
+    #main_alertas {
+        padding: 20px 15px;
+    }
+
+    #main_alertas .container_alertas {
+        width: 100%;
+        padding: 20px;
+        margin: 10px auto;
+    }
+}
+
+
+
+
+
+/* ====================================
+   CORREÇÃO DO LAYOUT DOS RELATÓRIOS
+==================================== */
+
+/* ÁREA PRINCIPAL */
+
+body.body_dashboard #main_relatorios {
+    position: relative;
+
+    /* Espaço reservado para a sidebar */
+    margin-left: 184px;
+    width: calc(100% - 184px);
+
+    /* Espaço abaixo da navbar */
+    margin-top: 0;
+    padding: 95px 30px 40px;
+
+    min-height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+
+    box-sizing: border-box;
+}
+
+/* CONTAINER VERMELHO */
+
+#main_relatorios .container_relatorios {
+    width: 100%;
+    max-width: 950px;
+
+    margin: 0 auto;
+    padding: 30px;
+
+    background-color: #8B0000;
+    border-radius: 25px;
+
+    box-sizing: border-box;
+}
+
+/* TÍTULO */
+
+#main_relatorios .container_relatorios h1 {
+    color: #ffffff;
+    text-align: center;
+    font-family: Arial, sans-serif;
+
+    font-size: clamp(24px, 3vw, 32px);
+    font-weight: 700;
+
+    margin: 0 0 25px;
+}
+
+/* CAIXAS BRANCAS */
+
+#main_relatorios .caixa_monitoramento,
+#main_relatorios .caixa_grafico {
+    width: 100%;
+    background-color: #ffffff;
+
+    padding: 25px;
+    border-radius: 18px;
+
+    margin-bottom: 18px;
+    box-sizing: border-box;
+}
+
+/* ORGANIZAÇÃO DOS SENSORES */
+
+#main_relatorios .grid_sensores {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+}
+
+/* GRÁFICO */
+
+#main_relatorios .grafico_trens {
+    width: 100%;
+    height: 270px;
+    position: relative;
+}
+
+/* RESPONSIVIDADE */
+
+@media (max-width: 1100px) {
+
+    #main_relatorios .grid_sensores {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+@media (max-width: 768px) {
+
+    body.body_dashboard #main_relatorios {
+        margin-left: 0;
+        width: 100%;
+        padding: 95px 15px 25px;
+    }
+
+    #main_relatorios .container_relatorios {
+        padding: 20px;
+    }
+
+    #main_relatorios .caixa_monitoramento,
+    #main_relatorios .caixa_grafico {
+        padding: 18px;
+    }
+
+}
+
+@media (max-width: 480px) {
+
+    #main_relatorios .grid_sensores {
+        grid-template-columns: 1fr;
+    }
+
+    #main_relatorios .grafico_trens {
+        height: 230px;
+    }
+
+}
+
+
+/* ======================================
+   RELATÓRIOS - ORGANIZAÇÃO DOS SENSORES
+====================================== */
+
+/* CAIXA BRANCA DOS SENSORES */
+
+#main_relatorios .caixa_monitoramento {
+    background-color: #ffffff;
+    border-radius: 18px;
+    padding: 25px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+}
+
+/* TÍTULO DOS SENSORES */
+
+#main_relatorios .caixa_monitoramento h2 {
+    color: #8B0000;
+    font-family: Arial, sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0 0 20px;
+}
+
+/* ORGANIZAÇÃO DOS QUATRO CARTÕES */
+
+#main_relatorios .caixa_monitoramento .grid_sensores {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 15px;
+    width: 100%;
+}
+
+/* CARTÕES INDIVIDUAIS */
+
+#main_relatorios .caixa_monitoramento .grid_sensores .card_sensor {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    min-width: 0;
+    min-height: 165px;
+    padding: 18px 10px;
+    gap: 10px;
+
+    background-color: #f8f9fc;
+    border: 1px solid #e1e5ed;
+    border-radius: 14px;
+
+    text-align: center;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* ÍCONES */
+
+#main_relatorios .caixa_monitoramento .card_sensor .sensor_icone {
+    display: block;
+    font-size: 30px;
+    line-height: 1.2;
+}
+
+/* NOMES */
+
+#main_relatorios .caixa_monitoramento .card_sensor h3 {
+    color: #333333;
+    font-size: 14px;
+    font-family: Arial, sans-serif;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* VALORES */
+
+#main_relatorios .caixa_monitoramento .card_sensor strong {
+    display: block;
+    color: #1680eb;
+    font-size: 25px;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    margin: 0;
+}
+
+/* STATUS NORMAL */
+
+#main_relatorios .caixa_monitoramento .card_sensor p {
+    color: #28a05a;
+    font-size: 14px;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    margin: 0;
+}
+
+/* ESPAÇAMENTO DO GRÁFICO */
+
+#main_relatorios .caixa_grafico {
+    margin-top: 15px;
+}
+
+/* RESPONSIVIDADE */
+
+@media (max-width: 1000px) {
+    #main_relatorios .caixa_monitoramento .grid_sensores {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 480px) {
+    #main_relatorios .caixa_monitoramento .grid_sensores {
+        grid-template-columns: 1fr;
+    }
+
+    #main_relatorios .caixa_monitoramento .card_sensor {
+        min-height: 140px;
+    }
+}
+
+
+/* =========================================
+   MONITORAMENTO - STRAIN
+========================================= */
+
+/* ÁREA PRINCIPAL */
+
+#main_monitoramento {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    flex-wrap: wrap;
+
+    gap: 25px;
+
+    padding: 100px 30px 40px 310px;
+    min-height: 100vh;
+
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* DUAS CAIXAS VERMELHAS */
+
+#main_monitoramento > .container_monitoramento {
+    flex: 1 1 350px;
+    width: auto;
+    min-width: 0;
+    max-width: 650px;
+
+    background-color: #8B0000;
+
+    border-radius: 25px;
+    padding: 30px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+
+    box-sizing: border-box;
+}
+
+/* CABEÇALHO DAS CAIXAS */
+
+#main_monitoramento .div_monitoramento {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 12px;
+    margin: 0;
+}
+
+/* IMAGENS DOS TÍTULOS */
+
+#main_monitoramento .imgLocalizacao {
+    width: 38px;
+    height: 38px;
+    object-fit: contain;
+    display: block;
+}
+
+/* TÍTULOS */
+
+#main_monitoramento .titulo_monitoramento {
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+
+    font-size: clamp(22px, 2vw, 30px);
+    font-weight: 700;
+    text-align: center;
+
+    margin: 0;
+    line-height: 1.3;
+}
+
+/* TEXTO DA LOCALIZAÇÃO */
+
+#main_monitoramento .titulo_monitoramento2 {
+    width: 100%;
+
+    background-color: #ffffff;
+    color: #555555;
+
+    padding: 25px;
+    border-radius: 18px;
+
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.7;
+
+    text-align: left;
+    margin: 15px 0 0;
+
+    box-sizing: border-box;
+}
+
+/* CONTAINER DO RESUMO */
+
+/* O SEGUNDO CONTAINER É O RESUMO */
+
+#main_monitoramento > .container_monitoramento:nth-of-type(2) {
+    gap: 15px;
+}
+
+/* CARTÕES DO RESUMO */
+
+#main_monitoramento .trensMonitoramento,
+#main_monitoramento .status,
+#main_monitoramento .falha,
+#main_monitoramento .alerta {
+    width: 100%;
+
+    background-color: #ffffff;
+    border-radius: 14px;
+
+    padding: 18px 20px;
+    margin: 0;
+
+    display: flex;
+    align-items: center;
+
+    min-height: 58px;
+    box-sizing: border-box;
+}
+
+/* TEXTOS DOS CARTÕES */
+
+#main_monitoramento .titulo_monitoramento3 {
+    color: #8B0000;
+    font-family: Arial, sans-serif;
+
+    font-size: 16px;
+    font-weight: 600;
+
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* DETALHE DOS CARTÕES */
+
+#main_monitoramento .trensMonitoramento {
+    border-left: 5px solid #2878e3;
+}
+
+#main_monitoramento .status {
+    border-left: 5px solid #28a05a;
+}
+
+#main_monitoramento .alerta {
+    border-left: 5px solid #f5a623;
+}
+
+#main_monitoramento .falha {
+    border-left: 5px solid #dc3545;
+}
+
+/* RESPONSIVIDADE */
+
+@media (max-width: 1200px) {
+
+    #main_monitoramento {
+        padding-left: 300px;
+        gap: 20px;
+    }
+
+    #main_monitoramento > .container_monitoramento {
+        flex-basis: 300px;
+        padding: 25px;
+    }
+
+}
+
+@media (max-width: 900px) {
+
+    #main_monitoramento {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #main_monitoramento > .container_monitoramento {
+        width: 100%;
+        max-width: 650px;
+        flex: auto;
+        padding: 25px;
+    }
+}
+
+@media (max-width: 768px) {
+
+    #main_monitoramento {
+        padding: 95px 15px 25px;
+    }
+
+    #main_monitoramento > .container_monitoramento {
+        padding: 20px;
+        border-radius: 20px;
+    }
+
+    #main_monitoramento .titulo_monitoramento2 {
+        padding: 18px;
+        font-size: 14px;
+    }
+
+    #main_monitoramento .trensMonitoramento,
+    #main_monitoramento .status,
+    #main_monitoramento .alerta,
+    #main_monitoramento .falha {
+        padding: 15px;
+    }
+}
+
+
+/* =====================================
+   CENTRALIZAÇÃO DO MONITORAMENTO
+===================================== */
+
+/* ÁREA PRINCIPAL */
+
+body.body_dashboard #main_monitoramento {
+    margin-left: 298px;
+    width: calc(100% - 298px);
+
+    min-height: calc(100vh - 90px);
+    padding: 30px 25px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 25px;
+
+    box-sizing: border-box;
+}
+
+/* DUAS CAIXAS VERMELHAS */
+
+#main_monitoramento > .container_monitoramento {
+    flex: 1 1 350px;
+    width: auto;
+    max-width: 600px;
+    min-width: 0;
+    min-height: 550px;
+
+    margin: 0;
+    padding: 30px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+
+    border-radius: 25px;
+    box-sizing: border-box;
+}
+
+/* CENTRALIZA OS TÍTULOS E ÍCONES */
+
+#main_monitoramento .div_monitoramento {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+
+    margin-bottom: 20px;
+}
+
+/* CENTRALIZA O TEXTO DA LOCALIZAÇÃO */
+
+#main_monitoramento .titulo_monitoramento2 {
+    width: 100%;
+    margin: 0;
+
+    padding: 25px;
+    box-sizing: border-box;
+}
+
+/* RESPONSIVIDADE */
+
+@media (max-width: 1100px) {
+    body.body_dashboard #main_monitoramento {
+        gap: 20px;
+        padding: 25px 20px;
+    }
+
+    #main_monitoramento > .container_monitoramento {
+        min-height: auto;
+    }
+}
+
+@media (max-width: 768px) {
+    body.body_dashboard #main_monitoramento {
+        margin-left: 0;
+        width: 100%;
+
+        flex-direction: column;
+        padding: 25px 15px;
+    }
+
+    #main_monitoramento > .container_monitoramento {
+        flex: none;
+        width: 100%;
+        max-width: 600px;
+        padding: 20px;
+    }
+}
+
+
+/* ==========================================
+   STRAIN - RESPONSIVIDADE GERAL
+   ADICIONAR AO FINAL DO STYLE.CSS
+========================================== */
+
+/* CONFIGURAÇÕES GERAIS */
+
+:root {
+    --sidebar-width: 250px;
+    --navbar-height: 70px;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    max-width: 100%;
+}
+
+body {
+    overflow-x: clip;
+}
+
+img,
+video,
+canvas {
+    max-width: 100%;
+}
+
+img,
+video {
+    object-fit: contain;
+}
+
+input,
+select,
+textarea {
+    max-width: 100%;
+}
+
+/* NAVBAR */
+
+.body_dashboard .navbar {
+    width: 100%;
+    max-width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+    padding: 0 25px;
+}
+
+.body_dashboard .marca-strain {
+    flex-shrink: 0;
+}
+
+.body_dashboard .saudacao-navbar {
+    min-width: 0;
+    max-width: 50%;
+}
+
+/* SIDEBAR */
+
+#sidebar_dashboard {
+    width: var(--sidebar-width);
+    max-width: 100%;
+}
+
+#sidebar_dashboard .menu_sidebar {
+    width: 100%;
+}
+
+#sidebar_dashboard .menu_sidebar a {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+}
+
+/* ÁREAS PRINCIPAIS */
+
+.body_dashboard :is(
+    #main_dashboard,
+    #main_trens,
+    #main_monitoramento,
+    #main_alertas,
+    #main_relatorios,
+    .area_registros,
+    #conteudo_cadastro_sensor
+) {
+    margin-left: var(--sidebar-width);
+    width: calc(100% - var(--sidebar-width));
+    max-width: none;
+    min-width: 0;
+
+    padding-left: clamp(15px, 3vw, 35px);
+    padding-right: clamp(15px, 3vw, 35px);
+
+    box-sizing: border-box;
+}
+
+/* CONTAINERS */
+
+.container_alertas,
+.container_relatorios,
+.painel_registros,
+.painel_formulario,
+.table_trens,
+.caixa_alertas,
+.caixa_monitoramento,
+.caixa_grafico {
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+/* MONITORAMENTO */
+
+#main_monitoramento {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: stretch;
+    gap: 25px;
+}
+
+#main_monitoramento > .container_monitoramento {
+    flex: 1 1 350px;
+    width: auto;
+    min-width: 0;
+    max-width: 650px;
+
+    margin: 0;
+    box-sizing: border-box;
+}
+
+/* RELATÓRIOS */
+
+#main_relatorios .grid_sensores {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 15px;
+}
+
+#main_relatorios .card_sensor {
+    width: 100%;
+    min-width: 0;
+}
+
+#main_relatorios .grafico_trens {
+    width: 100%;
+    max-width: 100%;
+}
+
+/* ALERTAS */
+
+#main_alertas .alerta {
+    width: 100%;
+    min-width: 0;
+}
+
+#main_alertas .texto_alerta {
+    flex: 1;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+/* TABELAS */
+
+.container_tabela,
+#tabela_visualizar_trens {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.container_tabela table {
+    width: 100%;
+}
+
+/* FORMULÁRIOS */
+
+.painel_formulario,
+.formulario_strain,
+.campo_formulario {
+    max-width: 100%;
+}
+
+.formulario_strain input,
+.formulario_strain select,
+.formulario_strain textarea {
+    width: 100%;
+    min-width: 0;
+}
+
+/* PÁGINA INICIAL */
+
+.body_index .Strain {
+    max-width: 100%;
+    height: auto;
+}
+
+.body_index .Introducao,
+.body_index .Introducao1,
+.body_index .Mapa {
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.footer,
+.footer1,
+.footer2 {
+    width: 100%;
+    max-width: 100%;
+    flex-wrap: wrap;
+}
+
+/* ==========================================
+   NOTEBOOKS E TELAS MÉDIAS
+========================================== */
+
+@media (max-width: 1200px) {
+
+    .body_dashboard :is(
+        #main_dashboard,
+        #main_trens,
+        #main_monitoramento,
+        #main_alertas,
+        #main_relatorios,
+        .area_registros
+    ) {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    #main_monitoramento > .container_monitoramento {
+        flex-basis: 300px;
+    }
+
+    #main_relatorios .grid_sensores {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    /* ELEMENTOS GRANDES DA PÁGINA INICIAL */
+
+    .body_index .Strain {
+        width: min(500px, 90%);
+        margin-right: 0;
+    }
+
+    .body_index .Introducao1 {
+        width: min(1100px, 100%);
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .body_index .Mapa {
+        width: 100%;
+        height: auto;
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .body_index .container_index {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+/* ==========================================
+   TABLETS E CELULARES
+========================================== */
+
+@media (max-width: 768px) {
+
+    :root {
+        --sidebar-width: 0px;
+    }
+
+    /* NAVBAR */
+
+    .body_dashboard .navbar {
+        padding: 0 15px;
+        gap: 10px;
+    }
+
+    .body_dashboard .saudacao-navbar p {
+        font-size: 13px;
+        overflow-wrap: anywhere;
+    }
+
+    /* SIDEBAR HORIZONTAL */
+
+    #sidebar_dashboard {
+        position: relative;
+        top: auto;
+        left: auto;
+
+        width: 100%;
+        height: auto;
+        min-height: 0;
+
+        padding: 12px;
+        overflow: visible;
+
+        z-index: 1;
+    }
+
+    #titulo_sidebar {
+        font-size: 22px;
+        margin-bottom: 12px;
+    }
+
+    #sidebar_dashboard .menu_sidebar {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+
+        gap: 8px;
+
+        overflow-x: auto;
+        padding-bottom: 5px;
+    }
+
+    #sidebar_dashboard .menu_sidebar li {
+        flex: 0 0 auto;
+        margin: 0;
+    }
+
+    #sidebar_dashboard .menu_sidebar a {
+        width: auto;
+        padding: 10px 14px;
+        white-space: nowrap;
+        font-size: 14px;
+    }
+
+    /* CONTEÚDO PRINCIPAL */
+
+    .body_dashboard :is(
+        #main_dashboard,
+        #main_trens,
+        #main_monitoramento,
+        #main_alertas,
+        #main_relatorios,
+        .area_registros,
+        #conteudo_cadastro_sensor
+    ) {
+        margin-left: 0;
+        width: 100%;
+
+        padding: 20px 15px;
+        min-height: auto;
+    }
+
+    /* PÁGINAS COM SIDEBAR DENTRO DO MAIN */
+
+    #main_monitoramento {
+        flex-direction: column;
+        align-items: center;
+        margin-top: var(--navbar-height);
+    }
+
+    #main_monitoramento > .container_monitoramento {
+        flex: none;
+        width: 100%;
+        max-width: 650px;
+    }
+
+    /* RELATÓRIOS */
+
+    #main_relatorios .grid_sensores {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    #main_relatorios .container_relatorios {
+        padding: 20px;
+    }
+
+    /* ALERTAS */
+
+    #main_alertas .container_alertas {
+        padding: 20px;
+    }
+
+    #main_alertas .alerta {
+        flex-wrap: wrap;
+    }
+
+    /* LOGIN */
+
+    .body_telalogin {
+        min-height: 100vh;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    .blue {
+        width: min(400px, 100%);
+        height: auto;
+        margin: 20px auto;
+        padding: 30px 20px;
+    }
+
+    .flex {
+        width: 100%;
+        height: auto;
+        min-height: 0;
+        padding: 25px;
+    }
+
+    /* INDEX */
+
+    .body_index .banner {
+        min-height: 400px;
+        height: auto;
+
+        justify-content: center;
+        flex-wrap: wrap;
+        padding: 30px 15px;
+    }
+
+    .body_index #frase1 {
+        width: 100%;
+        max-width: 700px;
+
+        padding: 30px;
+        font-size: clamp(22px, 5vw, 35px);
+        border-radius: 25px;
+    }
+
+    .body_index .Strain {
+        width: min(400px, 100%);
+        height: auto;
+        margin: 0 auto;
+    }
+
+    .body_index .Introducao,
+    .body_index .Introducao1 {
+        width: 100%;
+        margin: 20px auto;
+        padding: 20px;
+    }
+
+    /* FORMULÁRIOS */
+
+    .area_formulario {
+        padding: 20px 12px;
+    }
+
+    .painel_formulario {
+        width: 100%;
+        padding: 20px 15px;
+    }
+
+    /* TABELAS */
+
+    .container_tabela {
+        overflow-x: auto;
+    }
+
+    .tabela_registros {
+        min-width: 700px;
+    }
+}
+
+/* ==========================================
+   CELULARES PEQUENOS
+========================================== */
+
+@media (max-width: 480px) {
+
+    .body_dashboard .navbar {
+        padding: 0 10px;
+    }
+
+    .navbar .marca-strain span {
+        font-size: 16px;
+    }
+
+    #main_relatorios .grid_sensores {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    #main_relatorios .card_sensor {
+        padding: 12px 8px;
+    }
+
+    #main_relatorios .card_sensor strong {
+        font-size: 19px;
+    }
+
+    #main_relatorios .grafico_trens {
+        height: 220px;
+    }
+
+    #main_alertas .caixa_alertas {
+        padding: 12px;
+    }
+
+    #main_alertas .alerta {
+        padding: 12px;
+    }
+
+    #main_monitoramento > .container_monitoramento {
+        padding: 20px;
+    }
+
+    #main_monitoramento .titulo_monitoramento2 {
+        padding: 15px;
+        font-size: 14px;
+    }
+
+    .tabela_registros {
+        min-width: 650px;
+    }
+
+    .footer,
+    .footer1,
+    .footer2 {
+        padding: 25px 15px;
+    }
+}
+
+

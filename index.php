@@ -130,15 +130,6 @@
             </div>
 
 
-
-            <div class="footer2">
-
-                <a href="#"> <b>Trens e estações de Joinville SC </b> </a>
-                <a href="#"> <b>Cadastro de usuários </b> </a>
-                <a href="#"> <b>Sou administrador </b> </a>
-
-                </div>
-
             <div  class="footer3">
                 <p>
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse aut veniam autem accusamus perferendis, porro et? 
