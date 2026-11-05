@@ -110,11 +110,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         Entrar
                     </button>
                 </form>
-                <div class="Cadastro">
-                    <p id="texto_login"> Você ainda não possui cadastro?</p>
-                    <a class="link1" href="../../public/usuarios/cadastro_usuarios.php">Cadastrar-se!</a>
-                </div>
-
             </div>
         </main>
     </div>
