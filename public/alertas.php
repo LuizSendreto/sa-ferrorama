@@ -19,10 +19,7 @@ $admin = ($_SESSION['nivel_acesso'] ?? '') === 'admin';
 
     <title>Alertas ● Strain</title>
 
-    <link
-        rel="stylesheet"
-        href="../assets/style/style.css?v=sidebar7"
-    >
+    <link rel="stylesheet" href="../assets/style/style.css?v=sidebar7">
 </head>
 
 <body class="body_dashboard">
@@ -30,18 +27,20 @@ $admin = ($_SESSION['nivel_acesso'] ?? '') === 'admin';
     <!-- NAVBAR -->
     <header id="header_alertas">
 
-    <nav class="navbar">
-        <div class="marca-strain">
-            <i data-lucide="train-front"></i>
-            <span>STRAIN</span>
-        </div>
+        <nav class="navbar">
 
-        <div class="saudacao-navbar">
-            <p>
-                Olá, <?php echo htmlspecialchars($nome, ENT_QUOTES, 'UTF-8'); ?>!
-            </p>
-        </div>
-    </nav>
+            <div class="marca-strain">
+                <i data-lucide="train-front"></i>
+                <span>STRAIN</span>
+            </div>
+
+            <div class="saudacao-navbar">
+                <p>
+                    Olá, <?php echo htmlspecialchars($nome, ENT_QUOTES, 'UTF-8'); ?>!
+                </p>
+            </div>
+
+        </nav>
 
     </header>
 
@@ -98,40 +97,81 @@ $admin = ($_SESSION['nivel_acesso'] ?? '') === 'admin';
 
     </aside>
 
-      <div class="table_alertas">
-                    <h1 id="table_trens">alertas</h1>
-
-                    <section id="tabela_visualizar_trens">
-                        
-
-                        <table class="table_t">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Nome do alerta</th>
-                                    <th>Descriçao</th>
-                                    <th>Funcionário responsável</th>
-                                
-                                </tr>
-                            </thead>
-                        </table>
-                                     <div class="div_button">
-                            <button class="button-container"
-                                    onclick="location.href='trens_cadastro.php'">
-                                <b>Cadastrar alerta</b>
-                            </button>
-                        </div>
-</section>
     <!-- CONTEÚDO PRINCIPAL -->
     <main id="main_alertas">
 
-        
+        <section class="container_alertas">
+
+            <h1>Alertas recentes</h1>
+
+            <div class="caixa_alertas">
+
+                <!-- ALERTA DE ERRO -->
+                <div class="alerta alerta_erro">
+
+                    <span class="icone_alerta">🚨</span>
+
+                    <div class="texto_alerta">
+                        <strong>
+                            Falha no sensor de temperatura - Trem 6521
+                        </strong>
+
+                        <p>Sensor localizado no vagão 3</p>
+                    </div>
+
+                    <span class="hora_alerta">10:21</span>
+
+                </div>
+
+                <!-- ALERTA DE AVISO -->
+                <div class="alerta alerta_aviso">
+
+                    <span class="icone_alerta">⚠️</span>
+
+                    <div class="texto_alerta">
+                        <strong>
+                            Velocidade abaixo do esperado - Trem 1534
+                        </strong>
+
+                        <p>
+                            Velocidade média abaixo do limite estabelecido
+                        </p>
+                    </div>
+
+                    <span class="hora_alerta">10:18</span>
+
+                </div>
+
+                <!-- ALERTA DE INFORMAÇÃO -->
+                <div class="alerta alerta_info">
+
+                    <span class="icone_alerta">ℹ️</span>
+
+                    <div class="texto_alerta">
+                        <strong>
+                            Manutenção programada - Trem 9287
+                        </strong>
+
+                        <p>
+                            Manutenção preventiva agendada para hoje às 14:00
+                        </p>
+                    </div>
+
+                    <span class="hora_alerta">09:52</span>
+
+                </div>
+
+            </div>
+
+        </section>
 
     </main>
-<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
-<script>
-    lucide.createIcons();
-</script>
-</body>
 
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+    <script>
+        lucide.createIcons();
+    </script>
+
+</body>
 </html>
