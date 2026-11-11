@@ -116,7 +116,12 @@ $admin = ($_SESSION['nivel_acesso'] ?? '') === 'admin';
                     <!-- TEMPERATURA -->
                     <div class="card_sensor">
 
-                        <span class="sensor_icone">🌡️</span>
+                        <span class="sensor_icone">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#850000" class="bi bi-thermometer-half" viewBox="0 0 16 16">
+                                <path d="M9.5 12.5a1.5 1.5 0 1 1-2-1.415V6.5a.5.5 0 0 1 1 0v4.585a1.5 1.5 0 0 1 1 1.415"/>
+                                <path d="M5.5 2.5a2.5 2.5 0 0 1 5 0v7.55a3.5 3.5 0 1 1-5 0zM8 1a1.5 1.5 0 0 0-1.5 1.5v7.987l-.167.15a2.5 2.5 0 1 0 3.333 0l-.166-.15V2.5A1.5 1.5 0 0 0 8 1"/>
+                            </svg>
+                        </span>
 
                         <h3>Temperatura</h3>
 
@@ -129,7 +134,11 @@ $admin = ($_SESSION['nivel_acesso'] ?? '') === 'admin';
                     <!-- VIBRAÇÃO -->
                     <div class="card_sensor">
 
-                        <span class="sensor_icone">〰️</span>
+                        <span class="sensor_icone">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#850000" class="bi bi-broadcast" viewBox="0 0 16 16">
+                                <path d="M3.05 3.05a7 7 0 0 0 0 9.9.5.5 0 0 1-.707.707 8 8 0 0 1 0-11.314.5.5 0 0 1 .707.707m2.122 2.122a4 4 0 0 0 0 5.656.5.5 0 1 1-.708.708 5 5 0 0 1 0-7.072.5.5 0 0 1 .708.708m5.656-.708a.5.5 0 0 1 .708 0 5 5 0 0 1 0 7.072.5.5 0 1 1-.708-.708 4 4 0 0 0 0-5.656.5.5 0 0 1 0-.708m2.122-2.12a.5.5 0 0 1 .707 0 8 8 0 0 1 0 11.313.5.5 0 0 1-.707-.707 7 7 0 0 0 0-9.9.5.5 0 0 1 0-.707zM10 8a2 2 0 1 1-4 0 2 2 0 0 1 4 0"/>
+                            </svg>
+                        </span>
 
                         <h3>Vibração</h3>
 
@@ -142,7 +151,11 @@ $admin = ($_SESSION['nivel_acesso'] ?? '') === 'admin';
                     <!-- CONSUMO DE ENERGIA -->
                     <div class="card_sensor">
 
-                        <span class="sensor_icone">⚡</span>
+                        <span class="sensor_icone">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#850000" class="bi bi-lightning-charge-fill" viewBox="0 0 16 16">
+                                <path d="M11.251.068a.5.5 0 0 1 .227.58L9.677 6.5H13a.5.5 0 0 1 .364.843l-8 8.5a.5.5 0 0 1-.842-.49L6.323 9.5H3a.5.5 0 0 1-.364-.843l8-8.5a.5.5 0 0 1 .615-.09z"/>
+                            </svg>
+                        </span>
 
                         <h3>Consumo de energia</h3>
 
@@ -155,7 +168,11 @@ $admin = ($_SESSION['nivel_acesso'] ?? '') === 'admin';
                     <!-- FRENAGEM -->
                     <div class="card_sensor">
 
-                        <span class="sensor_icone">🛞</span>
+                        <span class="sensor_icone">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="#850000" class="bi bi-train-front-fill" viewBox="0 0 16 16">
+                                <path d="M10.621.515C8.647.02 7.353.02 5.38.515c-.924.23-1.982.766-2.78 1.22C1.566 2.322 1 3.432 1 4.582V13.5A2.5 2.5 0 0 0 3.5 16h9a2.5 2.5 0 0 0 2.5-2.5V4.583c0-1.15-.565-2.26-1.6-2.849-.797-.453-1.855-.988-2.779-1.22ZM6.5 2h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1 0-1m-2 2h7A1.5 1.5 0 0 1 13 5.5v2A1.5 1.5 0 0 1 11.5 9h-7A1.5 1.5 0 0 1 3 7.5v-2A1.5 1.5 0 0 1 4.5 4m.5 9a1 1 0 1 1-2 0 1 1 0 0 1 2 0m0 0a1 1 0 1 1 2 0 1 1 0 0 1-2 0m8 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0m-3-1a1 1 0 1 1 0 2 1 1 0 0 1 0-2M4 5.5a.5.5 0 0 1 .5-.5h3v3h-3a.5.5 0 0 1-.5-.5zM8.5 8V5h3a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5z"/>
+                            </svg>
+                        </span>
 
                         <h3>Frenagem</h3>
 
