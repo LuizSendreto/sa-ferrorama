@@ -449,8 +449,8 @@
                 <h3>Feito em equipe. Pensado para conectar.</h3>
 
                 <p>
-                    Luiz Felipe · Rafael Tironi<br>
-                    Nicole Jordan · Juana Franciscao
+                    Luiz Felipe · Rafael Tironi <br>
+                    Nicole Jordan · Juana Franciscão
                 </p>
 
             </div>
