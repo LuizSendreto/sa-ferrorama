@@ -2,8 +2,12 @@
 
 require_once '../../infra/verificar_acesso.php';
 verificarAdmin();
+require_once __DIR__ . '/../componentes/visual.php';
+require_once __DIR__ . '/../componentes/resposta_modal.php';
 
 include "../../infra/conexao.php";
+
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 $erro = "";
 
@@ -51,7 +55,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         )
     ) {
         http_response_code(403);
-        exit("Solicitação inválida.");
+        strainRespostaModal(false, "Solicitação inválida.", http_response_code() >= 400 ? http_response_code() : 422);
+    exit("Solicitação inválida.");
     }
 
     $tipo_sensor = trim($_POST["tipo_sensor"] ?? "");
@@ -88,6 +93,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             mysqli_stmt_execute($stmt);
             mysqli_stmt_close($stmt);
 
+            strainRespostaModal(true, "Operação concluída.");
+
             header("Location: visu_sensores.php");
             exit;
 
@@ -100,6 +107,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 }
 
+// Erros permanecem no modal, mantendo os dados preenchidos.
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $erro !== '') {
+    strainRespostaModal(false, $erro, 422);
+}
 ?>
 
 <!DOCTYPE html>
@@ -115,46 +126,23 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     <title>Cadastrar Sensor ● Strain</title>
 
-    <link
-        rel="stylesheet"
-        href="../../assets/style/style.css?v=cadastrosensor2"
-    >
+    
 
+<link rel="stylesheet" href="../../assets/style/listagens.css?v=4">
+<link rel="stylesheet" href="../../assets/style/admin_paginas.css?v=4">
+<script src="../../Scripts/listagens.js?v=2" defer></script>
 </head>
 
-<body class="body_dashboard">
+<body class="strain-listagem strain-admin">
 
     <!-- NAVBAR -->
-    <header id="header_cadastro_sensor">
-
-        <nav class="navbar">
-
-            <!-- LOGO -->
-            <div class="marca-strain">
-
-                <i data-lucide="train-front"></i>
-
-                <span>STRAIN</span>
-
-            </div>
-
-            <!-- VOLTAR -->
-            <button
-                type="button"
-                class="btn"
-                onclick="location.href='visu_sensores.php'"
-            >
-                Voltar
-            </button>
-
-        </nav>
-
-    </header>
+    <?php strainNavegacao('Sensores', '../', $_SESSION['usuario_nome'] ?? 'Funcionário', ($_SESSION['nivel_acesso'] ?? '') === 'admin'); ?>
 
     <!-- ÁREA PRINCIPAL -->
-    <main class="area_formulario">
+    <main class="strain-conteudo">
 
         <section class="painel_formulario">
+<a class="strain-btn strain-neutro" style="margin-bottom:20px" href="visu_sensores.php">Voltar para sensores</a>
 
             <!-- TÍTULO -->
             <h1 class="titulo_formulario">
@@ -334,11 +322,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     </main>
 
     <!-- ÍCONES LUCIDE -->
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    
 
-    <script>
-        lucide.createIcons();
-    </script>
+    
 
 </body>
 

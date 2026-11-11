@@ -3,6 +3,7 @@
 // Permitir exclusão somente para administradores
 require_once '../../infra/verificar_acesso.php';
 verificarAdmin();
+require_once __DIR__ . '/../componentes/resposta_modal.php';
 
 // Conexão com o banco
 include "../../infra/conexao.php";
@@ -21,6 +22,7 @@ if (
     !hash_equals($_SESSION["csrf_token"], $_POST["csrf_token"])
 ) {
     http_response_code(403);
+    strainRespostaModal(false, "Solicitação inválida.", http_response_code() >= 400 ? http_response_code() : 422);
     exit("Solicitação inválida.");
 }
 
@@ -31,7 +33,8 @@ if (
     !ctype_digit($_POST["id"]) ||
     (int) $_POST["id"] <= 0
 ) {
-    die("ID inválido.");
+    strainRespostaModal(false, "ID inválido.", http_response_code() >= 400 ? http_response_code() : 422);
+    exit("ID inválido.");
 }
 
 $id = (int) $_POST["id"];
@@ -53,15 +56,18 @@ try {
     mysqli_stmt_close($stmt);
 
     if ($apagou == 0) {
-        die("Nenhum sensor encontrado para exclusão.");
+        strainRespostaModal(false, "Nenhum sensor encontrado para exclusão.", http_response_code() >= 400 ? http_response_code() : 422);
+    exit("Nenhum sensor encontrado para exclusão.");
     }
 
 } catch (Throwable $e) {
     error_log($e->getMessage());
-    die("Erro ao excluir o sensor.");
+    strainRespostaModal(false, "Erro ao excluir o sensor.", http_response_code() >= 400 ? http_response_code() : 422);
+    exit("Erro ao excluir o sensor.");
 }
 
 // Voltar para a página de visualização
+strainRespostaModal(true, "Operação concluída.");
 header("Location: visu_sensores.php");
 exit;
 

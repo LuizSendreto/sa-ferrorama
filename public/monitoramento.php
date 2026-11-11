@@ -1,12 +1,14 @@
 <?php
 require_once '../infra/verificar_acesso.php';
 verificarFuncionario();
+require_once __DIR__ . '/componentes/visual.php';
 
 $admin = ($_SESSION['nivel_acesso'] ?? '') === 'admin';
 $nome = $_SESSION['usuario_nome'] ?? 'Funcionário';
 
 ?>
   
+<!DOCTYPE html>
 <html lang="pt-BR">
 
 <head>
@@ -14,57 +16,25 @@ $nome = $_SESSION['usuario_nome'] ?? 'Funcionário';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Monitoramento ● Strain</title>
 
-    <link rel="stylesheet" href="../assets/style/style.css">
+    
+<link rel="stylesheet" href="../assets/style/listagens.css?v=4">
+<link rel="stylesheet" href="../assets/style/admin_paginas.css?v=4">
+<script src="../Scripts/listagens.js?v=2" defer></script>
 </head>
 
-<body class="body_dashboard">
+<body class="strain-listagem strain-admin">
 
-    <header id="header_monitoramento">
-        <nav class="navbar">
-        <div class="marca-strain">
-            <i data-lucide="train-front"></i>
-            <span>STRAIN</span>
-        </div>
+    <?php strainNavegacao('Monitoramento', '', $nome, $admin); ?>
 
-        <div class="saudacao-navbar">
-            <p>
-                Olá, <?php echo htmlspecialchars($nome, ENT_QUOTES, 'UTF-8'); ?>!
-            </p>
-        </div>
-    </nav>
-    </header>
+    <main class="strain-conteudo" id="main_monitoramento">
+<section class="strain-cabecalho"><div><h1>Monitoramento</h1><p>Localização dos trens e resumo do sistema</p></div></section>
 
-    <main id="main_monitoramento">
-
-        <aside id="sidebar_dashboard">
-
-            <h2 id="titulo_sidebar">Dashboard</h2>
-
-            <ul class="menu_sidebar">
-               
-                <li><a href="dashboard.php">Dashboard</a></li>
-                <li><a href="Trens/visualizar_trens.php">Trens</a></li>
-                <li><a href="rotas/rotas.php">Rotas</a></li>
-                <li><a href="monitoramento.php" class="active_sidebar">Monitoramento</a></li>
-                <li><a href="alertas.php">Alertas</a></li>
-                <li><a href="relatorios.php">Relatórios</a></li>
-                <li><a href="usuarios/visu_usuarios.php">Usuarios</a></li>
-                <li><a href="sensores/visu_sensores.php">Sensores</a></li>
-                <li><a href="usuarios/logout.php">Logout</a></li>
-            </ul>
-
-        </aside>
+        
 
         <div class="container_monitoramento">
 
             <div class="div_monitoramento">
-                <img
-                    class="imgLocalizacao"
-                    src="../assets/img/Purple and Pink Modern Illustration Happy Halloween Circle Sticker (2).png"
-                    alt="Imagem de monitoramento">
-
                 <h1 class="titulo_monitoramento">Localização dos trens</h1>
-
                 <p class="titulo_monitoramento2">
                     Esta página é dedicada ao monitoramento em tempo real dos trens e
                     sensores. Aqui você pode visualizar dados atualizados, gráficos de
@@ -78,10 +48,7 @@ $nome = $_SESSION['usuario_nome'] ?? 'Funcionário';
         <div class="container_monitoramento">
 
             <div class="div_monitoramento">
-                <img
-                    class="imgLocalizacao"
-                    src="../assets/img/Purple and Pink Modern Illustration Happy Halloween Circle Sticker (3).png"
-                    alt="Imagem do resumo do sistema">
+               
 
                 <h1 class="titulo_monitoramento">Resumo do sistema</h1>
             </div>
@@ -101,14 +68,12 @@ $nome = $_SESSION['usuario_nome'] ?? 'Funcionário';
             <div class="falha">
                 <p class="titulo_monitoramento3">Falhas</p>
             </div>
-
+             
         </div>
 
     </main>
-<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
-<script>
-    lucide.createIcons();
-</script>
+
+
 </body>
 
 </html>

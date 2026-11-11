@@ -2,6 +2,7 @@
 
 require_once '../infra/verificar_acesso.php';
 verificarFuncionario();
+require_once __DIR__ . '/componentes/visual.php';
 
 require_once '../infra/conexao.php';
 
@@ -139,124 +140,33 @@ function textoEstadoDashboard($estado) {
     <title>Dashboard ● Strain</title>
 
     <!-- CSS ORIGINAL -->
-    <link
-        rel="stylesheet"
-        href="../assets/style/style.css"
-    >
+    
 
-    <link
-        rel="stylesheet"
-        href="../assets/style/clima.css"
-    >
+    
 
-    <link
-        rel="stylesheet"
-        href="../assets/style/cep.css"
-    >
+    
     <!-- Estilos do Dashboard integrados ao style.css -->
 
     <!-- JAVASCRIPT DAS APIS -->
     <script src="../Scripts/clima.js" defer></script>
     <script src="../Scripts/cep.js" defer></script>
 
+<link rel="stylesheet" href="../assets/style/listagens.css?v=4">
+<link rel="stylesheet" href="../assets/style/admin_paginas.css?v=4">
+<script src="../Scripts/listagens.js?v=2" defer></script>
 </head>
 
-<body class="body_dashboard">
+<body class="strain-listagem strain-admin">
 
     <!-- NAVBAR -->
-    <header id="header_dashboard">
-
-        <nav class="navbar">
-
-            <div class="marca-strain">
-                <i data-lucide="train-front"></i>
-                <span>STRAIN</span>
-            </div>
-
-            <div class="saudacao-navbar">
-                <p>
-                    Olá, <?= escaparDashboard($nome) ?>!
-                </p>
-            </div>
-
-        </nav>
-
-    </header>
+    <?php strainNavegacao('Dashboard', '', $nome, $admin); ?>
 
     <!-- SIDEBAR -->
-    <aside id="sidebar_dashboard">
-
-        <h2 id="titulo_sidebar">
-            Dashboard
-        </h2>
-
-        <ul class="menu_sidebar">
-
-            <li>
-                <a
-                    href="dashboard.php"
-                    class="active_sidebar"
-                >
-                    Dashboard
-                </a>
-            </li>
-
-            <li>
-                <a href="Trens/visualizar_trens.php">
-                    Trens
-                </a>
-            </li>
-
-            <li>
-                <a href="rotas/rotas.php">
-                    Rotas
-                </a>
-            </li>
-
-            <li>
-                <a href="monitoramento.php">
-                    Monitoramento
-                </a>
-            </li>
-
-            <li>
-                <a href="alertas.php">
-                    Alertas
-                </a>
-            </li>
-
-            <li>
-                <a href="relatorios.php">
-                    Relatórios
-                </a>
-            </li>
-
-            <?php if ($admin) { ?>
-                <li>
-                    <a href="usuarios/visu_usuarios.php">
-                        Usuários
-                    </a>
-                </li>
-            <?php } ?>
-
-            <li>
-                <a href="sensores/visu_sensores.php">
-                    Sensores
-                </a>
-            </li>
-
-            <li>
-                <a href="usuarios/logout.php">
-                    Logout
-                </a>
-            </li>
-
-        </ul>
-
-    </aside>
+    
 
     <!-- CONTEÚDO PRINCIPAL -->
-    <main id="main_dashboard" class="main_dashboard_dinamico">
+    <main class="strain-conteudo" id="main_dashboard">
+<section class="strain-cabecalho"><div><h1>Dashboard</h1><p>Visão geral dos trens e do sistema</p></div></section>
 
         <!-- PAINEL VERMELHO COM CARDS DOS TRENS -->
         <section class="secao_trens_dashboard">
@@ -330,7 +240,7 @@ function textoEstadoDashboard($estado) {
                             <div class="conteudo_card_trem">
 
                                 <div class="icone_card_trem">
-                                    <i data-lucide="train-front"></i>
+                                    <?= icone('train-front') ?>
                                 </div>
 
                                 <div class="dados_card_trem">
@@ -371,7 +281,7 @@ function textoEstadoDashboard($estado) {
 
                                 <a href="Trens/visualizar_trens.php">
                                     Ver detalhes
-                                    <i data-lucide="arrow-right"></i>
+                                    <?= icone('arrow-right') ?>
                                 </a>
 
                             </div>
@@ -395,7 +305,7 @@ function textoEstadoDashboard($estado) {
             <div class="cards_resumo_dashboard">
 
                 <div class="card_resumo_dashboard">
-                    <i data-lucide="train-front"></i>
+                    <?= icone('train-front') ?>
                     <div>
                         <strong><?= $totalTrens ?></strong>
                         <span>Total de trens</span>
@@ -403,7 +313,7 @@ function textoEstadoDashboard($estado) {
                 </div>
 
                 <div class="card_resumo_dashboard">
-                    <i data-lucide="check-circle"></i>
+                    <?= icone('check-circle') ?>
                     <div>
                         <strong><?= $trensAtivos ?></strong>
                         <span>Ativos</span>
@@ -411,7 +321,7 @@ function textoEstadoDashboard($estado) {
                 </div>
 
                 <div class="card_resumo_dashboard">
-                    <i data-lucide="pause-circle"></i>
+                    <?= icone('pause-circle') ?>
                     <div>
                         <strong><?= $trensInativos ?></strong>
                         <span>Inativos</span>
@@ -419,7 +329,7 @@ function textoEstadoDashboard($estado) {
                 </div>
 
                 <div class="card_resumo_dashboard">
-                    <i data-lucide="wrench"></i>
+                    <?= icone('wrench') ?>
                     <div>
                         <strong><?= $trensManutencao ?></strong>
                         <span>Em manutenção</span>
@@ -442,9 +352,7 @@ function textoEstadoDashboard($estado) {
                 <div class="card_clima">
 
                     <h3 id="local_clima">
-                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
-                        <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6"/>
-                        </svg> Joinville - SC
+                        📍 Joinville - SC
                     </h3>
 
                     <p id="temperatura_clima">
@@ -467,6 +375,7 @@ function textoEstadoDashboard($estado) {
             <div class="consulta_cep">
 
                 <h3>Consultar Endereço</h3>
+                <div class="strain-cep-conteudo">
 
                 <div class="conjunto">
 
@@ -519,6 +428,7 @@ function textoEstadoDashboard($estado) {
                     role="status"
                     aria-live="polite"
                 ></p>
+                </div>
 
             </div>
 
@@ -527,11 +437,9 @@ function textoEstadoDashboard($estado) {
     </main>
 
     <!-- ÍCONES -->
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    
 
-    <script>
-        lucide.createIcons();
-    </script>
+    
 
 </body>
 </html>

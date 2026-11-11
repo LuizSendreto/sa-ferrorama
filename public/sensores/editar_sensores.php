@@ -1,10 +1,13 @@
-
 <?php
 
 require_once '../../infra/verificar_acesso.php';
 verificarAdmin();
+require_once __DIR__ . '/../componentes/visual.php';
+require_once __DIR__ . '/../componentes/resposta_modal.php';
 
 include "../../infra/conexao.php";
+
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 $erro = "";
 
@@ -43,6 +46,7 @@ $id = filter_var(
 );
 
 if (!$id || $id <= 0) {
+    strainRespostaModal(false, "Registro inválido.", 400);
     header("Location: visu_sensores.php");
     exit;
 }
@@ -66,6 +70,7 @@ mysqli_stmt_close($stmt);
 
 if (!$sensor) {
     http_response_code(404);
+    strainRespostaModal(false, "Sensor não encontrado.", http_response_code() >= 400 ? http_response_code() : 422);
     exit("Sensor não encontrado.");
 }
 
@@ -82,7 +87,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         )
     ) {
         http_response_code(403);
-        exit("Solicitação inválida.");
+        strainRespostaModal(false, "Solicitação inválida.", http_response_code() >= 400 ? http_response_code() : 422);
+    exit("Solicitação inválida.");
     }
 
     $tipo_sensor = trim($_POST["tipo_sensor"] ?? "");
@@ -125,6 +131,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             mysqli_stmt_execute($stmt);
             mysqli_stmt_close($stmt);
+
+            strainRespostaModal(true, "Operação concluída.");
 
             header("Location: visu_sensores.php");
             exit;
@@ -172,6 +180,10 @@ function selecionarValorSensor($valorBanco, $opcoes) {
     return null;
 }
 
+// Erros permanecem no modal, mantendo os dados preenchidos.
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $erro !== '') {
+    strainRespostaModal(false, $erro, 422);
+}
 ?>
 
 <!DOCTYPE html>
@@ -187,40 +199,22 @@ function selecionarValorSensor($valorBanco, $opcoes) {
 
     <title>Editar Sensor ● Strain</title>
 
-    <link
-        rel="stylesheet"
-        href="../../assets/style/style.css?v=editarsensores1"
-    >
+    
+<link rel="stylesheet" href="../../assets/style/listagens.css?v=4">
+<link rel="stylesheet" href="../../assets/style/admin_paginas.css?v=4">
+<script src="../../Scripts/listagens.js?v=2" defer></script>
 </head>
 
-<body class="body_dashboard">
+<body class="strain-listagem strain-admin">
 
     <!-- NAVBAR -->
-    <header id="header_sensores">
-
-        <nav class="navbar">
-
-            <div class="marca-strain">
-                <i data-lucide="train-front"></i>
-                <span>STRAIN</span>
-            </div>
-
-            <button
-                type="button"
-                class="btn"
-                onclick="location.href='visu_sensores.php'"
-            >
-                Voltar
-            </button>
-
-        </nav>
-
-    </header>
+    <?php strainNavegacao('Sensores', '../', $_SESSION['usuario_nome'] ?? 'Funcionário', ($_SESSION['nivel_acesso'] ?? '') === 'admin'); ?>
 
     <!-- ÁREA PRINCIPAL -->
-    <main class="area_formulario">
+    <main class="strain-conteudo">
 
         <section class="painel_formulario">
+<a class="strain-btn strain-neutro" style="margin-bottom:20px" href="visu_sensores.php">Voltar para sensores</a>
 
             <h1 class="titulo_formulario">
                 Editar Sensor
@@ -382,11 +376,9 @@ function selecionarValorSensor($valorBanco, $opcoes) {
     </main>
 
     <!-- LUCIDE -->
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    
 
-    <script>
-        lucide.createIcons();
-    </script>
+    
 
 </body>
 </html>

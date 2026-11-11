@@ -1,8 +1,8 @@
-
 <?php
 
 require_once '../../infra/verificar_acesso.php';
 verificarAdmin();
+require_once __DIR__ . '/../componentes/visual.php';
 
 include "../../infra/conexao.php";
 
@@ -244,44 +244,22 @@ $funcionarios = mysqli_query(
 
     <title>Editar Trem ● Strain</title>
 
-    <link
-        rel="stylesheet"
-        href="../../assets/style/style.css?v=editartrens1"
-    >
+    
+<link rel="stylesheet" href="../../assets/style/listagens.css?v=4">
+<link rel="stylesheet" href="../../assets/style/admin_paginas.css?v=4">
+<script src="../../Scripts/listagens.js?v=2" defer></script>
 </head>
 
-<body class="body_dashboard">
+<body class="strain-listagem strain-admin">
 
     <!-- NAVBAR -->
-    <header id="header_trens">
-
-        <nav class="navbar">
-
-            <!-- LOGO -->
-            <div class="marca-strain">
-
-                <i data-lucide="train-front"></i>
-                <span>STRAIN</span>
-
-            </div>
-
-            <!-- BOTÃO VOLTAR -->
-            <button
-                type="button"
-                class="btn"
-                onclick="location.href='visualizar_trens.php'"
-            >
-                Voltar
-            </button>
-
-        </nav>
-
-    </header>
+    <?php strainNavegacao('Trens', '../', $_SESSION['usuario_nome'] ?? 'Funcionário', ($_SESSION['nivel_acesso'] ?? '') === 'admin'); ?>
 
     <!-- ÁREA PRINCIPAL -->
-    <main class="area_formulario">
+    <main class="strain-conteudo">
 
         <section class="painel_formulario">
+<a class="strain-btn strain-neutro" style="margin-bottom:20px" href="visualizar_trens.php">Voltar para trens</a>
 
             <!-- TÍTULO -->
             <h1 class="titulo_formulario">
@@ -520,11 +498,9 @@ $funcionarios = mysqli_query(
     </main>
 
     <!-- ÍCONES LUCIDE -->
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    
 
-    <script>
-        lucide.createIcons();
-    </script>
+    
 
 </body>
 

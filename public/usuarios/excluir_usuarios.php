@@ -3,6 +3,7 @@
 // Permitir exclusão somente para administradores
 require_once '../../infra/verificar_acesso.php';
 verificarAdmin();
+require_once __DIR__ . '/../componentes/resposta_modal.php';
 
 include "../../infra/conexao.php";
 
@@ -20,6 +21,7 @@ if (
     !hash_equals($_SESSION["csrf_token"], $_POST["csrf_token"])
 ) {
     http_response_code(403);
+    strainRespostaModal(false, "Solicitação inválida.", http_response_code() >= 400 ? http_response_code() : 422);
     exit("Solicitação inválida.");
 }
 
@@ -30,14 +32,16 @@ if (
     !ctype_digit($_POST["id"]) ||
     (int) $_POST["id"] <= 0
 ) {
-    die("ID inválido.");
+    strainRespostaModal(false, "ID inválido.", http_response_code() >= 400 ? http_response_code() : 422);
+    exit("ID inválido.");
 }
 
 $id = (int) $_POST["id"];
 
 // Impedir que o administrador exclua a própria conta
 if ($id == (int) $_SESSION["usuario_id"]) {
-    die("Você não pode excluir sua própria conta.");
+    strainRespostaModal(false, "Você não pode excluir sua própria conta.", http_response_code() >= 400 ? http_response_code() : 422);
+    exit("Você não pode excluir sua própria conta.");
 }
 
 try {
@@ -58,7 +62,8 @@ try {
     mysqli_stmt_close($stmt);
 
     if (!$usuario) {
-        die("Usuário não encontrado.");
+        strainRespostaModal(false, "Usuário não encontrado.", http_response_code() >= 400 ? http_response_code() : 422);
+    exit("Usuário não encontrado.");
     }
 
     // Verificar se o funcionário é responsável por algum trem
@@ -77,7 +82,8 @@ try {
     mysqli_stmt_close($stmt);
 
     if ($possui_trem) {
-        die("Este funcionário é responsável por um trem. Altere o responsável antes de excluir.");
+        strainRespostaModal(false, "Este funcionário é responsável por um trem. Altere o responsável antes de excluir.", http_response_code() >= 400 ? http_response_code() : 422);
+    exit("Este funcionário é responsável por um trem. Altere o responsável antes de excluir.");
     }
 
     // Excluir o usuário da tabela unificada
@@ -94,15 +100,18 @@ try {
     mysqli_stmt_close($stmt);
 
     if ($apagou == 0) {
-        die("Nenhum usuário foi encontrado para exclusão.");
+        strainRespostaModal(false, "Nenhum usuário foi encontrado para exclusão.", http_response_code() >= 400 ? http_response_code() : 422);
+    exit("Nenhum usuário foi encontrado para exclusão.");
     }
 
 } catch (Throwable $e) {
     error_log($e->getMessage());
-    die("Erro ao excluir o usuário.");
+    strainRespostaModal(false, "Erro ao excluir o usuário.", http_response_code() >= 400 ? http_response_code() : 422);
+    exit("Erro ao excluir o usuário.");
 }
 
 // Voltar para a visualização
+strainRespostaModal(true, "Operação concluída.");
 header("Location: visu_usuarios.php");
 exit;
 

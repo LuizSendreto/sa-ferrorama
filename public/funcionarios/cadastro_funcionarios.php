@@ -1,8 +1,9 @@
-
 <?php
 
 require_once '../../infra/verificar_acesso.php';
 verificarAdmin();
+require_once __DIR__ . '/../componentes/visual.php';
+require_once __DIR__ . '/../componentes/resposta_modal.php';
 
 include '../../infra/conexao.php';
 
@@ -90,7 +91,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])
     ) {
         http_response_code(403);
-        exit("Solicitação inválida.");
+        strainRespostaModal(false, "Solicitação inválida.", http_response_code() >= 400 ? http_response_code() : 422);
+    exit("Solicitação inválida.");
     }
 
     $nome = trim($_POST['nomeUsuario'] ?? '');
@@ -200,6 +202,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $transacaoIniciada = false;
 
             // Retornar para a listagem
+            strainRespostaModal(true, "Operação concluída.");
             header("Location: ../usuarios/visu_usuarios.php");
             exit;
 
@@ -226,6 +229,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 }
+// Erros permanecem no modal, mantendo os dados preenchidos.
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $erro !== '') {
+    strainRespostaModal(false, $erro, 422);
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -233,22 +240,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastrar Funcionário ● Strain</title>
-    <link rel="stylesheet" href="../../assets/style/style.css?v=cadastrofuncionarios2">
+    
+<link rel="stylesheet" href="../../assets/style/listagens.css?v=4">
+<link rel="stylesheet" href="../../assets/style/admin_paginas.css?v=4">
+<script src="../../Scripts/listagens.js?v=2" defer></script>
 </head>
-<body class="body_dashboard">
+<body class="strain-listagem strain-admin">
 
-    <header>
-        <nav class="navbar">
-            <div class="marca-strain">
-                <i data-lucide="train-front"></i>
-                <span>STRAIN</span>
-            </div>
-            <a href="../usuarios/visu_usuarios.php" class="btn">Voltar</a>
-        </nav>
-    </header>
+    <?php strainNavegacao('Usuários', '../', $_SESSION['usuario_nome'] ?? 'Funcionário', ($_SESSION['nivel_acesso'] ?? '') === 'admin'); ?>
 
-    <main class="area_formulario">
+    <main class="strain-conteudo">
         <section class="painel_formulario">
+<a class="strain-btn strain-neutro" style="margin-bottom:20px" href="../usuarios/visu_usuarios.php">Voltar para usuários</a>
             <h1 class="titulo_formulario">Cadastrar Funcionário</h1>
 
             <?php if ($erro !== "") { ?>
@@ -476,7 +479,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     });
     </script>
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
-    <script>lucide.createIcons();</script>
+    
+    
 </body>
 </html>

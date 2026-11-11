@@ -1,8 +1,9 @@
-
 <?php
 
 require_once '../../infra/verificar_acesso.php';
 verificarAdmin();
+require_once __DIR__ . '/../componentes/visual.php';
+require_once __DIR__ . '/../componentes/resposta_modal.php';
 
 include "../../infra/conexao.php";
 
@@ -24,6 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 if ($id <= 0) {
+    strainRespostaModal(false, "Registro inválido.", 400);
     header("Location: visu_usuarios.php");
     exit;
 }
@@ -55,7 +57,8 @@ $usuario = mysqli_fetch_assoc(
 mysqli_stmt_close($stmt);
 
 if (!$usuario) {
-    die("Usuário não encontrado.");
+    strainRespostaModal(false, "Usuário não encontrado.", http_response_code() >= 400 ? http_response_code() : 422);
+    exit("Usuário não encontrado.");
 }
 
 $titulo_nome = $usuario["nome"];
@@ -73,7 +76,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         )
     ) {
         http_response_code(403);
-        exit("Solicitação inválida.");
+        strainRespostaModal(false, "Solicitação inválida.", http_response_code() >= 400 ? http_response_code() : 422);
+    exit("Solicitação inválida.");
     }
 
     $nome = trim($_POST["nome"] ?? "");
@@ -233,6 +237,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $_SESSION['usuario_email'] = $email;
                 }
 
+                strainRespostaModal(true, "Operação concluída.");
+
                 header("Location: visu_usuarios.php");
                 exit;
             }
@@ -258,6 +264,10 @@ if ($enviado !== null) {
     $usuario = array_merge($usuario, $enviado);
 }
 
+// Erros permanecem no modal, mantendo os dados preenchidos.
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $erro !== '') {
+    strainRespostaModal(false, $erro, 422);
+}
 ?>
 
 
@@ -267,21 +277,17 @@ if ($enviado !== null) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Usuário ● Strain</title>
-    <link rel="stylesheet" href="../../assets/style/style.css?v=editarusuarioscep2">
+    
+<link rel="stylesheet" href="../../assets/style/listagens.css?v=4">
+<link rel="stylesheet" href="../../assets/style/admin_paginas.css?v=4">
+<script src="../../Scripts/listagens.js?v=2" defer></script>
 </head>
-<body class="body_dashboard">
-    <header id="header_usuarios">
-        <nav class="navbar">
-            <div class="marca-strain">
-                <i data-lucide="train-front"></i>
-                <span>STRAIN</span>
-            </div>
-            <button type="button" class="btn" onclick="location.href='visu_usuarios.php'">Voltar</button>
-        </nav>
-    </header>
+<body class="strain-listagem strain-admin">
+    <?php strainNavegacao('Usuários', '../', $_SESSION['usuario_nome'] ?? 'Funcionário', ($_SESSION['nivel_acesso'] ?? '') === 'admin'); ?>
 
-    <main class="area_formulario">
+    <main class="strain-conteudo">
         <section class="painel_formulario">
+<a class="strain-btn strain-neutro" style="margin-bottom:20px" href="../usuarios/visu_usuarios.php">Voltar para usuários</a>
             <h1 class="titulo_formulario">Editar Usuário</h1>
             <p class="subtitulo_formulario">
                 Editando o usuário: <?= htmlspecialchars($titulo_nome, ENT_QUOTES, 'UTF-8') ?>
@@ -359,7 +365,7 @@ if ($enviado !== null) {
         </section>
     </main>
 
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
-    <script>lucide.createIcons();</script>
+    
+    
 </body>
 </html>
