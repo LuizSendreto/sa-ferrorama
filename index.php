@@ -56,8 +56,8 @@
                 </p>
 
                 <h1 id="hero-title">
-                    Um novo olhar<br>
-                    sobre os <em>trilhos.</em>
+                    Bem-vindo<br>
+                    ao <em>Strain</em>
                 </h1>
 
                 <p class="hero-description">
