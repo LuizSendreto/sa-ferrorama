@@ -6,7 +6,6 @@ if (session_status() == PHP_SESSION_NONE) {
 
 // Caminhos principais do sistema
 $inicio = "/tironi_2026_m4/sa-ferrorama/index.php";
-$homeUsuario = "/tironi_2026_m4/sa-ferrorama/public/usuarios/home_usuario.php";
 $dashboard = "/tironi_2026_m4/sa-ferrorama/public/dashboard.php";
 
 // Verificar se está logado
@@ -21,12 +20,12 @@ function verificarLogin() {
 
 // Permitir somente funcionários
 function verificarFuncionario() {
-    global $homeUsuario;
+    global $inicio;
 
     verificarLogin();
 
     if (($_SESSION['tipo_usuario'] ?? '') != 'funcionario') {
-        header("Location: " . $homeUsuario);
+        header("Location: " . $inicio);
         exit;
     }
 }

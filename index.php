@@ -1,3 +1,11 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+$usuarioLogadoIndex = !empty($_SESSION['usuario_id']);
+$nomeUsuarioIndex = $_SESSION['usuario_nome'] ?? 'usuário';
+?>
 
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -33,9 +41,20 @@
                 <a href="#linhas">Linhas e horários</a>
             </div>
 
-            <a class="button button-light nav-login" href="public/usuarios/login.php">
-                Entrar <span aria-hidden="true">↗</span>
-            </a>
+            <?php if ($usuarioLogadoIndex): ?>
+                <div style="display: flex; align-items: center; justify-content: flex-end; gap: 12px; flex-wrap: wrap; margin-left: auto;">
+                    <span style="color: #fff; font-weight: 600; font-size: 14px;">
+                        Olá, <?= htmlspecialchars((string) $nomeUsuarioIndex, ENT_QUOTES, 'UTF-8') ?>!
+                    </span>
+                    <a class="button button-light nav-login" href="public/usuarios/logout.php">
+                        Sair
+                    </a>
+                </div>
+            <?php else: ?>
+                <a class="button button-light nav-login" href="public/usuarios/login.php">
+                    Entrar <span aria-hidden="true">↗</span>
+                </a>
+            <?php endif; ?>
 
         </nav>
 

@@ -48,7 +48,7 @@ $exclusao = $ehUsuario ? 'excluir_usuarios.php' : 'excluir_sensor.php';
     <section class="strain-cabecalho" aria-labelledby="titulo-pagina">
         <div><h1 id="titulo-pagina">Visualização de <?= $titulo ?></h1><p><?= $titulo ?> Cadastrados</p></div>
         <?php if ($admin): ?>
-            <button class="strain-acao strain-cadastrar" type="button" data-abrir="cadastro" title="<?= $ehUsuario ? 'Cadastrar funcionário' : 'Cadastrar sensor' ?>" aria-label="<?= $ehUsuario ? 'Cadastrar funcionário' : 'Cadastrar sensor' ?>"><?= icone('plus') ?></button>
+            <button class="strain-acao strain-cadastrar" type="button" data-abrir="cadastro" title="<?= $ehUsuario ? 'Cadastrar usuário' : 'Cadastrar sensor' ?>" aria-label="<?= $ehUsuario ? 'Cadastrar usuário' : 'Cadastrar sensor' ?>"><?= icone('plus') ?><span><?= $ehUsuario ? 'Cadastrar usuário' : 'Cadastrar sensor' ?></span></button>
         <?php endif; ?>
     </section>
     <p class="strain-aviso" id="aviso-listagem" role="status" hidden></p>

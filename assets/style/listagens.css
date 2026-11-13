@@ -77,3 +77,35 @@
 /* Apenas títulos: faixa vermelha e texto branco, sem alterar dimensões. */
 .strain-modal-topo { background:var(--bordo); color:#fff; padding:16px; border-radius:9px; }
 .strain-modal-topo p { color:#fff; }
+
+/* Botão de cadastro com ícone e descrição nas listagens. */
+.strain-listagem .strain-cabecalho .strain-cadastrar {
+    width:auto;
+    min-height:49px;
+    height:auto;
+    padding:10px 15px;
+    gap:10px;
+    font:inherit;
+    font-size:14px;
+    font-weight:700;
+    white-space:nowrap;
+    text-decoration:none;
+    cursor:pointer;
+}
+.strain-listagem .strain-cabecalho .strain-cadastrar svg {
+    width:23px;
+    height:23px;
+    flex-shrink:0;
+}
+@media (max-width:700px) {
+    .strain-listagem .strain-cabecalho .strain-cadastrar {
+        min-height:40px;
+        padding:8px 10px;
+        font-size:12px;
+        gap:6px;
+    }
+    .strain-listagem .strain-cabecalho .strain-cadastrar svg {
+        width:18px;
+        height:18px;
+    }
+}
