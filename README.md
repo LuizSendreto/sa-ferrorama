@@ -198,22 +198,39 @@ sa-ferrorama/
 │   │
 │   └── style/
 │       └── style.css
+│       └── admin_paginas.css
+│       └── cep.css
+│       └── clima.css
+│       └── home_usuario.css
+│       └── landing.css
+│       └── listagens.css
 │
 ├── database/
 │   └── db.sql
 │
 ├── doc/
 │   ├── apis.md
+│   ├── identidade_visual.md
+│   ├── manual.md
 │   ├── pdo.md
 │   ├── pesquisa-crude.md
 │   ├── pesquisa-scrum.md
 │   └── pesquisa-XAMPP.md
+│   ├── relatorio-uso-ia.md
 │
 ├── infra/
 │   ├── conexao.php
 │   └── verificar_acesso.php
 │
 ├── public/
+├── componentes/
+│   │   ├── listagem_operacional.php
+│   │   ├── listagem.php
+│   │   ├── modais_listagem.php
+│   │   ├── paginacao.php
+│   │   ├── resposta_modal.php
+│   │   └── visual.php
+|   |
 │   ├── funcionarios/
 │   │   ├── cadastro_funcionarios.php
 │   │   ├── editar_funcionarios.php
@@ -228,6 +245,7 @@ sa-ferrorama/
 │   │
 │   ├── sensores/
 │   │   ├── cadastro_sensor.php
+│   │   ├── editar_sensor.php
 │   │   ├── excluir_sensor.php
 │   │   └── visu_sensores.php
 │   │
@@ -253,7 +271,12 @@ sa-ferrorama/
 │
 ├── Scripts/
 │   ├── botoes.js
+│   ├── cep.js
+│   ├── clima.js
 │   ├── converter_senhas.php
+│   ├── formulario_modal.js
+│   ├── landing.js
+│   ├── listagem.js
 │   ├── script.js
 │   └── validacao.js
 │
@@ -305,3 +328,169 @@ Com ela, o sistema pode apresentar a temperatura atual e as condições meteorol
 O objetivo da atividade foi aprender a utilizar APIs externas e integrar as informações recebidas às funcionalidades do nosso sistema.
 
 Durante o desenvolvimento, também realizamos ajustes nos códigos, na organização das páginas e no banco de dados para adaptar as APIs ao Strain.
+
+
+## Pré-requisitos
+
+Para executar o sistema Strain, é necessário ter os seguintes programas e recursos:
+
+- **XAMPP:** ambiente de desenvolvimento que disponibiliza Apache, PHP e MySQL/MariaDB.
+- **Navegador:** Google Chrome, Microsoft Edge ou Firefox.
+- **Visual Studio Code:** recomendado para visualizar e editar os códigos.
+- **Git:** opcional, para clonar o repositório do projeto.
+- **Conexão com a internet:** necessária para utilizar as APIs ViaCEP e Open-Meteo.
+
+---
+
+## Instruções de instalação e configuração
+
+Para instalar o Strain no computador, siga os passos:
+
+1. Instale o XAMPP.
+2. Baixe o projeto SA_Ferrorama pelo GitHub.
+3. Extraia os arquivos, caso tenha baixado o projeto em ZIP.
+4. Acesse a pasta `C:\xampp\htdocs`.
+5. Coloque a pasta do projeto dentro de `htdocs`, utilizando o nome `sa-ferrorama`.
+6. Abra o painel de controle do XAMPP.
+7. Inicie os serviços Apache e MySQL.
+8. Configure a conexão com o banco de dados no arquivo `infra/conexao.php`.
+
+Após esses procedimentos, o sistema estará preparado para ser acessado pelo navegador, desde que o banco de dados esteja configurado corretamente.
+
+---
+
+## Configuração e importação do banco de dados
+
+O Strain utiliza o MySQL para armazenar as informações dos usuários, funcionários, trens, sensores e rotas.
+
+Para importar o banco de dados:
+
+1. Abra o XAMPP e inicie o Apache e o MySQL.
+2. Acesse `http://localhost/phpmyadmin`.
+3. Crie um banco de dados com o nome definido no arquivo `infra/conexao.php`, caso ele ainda não exista.
+4. Selecione o banco criado.
+5. Clique na opção **Importar**.
+6. Selecione o arquivo `database/db.sql`, localizado na pasta do projeto.
+7. Clique em **Importar** ou **Executar**.
+8. Verifique se as tabelas foram criadas corretamente.
+
+Após a importação, confira as informações de conexão no arquivo `infra/conexao.php`, como nome do banco, usuário, senha e servidor.
+
+---
+
+## Como iniciar a aplicação
+
+Após instalar e configurar o sistema:
+
+1. Abra o XAMPP.
+2. Inicie o Apache e o MySQL.
+3. Abra um navegador.
+4. Digite o endereço: `http://localhost/sa-ferrorama/`
+5. A página inicial do Strain será exibida.
+6. Clique no botão de login para acessar o sistema.
+7. Entre com um usuário cadastrado no banco de dados.
+
+Após a autenticação, o usuário será direcionado para a página correspondente ao seu perfil de acesso.
+
+---
+
+## Perfis de acesso e permissões
+
+O Strain possui diferentes perfis de usuários, permitindo organizar o acesso às funcionalidades do sistema.
+
+### Administrador
+
+O administrador é responsável pelo gerenciamento geral do sistema.
+
+**Permissões previstas:**
+
+- Acessar o dashboard.
+- Gerenciar usuários e funcionários.
+- Cadastrar, visualizar, editar e excluir registros, conforme as regras do sistema.
+- Gerenciar trens, sensores e rotas.
+- Consultar relatórios e informações de monitoramento.
+- Encerrar a sessão pelo botão de logout.
+
+**Acesso de demonstração:**
+
+- **Usuário:** `Rafael@strain`
+- **Senha:** fornecida separadamente pela equipe.
+
+Essa é uma conta fictícia, criada exclusivamente para demonstração do sistema.
+
+### Funcionário
+
+O funcionário é responsável pelo acompanhamento e gerenciamento das operações ferroviárias.
+
+**Permissões previstas:**
+
+- Acessar o dashboard operacional.
+- Consultar informações dos trens.
+- Visualizar sensores e rotas.
+- Acompanhar informações de monitoramento.
+- Consultar alertas e relatórios.
+- Realizar operações de cadastro e edição, quando autorizado.
+
+### Cliente
+
+O cliente possui acesso às funcionalidades disponibilizadas aos usuários comuns.
+
+**Permissões previstas:**
+
+- Realizar cadastro e login.
+- Acessar a página inicial do usuário.
+- Consultar informações disponibilizadas pelo sistema.
+
+---
+
+## Contribuições dos integrantes
+
+O projeto SA_Ferrorama foi desenvolvido em equipe, com a participação dos seguintes integrantes:
+
+- **Luiz Felipe Sendreto dos Santos:** Front-end, Kanban, revisão, testes, back-end e organização.
+- **Juana Franciscão:** Front-end, documentação, revisão, testes, back-end e Kanban.
+- **Nicole Jordan Amaral:** Front-end, documentação, testes, back-end e Kanban.
+- **Rafael Tironi:** Front-end, Kanban, revisão, testes, back-end e organização.
+
+A equipe utilizou Git e GitHub para organizar o desenvolvimento, compartilhar alterações e acompanhar as tarefas do projeto.
+
+---
+
+## Capturas de tela da versão final
+
+As imagens a seguir apresentam as principais interfaces do Strain.
+
+### Página inicial
+
+![Página inicial](assets/img/tela_inicial.png)
+
+### Tela de login
+
+![Tela de login](assets/img/tela_login.png)
+
+### Dashboard
+
+![Dashboard](assets/img/dashboard_readme.png)
+
+### Gerenciamento de trens
+
+![Gerenciamento de trens](assets/img/Gerenciamento_trens.png)
+
+### Monitoramento
+
+![Monitoramento](assets/img/monitoramento_readme.png)
+
+
+---
+
+## Limitações conhecidas
+
+O Strain foi desenvolvido como um projeto acadêmico, utilizando um ambiente de desenvolvimento local.
+
+Entre as possíveis limitações que devem ser verificadas, estão:
+
+- **Ambiente local:** o sistema foi configurado para execução pelo XAMPP, não havendo confirmação de implantação em um servidor público.
+- **Sensores IoT:** é necessário confirmar se a comunicação com sensores físicos em tempo real está implementada ou se os dados utilizados são apenas demonstrativos.
+- **Monitoramento:** algumas funcionalidades de acompanhamento ferroviário podem depender de integrações adicionais com sensores e dispositivos.
+- **Relatórios:** é necessário verificar quais recursos de geração e exportação de relatórios estão realmente implementados.
+- **APIs externas:** a consulta de CEP e das condições meteorológicas depende da disponibilidade dos serviços ViaCEP e Open-Meteo.
