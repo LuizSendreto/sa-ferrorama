@@ -41,7 +41,7 @@ $colunas = $ehTrem ? ['ID','Linha','Número de série','Velocidade','Estado','Fu
 <?php strainNavegacao($titulo, '../', $nome, $admin); ?>
 <main class="strain-conteudo">
     <section class="strain-cabecalho"><div><h1>Visualização de <?= $titulo ?></h1><p><?= $titulo ?> <?= $ehTrem ? 'Cadastrados' : 'Cadastradas' ?></p></div>
-        <?php if ($admin): ?><a class="strain-acao strain-cadastrar" href="<?= $cadastro ?>" data-formulario-modal data-titulo="Cadastrar <?= $ehTrem ? 'trem' : 'rota' ?>" title="Cadastrar <?= $ehTrem ? 'trem' : 'rota' ?>" aria-label="Cadastrar <?= $ehTrem ? 'trem' : 'rota' ?>"><?= icone('plus') ?></a><?php endif; ?>
+        <?php if ($admin): ?><a class="strain-acao strain-cadastrar" href="<?= $cadastro ?>" data-formulario-modal data-titulo="Cadastrar <?= $ehTrem ? 'trem' : 'rota' ?>" title="Cadastrar <?= $ehTrem ? 'trem' : 'rota' ?>" aria-label="Cadastrar <?= $ehTrem ? 'trem' : 'rota' ?>"><?= icone('plus') ?><span>Cadastrar <?= $ehTrem ? 'trem' : 'rota' ?></span></a><?php endif; ?>
     </section>
     <p class="strain-aviso" id="aviso-listagem" role="status" hidden></p>
     <div class="strain-painel">
