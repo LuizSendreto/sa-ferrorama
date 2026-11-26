@@ -9,11 +9,13 @@ Primeiro, o MySQL prepara a estrutura da consulta e, em seguida, recebe os valor
 ```php
 <?php
 
+
 include "../infra/conexao.php";
 
 $titulo = $_POST["titulo"];
 $autor = $_POST["autor"];
 $ano = $_POST["ano"];
+
 
 $sql = "INSERT INTO livros (titulo, autor, ano) VALUES (?, ?, ?)";
 

@@ -5,6 +5,7 @@
 
 ### Verificação da sessão do usuário
 
+
 ```php
 <?php
 if (session_status() === PHP_SESSION_NONE) {
@@ -14,6 +15,7 @@ $usuarioLogadoIndex = !empty($_SESSION['usuario_id']);
 $nomeUsuarioIndex = $_SESSION['usuario_nome'] ?? 'usuário';
 ?>
 ```
+
 
 Esse código é responsável por iniciar a sessão, verificar se o usuário está logado e obter seu nome.
 

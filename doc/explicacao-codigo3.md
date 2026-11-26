@@ -8,6 +8,7 @@ $_SESSION['csrf_token'] = $_SESSION['csrf_token'] ?? bin2hex(random_bytes(32));
 
 Essa linha verifica se já existe um token CSRF salvo na sessão. O operador `??` significa que, caso não exista, será criado um novo. A função `random_bytes(32)` gera 32 bytes aleatórios, e `bin2hex()` transforma esses bytes em uma sequência hexadecimal.
 
+
 ## 2. Percorrendo um array com `foreach`
 
 ```php
@@ -15,6 +16,7 @@ Essa linha verifica se já existe um token CSRF salvo na sessão. O operador `??
     <th scope="col"><?= $coluna ?></th>
 <?php endforeach; ?>
 ```
+
 
 Esse trecho percorre o array `$colunas` usando o `foreach`. A cada repetição, o valor atual é armazenado na variável `$coluna` e exibido dentro de uma tag `<th>`, que representa o cabeçalho de uma coluna de tabela. O `<?= $coluna ?>` exibe o conteúdo da variável, enquanto `endforeach` encerra o loop.
 
