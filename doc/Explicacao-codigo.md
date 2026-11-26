@@ -202,11 +202,13 @@ Garantir a segurança do sistema, impedir acessos não autorizados e evitar a re
 
 #### Conceitos
 
+
 - **Autenticação:** verifica se o usuário está logado.
 
 - **Autorização:** verifica quais funcionalidades o usuário pode acessar.
 
 - **Hierarquia de acesso:** usuário logado → funcionário → administrador.
+
 
 ---
 
