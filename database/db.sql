@@ -40,17 +40,6 @@ CREATE TABLE IF NOT EXISTS enderecos_usuarios (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ==========================================
--- TABELA SENSORES
--- ==========================================
-
-CREATE TABLE IF NOT EXISTS sensores (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    tipo VARCHAR(100) NOT NULL,
-    localizacao VARCHAR(100) NOT NULL,
-    posicao VARCHAR(100) NOT NULL
-);
-
--- ==========================================
 -- TABELA TRENS
 -- ==========================================
 
@@ -82,6 +71,27 @@ CREATE TABLE IF NOT EXISTS rotas (
 );
 
 -- ==========================================
+-- TABELA SENSORES / DEPENDENCIA DE ROTAS
+-- ==========================================
+-- NULL somente para compatibilidade com sensores de exemplo/legados;
+-- os formularios exigem rota existente para novos cadastros e edicoes.
+CREATE TABLE IF NOT EXISTS sensores (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    tipo VARCHAR(100) NOT NULL,
+    localizacao VARCHAR(100) NOT NULL,
+    posicao VARCHAR(100) NOT NULL,
+    rota_id INT NULL,
+
+    INDEX idx_sensores_rota_id (rota_id),
+
+    CONSTRAINT fk_sensores_rotas
+        FOREIGN KEY (rota_id)
+        REFERENCES rotas(id)
+        ON UPDATE CASCADE
+        ON DELETE RESTRICT
+);
+
+-- ==========================================
 -- CORRECAO DOS STATUS DOS TRENS
 -- ==========================================
 
@@ -95,6 +105,7 @@ WHERE estado NOT IN ('Ativo', 'Inativo', 'Manutencao');
 
 -- ==========================================
 -- SENSORES DE EXEMPLO
+-- Sem rota definida: registros antigos devem ser vinculados pela edicao.
 -- ==========================================
 
 INSERT INTO sensores (id, tipo, localizacao, posicao)

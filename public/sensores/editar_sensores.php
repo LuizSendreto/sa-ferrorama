@@ -6,6 +6,8 @@ require_once __DIR__ . '/../componentes/visual.php';
 require_once __DIR__ . '/../componentes/resposta_modal.php';
 
 include "../../infra/conexao.php";
+require_once __DIR__ . '/rotas_sensor.php';
+$rotasDisponiveis = listarRotasSensor($conn);
 
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
@@ -54,7 +56,7 @@ if (!$id || $id <= 0) {
 // Buscar sensor
 $stmt = mysqli_prepare(
     $conn,
-    "SELECT id, tipo, localizacao, posicao
+    "SELECT id, tipo, localizacao, posicao, rota_id
      FROM sensores
      WHERE id = ?"
 );
@@ -94,11 +96,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $tipo_sensor = trim($_POST["tipo_sensor"] ?? "");
     $localizacao = trim($_POST["localizacao"] ?? "");
     $posicao = trim($_POST["posicao"] ?? "");
+    $rota_id = filter_var($_POST['rota_id'] ?? null, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]) ?: 0;
 
     // Manter valores digitados se houver erro
     $sensor["tipo"] = $tipo_sensor;
     $sensor["localizacao"] = $localizacao;
     $sensor["posicao"] = $posicao;
+    $sensor['rota_id'] = $rota_id;
 
     // Validar opções
     if (
@@ -107,6 +111,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         !array_key_exists($posicao, $posicoes_validas)
     ) {
         $erro = "Selecione opções válidas para todos os campos.";
+    } elseif (!rotaSensorExiste($conn, $rota_id)) {
+        $erro = "Selecione uma rota cadastrada para o sensor.";
 
     } else {
 
@@ -115,17 +121,19 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $sql = "UPDATE sensores
                     SET tipo = ?,
                         localizacao = ?,
-                        posicao = ?
+                        posicao = ?,
+                        rota_id = ?
                     WHERE id = ?";
 
             $stmt = mysqli_prepare($conn, $sql);
 
             mysqli_stmt_bind_param(
                 $stmt,
-                "sssi",
+                "sssii",
                 $tipo_sensor,
                 $localizacao,
                 $posicao,
+                $rota_id,
                 $id
             );
 
@@ -361,10 +369,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $erro !== '') {
 
                 </div>
 
+                <!-- ROTA ASSOCIADA -->
+                <div class="campo_formulario">
+                    <label for="rota_id">A qual rota o sensor está ligado?</label>
+                    <select name="rota_id" id="rota_id" required>
+                        <option value="">Selecione uma rota</option>
+                        <?php foreach ($rotasDisponiveis as $rota): ?>
+                            <option value="<?= (int) $rota['id'] ?>" <?= (int) ($sensor['rota_id'] ?? 0) === (int) $rota['id'] ? 'selected' : '' ?>>
+                                <?= htmlspecialchars($rota['nome_rota'], ENT_QUOTES, 'UTF-8') ?> (ID <?= (int) $rota['id'] ?>)
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                    <?php if (!$rotasDisponiveis): ?>
+                        <p role="status">Cadastre uma rota antes de editar sensores. <a href="../rotas/rotas.php">Abrir rotas</a>.</p>
+                    <?php endif; ?>
+                </div>
+
                 <!-- ATUALIZAR -->
                 <button
                     type="submit"
                     class="botao_formulario"
+                    <?= !$rotasDisponiveis ? 'disabled' : '' ?>
                 >
                     Atualizar Sensor
                 </button>

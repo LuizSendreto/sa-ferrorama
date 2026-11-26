@@ -6,6 +6,7 @@ require_once __DIR__ . '/../componentes/visual.php';
 require_once __DIR__ . '/../componentes/resposta_modal.php';
 
 include "../../infra/conexao.php";
+require_once __DIR__ . '/rotas_sensor.php';
 
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
@@ -41,6 +42,8 @@ $posicoes_validas = [
 $tipo_sensor = "";
 $localizacao = "";
 $posicao = "";
+$rota_id = 0;
+$rotasDisponiveis = listarRotasSensor($conn);
 
 // Processar cadastro
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -62,6 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $tipo_sensor = trim($_POST["tipo_sensor"] ?? "");
     $localizacao = trim($_POST["localizacao"] ?? "");
     $posicao = trim($_POST["posicao"] ?? "");
+    $rota_id = filter_var($_POST['rota_id'] ?? null, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]) ?: 0;
 
     // Validar campos
     if (
@@ -70,6 +74,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         !array_key_exists($posicao, $posicoes_validas)
     ) {
         $erro = "Selecione opções válidas para todos os campos.";
+    } elseif (!rotaSensorExiste($conn, $rota_id)) {
+        $erro = "Selecione uma rota cadastrada para o sensor.";
 
     } else {
 
@@ -77,17 +83,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             // Cadastrar sensor
             $sql = "INSERT INTO sensores
-                    (tipo, localizacao, posicao)
-                    VALUES (?, ?, ?)";
+                    (tipo, localizacao, posicao, rota_id)
+                    VALUES (?, ?, ?, ?)";
 
             $stmt = mysqli_prepare($conn, $sql);
 
             mysqli_stmt_bind_param(
                 $stmt,
-                "sss",
+                "sssi",
                 $tipo_sensor,
                 $localizacao,
-                $posicao
+                $posicao,
+                $rota_id
             );
 
             mysqli_stmt_execute($stmt);
@@ -307,10 +314,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $erro !== '') {
 
                 </div>
 
+                <!-- ROTA ASSOCIADA -->
+                <div class="campo_formulario">
+                    <label for="rota_id">A qual rota o sensor está ligado?</label>
+                    <select name="rota_id" id="rota_id" required>
+                        <option value="">Selecione uma rota</option>
+                        <?php foreach ($rotasDisponiveis as $rota): ?>
+                            <option value="<?= (int) $rota['id'] ?>" <?= $rota_id === (int) $rota['id'] ? 'selected' : '' ?>>
+                                <?= htmlspecialchars($rota['nome_rota'], ENT_QUOTES, 'UTF-8') ?> (ID <?= (int) $rota['id'] ?>)
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                    <?php if (!$rotasDisponiveis): ?>
+                        <p role="status">Cadastre uma rota antes de adicionar sensores. <a href="../rotas/rotas.php">Abrir rotas</a>.</p>
+                    <?php endif; ?>
+                </div>
+
                 <!-- BOTÃO CADASTRAR -->
                 <button
                     type="submit"
                     class="botao_formulario"
+                    <?= !$rotasDisponiveis ? 'disabled' : '' ?>
                 >
                     Cadastrar Sensor
                 </button>

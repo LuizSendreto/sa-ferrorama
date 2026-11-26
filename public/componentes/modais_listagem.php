@@ -34,9 +34,22 @@ foreach (['cadastro', 'edicao'] as $modo):
             ];
             foreach ($opcoes as $campo => [$rotulo, $valores]): ?>
                 <label class="strain-campo-largo" for="<?= $modo . '-' . $campo ?>"><?= $rotulo ?><select id="<?= $modo . '-' . $campo ?>" name="<?= $campo ?>" required><option value="">Selecione</option><?php foreach ($valores as $valor => $texto): ?><option value="<?= escapar($valor) ?>"><?= $texto ?></option><?php endforeach; ?></select></label>
-            <?php endforeach; endif; ?>
+            <?php endforeach; ?>
+                <label class="strain-campo-largo" for="<?= $modo ?>-rota-id">
+                    A qual rota o sensor está ligado?
+                    <select id="<?= $modo ?>-rota-id" name="rota_id" required>
+                        <option value="">Selecione uma rota</option>
+                        <?php foreach ($rotasDisponiveis as $rota): ?>
+                            <option value="<?= (int) $rota['id'] ?>"><?= escapar($rota['nome_rota']) ?> (ID <?= (int) $rota['id'] ?>)</option>
+                        <?php endforeach; ?>
+                    </select>
+                    <?php if (!$rotasDisponiveis): ?>
+                        <small>Cadastre uma rota primeiro, na aba Rotas.</small>
+                    <?php endif; ?>
+                </label>
+            <?php endif; ?>
         </div>
-        <div class="strain-modal-rodape"><button type="button" class="strain-btn strain-neutro" data-fechar>Cancelar</button><button type="submit" class="strain-btn strain-salvar"><?= $criando ? 'Cadastrar' : 'Salvar alterações' ?></button></div>
+        <div class="strain-modal-rodape"><button type="button" class="strain-btn strain-neutro" data-fechar>Cancelar</button><button type="submit" class="strain-btn strain-salvar" <?= !$ehUsuario && !$rotasDisponiveis ? 'disabled title="Cadastre uma rota antes"' : '' ?>><?= $criando ? 'Cadastrar' : 'Salvar alterações' ?></button></div>
     </form>
 </dialog>
 <?php endforeach; ?>

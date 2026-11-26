@@ -12,6 +12,10 @@ $admin = ($_SESSION['nivel_acesso'] ?? '') === 'admin';
 $nome = $_SESSION['usuario_nome'] ?? 'Funcionário';
 $_SESSION['csrf_token'] = $_SESSION['csrf_token'] ?? bin2hex(random_bytes(32));
 require_once __DIR__ . '/visual.php';
+$rotasDisponiveis = [];
+if (!$ehUsuario && $admin) {
+    $rotasDisponiveis = $conn->query('SELECT id, nome_rota FROM rotas ORDER BY nome_rota ASC, id ASC')->fetch_all(MYSQLI_ASSOC);
+}
 // Paginação no servidor; a mesma quantidade e controles nas duas páginas.
 $porPagina = 6;
 $total = (int) $conn->query($ehUsuario ? 'SELECT COUNT(*) FROM usuarios' : 'SELECT COUNT(*) FROM sensores')->fetch_row()[0];
@@ -21,7 +25,7 @@ $pagina = max(1, min($pagina, $totalPaginas));
 $offset = ($pagina - 1) * $porPagina;
 $sql = $ehUsuario
     ? 'SELECT u.id, u.nome, u.email, u.telefone, u.tipo, u.nivel_acesso, e.cep FROM usuarios u LEFT JOIN enderecos_usuarios e ON e.usuario_id = u.id ORDER BY u.nome ASC, u.id ASC LIMIT ? OFFSET ?'
-    : 'SELECT id, tipo, localizacao, posicao FROM sensores ORDER BY id ASC LIMIT ? OFFSET ?';
+    : 'SELECT s.id, s.tipo, s.localizacao, s.posicao, s.rota_id, r.nome_rota FROM sensores s LEFT JOIN rotas r ON r.id = s.rota_id ORDER BY s.id ASC LIMIT ? OFFSET ?';
 $stmt = $conn->prepare($sql);
 $stmt->bind_param('ii', $porPagina, $offset);
 $stmt->execute();
@@ -56,7 +60,7 @@ $exclusao = $ehUsuario ? 'excluir_usuarios.php' : 'excluir_sensor.php';
         <div class="strain-tabela-scroll" tabindex="0" role="region" aria-label="Tabela de <?= $titulo ?>">
             <table class="strain-tabela">
                 <thead><tr>
-                    <?php foreach ($ehUsuario ? ['ID','Nome','E-mail','Telefone','Tipo','Nível de acesso','CEP'] : ['ID','Tipo','Localização','Posição'] as $coluna): ?>
+                    <?php foreach ($ehUsuario ? ['ID','Nome','E-mail','Telefone','Tipo','Nível de acesso','CEP'] : ['ID','Tipo','Localização','Posição','Rota vinculada'] as $coluna): ?>
                         <th scope="col"><?= $coluna ?></th>
                     <?php endforeach; ?>
                     <?php if ($admin): ?><th scope="col">Ações</th><?php endif; ?>
@@ -76,6 +80,7 @@ $exclusao = $ehUsuario ? 'excluir_usuarios.php' : 'excluir_sensor.php';
                             <td><?= escapar($registro['tipo']) ?></td>
                             <td><?= escapar($registro['localizacao']) ?></td>
                             <td><?= escapar($registro['posicao']) ?></td>
+                            <td><?= $registro['rota_id'] === null ? 'Sem rota (cadastro antigo)' : escapar($registro['nome_rota'] ?? 'Rota indisponível') ?></td>
                         <?php endif; ?>
                         <?php if ($admin): ?>
                             <td><div class="strain-acoes">
@@ -87,7 +92,7 @@ $exclusao = $ehUsuario ? 'excluir_usuarios.php' : 'excluir_sensor.php';
                         <?php endif; ?>
                     </tr>
                 <?php endforeach; ?>
-                <?php if (!$registros): ?><tr><td colspan="<?= $ehUsuario ? 8 : ($admin ? 5 : 4) ?>" class="strain-vazio">Nenhum registro cadastrado.</td></tr><?php endif; ?>
+                <?php if (!$registros): ?><tr><td colspan="<?= $ehUsuario ? 8 : ($admin ? 6 : 5) ?>" class="strain-vazio">Nenhum registro cadastrado.</td></tr><?php endif; ?>
                 </tbody>
             </table>
         </div>

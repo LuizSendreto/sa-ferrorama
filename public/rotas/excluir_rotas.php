@@ -53,8 +53,13 @@ try {
     }
 
 } catch (Throwable $e) {
+    if ($e instanceof mysqli_sql_exception && (int) $e->getCode() === 1451) {
+        http_response_code(409);
+        exit("Esta rota está vinculada a sensores. Edite os sensores para escolher outra rota antes de excluí-la.");
+    }
     error_log($e->getMessage());
-    die("Erro ao excluir a rota.");
+    http_response_code(500);
+    exit("Erro ao excluir a rota.");
 }
 
 // Voltar para a listagem
